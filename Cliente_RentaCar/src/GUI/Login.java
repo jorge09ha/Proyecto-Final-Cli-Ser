@@ -1,13 +1,7 @@
 package GUI;
 
-import rentACar.*;
+import RentaCar.*;
 import java.awt.Color;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import javax.swing.JOptionPane;
 import java.awt.Toolkit;
 
 public class Login extends javax.swing.JFrame {
@@ -259,7 +253,8 @@ public class Login extends javax.swing.JFrame {
         String userSelec, passSelec;
         userSelec = userTxt.getText();
         passSelec = passTxt.getText();
-        ConnectSQL.validarLogin(userSelec, passSelec);
+        
+        ClientSocket.validarLogin(userSelec, passSelec);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -287,6 +282,18 @@ public class Login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
