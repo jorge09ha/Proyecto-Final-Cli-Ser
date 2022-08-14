@@ -2,6 +2,8 @@ package GUI;
 
 import java.util.*;
 import RentaCar.*;
+import static RentaCar.ClientSocket.SMsgStream;
+import static RentaCar.ClientSocket.toJson;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.sql.ResultSet;
@@ -288,14 +290,19 @@ public class Rentar extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             Cliente cli = new Cliente();
-            cli = ClientSocket.buscarcliente(txtid.getText());
+
+            cli.setCedula(txtid.getText());
+            toJson(cli);
+
+            String task = "buscarcliente";
+
+            cli = SMsgStream(task, cli.getCedula());
 
             if (cli.getCedula() == null) {
                 JOptionPane.showMessageDialog(null, "El usuario no existe.\n" + "Puede agregarlos desde la sección clientes", "Info", 1);
             } else {
                 presentarTableCliente();
             }
-
         } catch (Exception e) {
 
         }
@@ -373,7 +380,13 @@ public class Rentar extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             Auto aut = new Auto();
-            aut = ClientSocket.verEstados(txtPlaca.getText(), "D");
+
+            aut.setPlaca(txtid.getText());
+            toJson(aut);
+
+            String task = "buscarcliente";
+
+            aut = SMsgStream(task, aut.getPlaca());
 
             if (aut.getPlaca() == null) {
                 presentarTableAuto();

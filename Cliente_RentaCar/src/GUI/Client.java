@@ -1,7 +1,9 @@
 package GUI;
 
 import javax.swing.*;
+import RentaCar.ClientSocket;
 import RentaCar.*;
+import static RentaCar.ClientSocket.*;
 
 public class Client extends javax.swing.JPanel {
 
@@ -284,7 +286,7 @@ public class Client extends javax.swing.JPanel {
                     cli.setApellido2(txtapellido2.getText());
                     cli.setEmail(txtemail.getText());
                     cli.setTelefono(txttelefono.getText());
-                    boolean resultado = ClientSocket.registrarcliente(cli);
+                    boolean resultado = true;//ClientSocket.registrarcliente(cli);
 
                     if (resultado == false) {
 
@@ -350,36 +352,40 @@ public class Client extends javax.swing.JPanel {
     private void btnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarActionPerformed
         // TODO add your handling code here:
         try {
-            Cliente cli = new Cliente();
-            cli = ClientSocket.buscarcliente(txtid.getText());
 
-            txtnombre.setText(cli.getNombre());
-            txtapellido1.setText(cli.getApellido1());
-            txtapellido2.setText(cli.getApellido2());
-            txtid.setText(cli.getCedula());
-            txtemail.setText(cli.getEmail());
-            txttelefono.setText(cli.getTelefono());
+            int response = JOptionPane.showConfirmDialog(null, "Desea Buscar al cliente?\nCedula: "+txtid.getText(), "Buscar Cliente", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                Cliente cli = new Cliente();
 
-            search = cli.getCedula();
+                cli.setCedula(txtid.getText());
+                toJson(cli);
+                
+                String task = "buscarcliente";
 
-            if (cli.getCedula() == null) {
-                btnmodificar.setVisible(false);
-                btnborrar.setVisible(false);
-                btnRegistrar.setVisible(true);
+                cli = SMsgStream(task, cli.getCedula());
 
-                txtnombre.setText("Ingrese el nombre");
-                txtapellido1.setText("Ingrese el apellido 1");
-                txtapellido2.setText("Ingrese el apellido 2");
-                txtid.setText("Ingrese la identificacion");
-                txtemail.setText("Ingrese el correo electronico");
-                txttelefono.setText("Ingrese el telefono");
+                txtid.setText(cli.getCedula());
+                txtnombre.setText(cli.getNombre());
+                txtapellido1.setText(cli.getApellido1());
+                txtapellido2.setText(cli.getApellido2());
+                txtemail.setText(cli.getEmail());
+                txttelefono.setText(cli.getTelefono());
+
+                if (cli == null) {
+
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtemail.setText("Ingrese el correo electronico");
+                    txttelefono.setText("Ingrese el telefono");
+                }
             } else {
-                btnmodificar.setVisible(true);
-                btnborrar.setVisible(true);
-                btnRegistrar.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
             }
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar. " + e + "", "Error", 0);
+            JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
         }
     }//GEN-LAST:event_btnbuscarActionPerformed
 
@@ -398,7 +404,7 @@ public class Client extends javax.swing.JPanel {
                 cli.setEmail(txtemail.getText());
                 cli.setTelefono(txttelefono.getText());
 
-                resultado = ClientSocket.modificarcliente(cli, search);
+                //resultado = ClientSocket.modificarcliente(cli, search);
             } else {
                 JOptionPane.showMessageDialog(null, "Datos no modificados", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -413,7 +419,7 @@ public class Client extends javax.swing.JPanel {
             int response = JOptionPane.showConfirmDialog(null, "Desea borrar al cliente?", "Borrar Cliente", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
 
-                ClientSocket.borrarcliente(txtid.getText());
+                //ClientSocket.borrarcliente(txtid.getText());
                 txtid.setText("Ingrese la identificacion");
                 txtnombre.setText("Ingrese el nombre");
                 txtapellido1.setText("Ingrese el apellido 1");

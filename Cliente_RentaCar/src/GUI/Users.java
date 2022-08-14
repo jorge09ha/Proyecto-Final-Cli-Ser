@@ -1,6 +1,8 @@
 package GUI;
 
 import RentaCar.*;
+import static RentaCar.ClientSocket.SMsgStream;
+import static RentaCar.ClientSocket.toJson;
 import javax.swing.*;
 
 public class Users extends javax.swing.JPanel {
@@ -326,8 +328,8 @@ public class Users extends javax.swing.JPanel {
         try {
             int response = JOptionPane.showConfirmDialog(null, "Desea borrar al usuario?", "Borrar Usuario", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
-                
-                ClientSocket.borrarUsuario(txtid.getText());
+
+                //ClientSocket.borrarUsuario(txtid.getText());
                 txtid.setText("Ingrese la identificacion");
                 txtnombre.setText("Ingrese el nombre");
                 txtapellido1.setText("Ingrese el apellido 1");
@@ -335,7 +337,7 @@ public class Users extends javax.swing.JPanel {
                 txtUserName.setText("Ingrese el nombre de usuario");
                 txtPass1.setText("contraseña");
                 txtPass2.setText("contraseña");
-                
+
                 btnmodificar.setVisible(false);
                 btnborrar.setVisible(false);
                 btnAgregar.setVisible(true);
@@ -362,7 +364,7 @@ public class Users extends javax.swing.JPanel {
                         usu.setApellido2(txtapellido2.getText());
                         usu.setUser(txtUserName.getText());
                         usu.setPass(txtPass1.getText());
-                        ClientSocket.registrarUsuario(usu);
+                        //ClientSocket.registrarUsuario(usu);
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
@@ -378,41 +380,44 @@ public class Users extends javax.swing.JPanel {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         try {
-            UserAdmin usu = new UserAdmin();
-            usu = ClientSocket.buscarUsuario(txtid.getText());
 
-            txtnombre.setText(usu.getNombre());
-            txtapellido1.setText(usu.getApellido1());
-            txtapellido2.setText(usu.getApellido2());
-            txtid.setText(usu.getCedula());
-            txtUserName.setText(usu.getUser());
-            txtPass1.setText(usu.getPass());
-            txtPass2.setText(usu.getPass());
+            int response = JOptionPane.showConfirmDialog(null, "Desea buscar al usuario?\nCedula: " + txtid.getText(), "Buscar Usuario", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                
+                UserAdmin usu = new UserAdmin();
+                usu.setCedula(txtid.getText());
+                toJson(usu);
 
-            search = usu.getCedula();
+                String task = "buscarUsuario";
 
-            if (usu.getCedula() == null) {
+                usu = SMsgStream(task, usu.getCedula());
 
-                btnmodificar.setVisible(false);
-                btnborrar.setVisible(false);
-                btnAgregar.setVisible(true);
+                txtid.setText(usu.getCedula());
+                txtnombre.setText(usu.getNombre());
+                txtapellido1.setText(usu.getApellido1());
+                txtapellido2.setText(usu.getApellido2());
+                txtUserName.setText(usu.getUser());
+                txtPass1.setText(usu.getPass());
+                txtPass2.setText(usu.getPass());
 
-                txtid.setText("Ingrese la identificacion");
-                txtnombre.setText("Ingrese el nombre");
-                txtapellido1.setText("Ingrese el apellido 1");
-                txtapellido2.setText("Ingrese el apellido 2");
-                txtUserName.setText("Ingrese el nombre de usuario");
-                txtPass1.setText("contraseña");
-                txtPass2.setText("contraseña");
+                if (usu == null) {
+
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtUserName.setText("Ingrese el nombre de usuario");
+                    txtPass2.setText("contraseña");
+                    txtPass1.setText("contraseña");
+                }
             } else {
-                btnmodificar.setVisible(true);
-                btnborrar.setVisible(true);
-                btnAgregar.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar. " + e + "", "Error", 1);
-        }
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
+
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
@@ -429,12 +434,12 @@ public class Users extends javax.swing.JPanel {
                 usu.setApellido2(txtapellido2.getText());
                 usu.setUser(txtUserName.getText());
                 usu.setPass(txtPass1.getText());
-                ClientSocket.modificarUsuario(usu);
+                //ClientSocket.modificarUsuario(usu);
             } else {
                 JOptionPane.showMessageDialog(null, "Las contraseñas no coinsiden.\n" + "Revise he intente nuevamente", "Error", 0);
             }
         } else {
-             JOptionPane.showMessageDialog(null, "Datos no modificados", "Info", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Datos no modificados", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnmodificarActionPerformed
 

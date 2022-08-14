@@ -1,11 +1,11 @@
 package GUI;
 
 import RentaCar.*;
+import static RentaCar.ClientSocket.SMsgStream;
+import static RentaCar.ClientSocket.toJson;
 import javax.swing.*;
 
 public class Autos extends javax.swing.JPanel {
-
-    String search = "";
 
     public Autos() {
         initComponents();
@@ -20,7 +20,6 @@ public class Autos extends javax.swing.JPanel {
     }
 
     public boolean camposVacios() {
-
 
         if ((txtid.equals("")) || (txtid.getText().equals("Ingrese la placa"))
                 || (txtMarca.getText().equals("")) || (txtMarca.getText().equals("Ingrese la marca"))
@@ -342,35 +341,47 @@ public class Autos extends javax.swing.JPanel {
     private void btnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarActionPerformed
         // TODO add your handling code here:
         try {
-            Auto aut = new Auto();
-            aut = ClientSocket.buscarAuto(txtid.getText());
 
-            txtid.setText(aut.getPlaca());
-            txtMarca.setText(aut.getMarca());
-            txtModelo.setText(aut.getModelo());
-            txtMarca.setText(aut.getMarca());
-            cbAnnio.setSelectedItem(aut.getAnnio());
-            cbTransm.setSelectedItem(aut.getTransmision());
-            search = aut.getPlaca();
+            int response = JOptionPane.showConfirmDialog(null, "Desea Buscar al cliente?\nCedula: " + txtid.getText(), "Buscar Cliente", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
 
-            if (aut.getPlaca() == null) {
-                btnmodificar.setVisible(false);
-                btnborrar.setVisible(false);
-                btmAgregar.setVisible(true);
+                Auto aut = new Auto();
 
-                txtid.setText("Ingrese la placa");
-                txtMarca.setText("Ingrese la marca");
-                txtModelo.setText("Ingrese el modelo");
-                cbAnnio.setSelectedItem(null);
-                cbTransm.setSelectedItem(null);
+                aut.setPlaca(txtid.getText());
+                toJson(aut);
 
+                String task = "buscarcliente";
+
+                aut = SMsgStream(task, aut.getPlaca());
+
+                txtid.setText(aut.getPlaca());
+                txtMarca.setText(aut.getMarca());
+                txtModelo.setText(aut.getModelo());
+                txtMarca.setText(aut.getMarca());
+                cbAnnio.setSelectedItem(aut.getAnnio());
+                cbTransm.setSelectedItem(aut.getTransmision());
+
+                if (aut == null) {
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btmAgregar.setVisible(true);
+
+                    txtid.setText("Ingrese la placa");
+                    txtMarca.setText("Ingrese la marca");
+                    txtModelo.setText("Ingrese el modelo");
+                    cbAnnio.setSelectedItem(null);
+                    cbTransm.setSelectedItem(null);
+                }
             } else {
+                JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
                 btnmodificar.setVisible(true);
                 btnborrar.setVisible(true);
                 btmAgregar.setVisible(false);
             }
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al buscar. " + e + "", "Error", 0);
+            JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
+
         }
 
     }//GEN-LAST:event_btnbuscarActionPerformed
