@@ -277,7 +277,7 @@ public class Client extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             if (camposVacios() == false) {
-                int response = JOptionPane.showConfirmDialog(null, "Desea Registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Desea registrar al cliente?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
                     Cliente cli = new Cliente();
                     cli.setCedula(txtid.getText());
@@ -286,7 +286,10 @@ public class Client extends javax.swing.JPanel {
                     cli.setApellido2(txtapellido2.getText());
                     cli.setEmail(txtemail.getText());
                     cli.setTelefono(txttelefono.getText());
-                    boolean resultado = true;//ClientSocket.registrarcliente(cli);
+                    boolean resultado = toJson(cli);
+                    String task = "agregarCliente";
+
+                    SMsgStream(task, cli.getCedula());
 
                     if (resultado == false) {
 
@@ -305,6 +308,7 @@ public class Client extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
+
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
@@ -353,14 +357,14 @@ public class Client extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
 
-            int response = JOptionPane.showConfirmDialog(null, "Desea Buscar al cliente?\nCedula: "+txtid.getText(), "Buscar Cliente", JOptionPane.YES_NO_OPTION);
+            int response = JOptionPane.showConfirmDialog(null, "Desea Buscar al cliente?\nCedula: " + txtid.getText(), "Buscar Cliente", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
                 Cliente cli = new Cliente();
 
                 cli.setCedula(txtid.getText());
                 toJson(cli);
-                
-                String task = "buscarcliente";
+
+                String task = "buscarCliente";
 
                 cli = (Cliente) SMsgStream(task, cli.getCedula());
 
@@ -391,52 +395,12 @@ public class Client extends javax.swing.JPanel {
 
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
         // TODO add your handling code here:
-        boolean resultado = false;
 
-        try {
-            int response = JOptionPane.showConfirmDialog(null, "Desea modificar al cliente?", "Modificar Cliente", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
-                Cliente cli = new Cliente();
-                cli.setCedula(txtid.getText());
-                cli.setNombre(txtnombre.getText());
-                cli.setApellido1(txtapellido1.getText());
-                cli.setApellido2(txtapellido2.getText());
-                cli.setEmail(txtemail.getText());
-                cli.setTelefono(txttelefono.getText());
-
-                //resultado = ClientSocket.modificarcliente(cli, search);
-            } else {
-                JOptionPane.showMessageDialog(null, "Datos no modificados", "Info", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar. " + e + "", "Error", 0);
-        }
     }//GEN-LAST:event_btnmodificarActionPerformed
 
     private void btnborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnborrarActionPerformed
         // TODO add your handling code here:
-        try {
-            int response = JOptionPane.showConfirmDialog(null, "Desea borrar al cliente?", "Borrar Cliente", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
 
-                //ClientSocket.borrarcliente(txtid.getText());
-                txtid.setText("Ingrese la identificacion");
-                txtnombre.setText("Ingrese el nombre");
-                txtapellido1.setText("Ingrese el apellido 1");
-                txtapellido2.setText("Ingrese el apellido 2");
-                txtemail.setText("Ingrese el correo electronico");
-                txttelefono.setText("Ingrese el telefono");
-
-                btnmodificar.setVisible(false);
-                btnborrar.setVisible(false);
-                btnRegistrar.setVisible(true);
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Datos no borrados", "Info", 1);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al borrar. " + e + "", "Error", 0);
-        }
     }//GEN-LAST:event_btnborrarActionPerformed
 
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed

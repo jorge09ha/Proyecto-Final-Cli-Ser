@@ -323,28 +323,6 @@ public class Users extends javax.swing.JPanel {
 
     private void btnborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnborrarActionPerformed
         // TODO add your handling code here:
-        try {
-            int response = JOptionPane.showConfirmDialog(null, "Desea borrar al usuario?", "Borrar Usuario", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
-
-                //ClientSocket.borrarUsuario(txtid.getText());
-                txtid.setText("Ingrese la identificacion");
-                txtnombre.setText("Ingrese el nombre");
-                txtapellido1.setText("Ingrese el apellido 1");
-                txtapellido2.setText("Ingrese el apellido 2");
-                txtUserName.setText("Ingrese el nombre de usuario");
-                txtPass1.setText("contraseña");
-                txtPass2.setText("contraseña");
-
-                btnmodificar.setVisible(false);
-                btnborrar.setVisible(false);
-                btnAgregar.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "Datos no borrados", "Info", 1);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al borrar. " + e + "", "Error", 0);
-        }
 
     }//GEN-LAST:event_btnborrarActionPerformed
 
@@ -353,7 +331,7 @@ public class Users extends javax.swing.JPanel {
         UserAdmin usu = new UserAdmin();
         try {
             if (camposVacios() == false) {
-                int response = JOptionPane.showConfirmDialog(null, "Desea Registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Desea registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
                     if (txtPass1.getText().equals(txtPass2.getText())) {
                         usu.setCedula(txtid.getText());
@@ -362,7 +340,22 @@ public class Users extends javax.swing.JPanel {
                         usu.setApellido2(txtapellido2.getText());
                         usu.setUser(txtUserName.getText());
                         usu.setPass(txtPass1.getText());
-                        //ClientSocket.registrarUsuario(usu);
+                        boolean resultado = toJson(usu);
+                        String task = "agregarUsuario";
+
+                        SMsgStream(task, usu.getCedula());
+
+                        if (resultado == false) {
+                            txtnombre.setText("Ingrese el nombre");
+                            txtapellido1.setText("Ingrese el apellido 1");
+                            txtapellido2.setText("Ingrese el apellido 2");
+                            txtid.setText("Ingrese la identificacion");
+                            txtUserName.setText("Ingrese el nombre de usuario");
+                            txtPass1.setText("contraseña");
+                            txtPass2.setText("contraseña");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Las contraseñas no son iguales", "Info", 1);
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
@@ -421,24 +414,6 @@ public class Users extends javax.swing.JPanel {
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
         // TODO add your handling code here:
 
-        UserAdmin usu = new UserAdmin();
-        int response = JOptionPane.showConfirmDialog(null, "Desea modificar al usuario?", "Modificar Usuario", JOptionPane.YES_NO_OPTION);
-        if (response == JOptionPane.YES_OPTION) {
-            if (txtPass1.getText().equals(txtPass2.getText())) {
-
-                usu.setCedula(txtid.getText());
-                usu.setNombre(txtnombre.getText());
-                usu.setApellido1(txtapellido1.getText());
-                usu.setApellido2(txtapellido2.getText());
-                usu.setUser(txtUserName.getText());
-                usu.setPass(txtPass1.getText());
-                //ClientSocket.modificarUsuario(usu);
-            } else {
-                JOptionPane.showMessageDialog(null, "Las contraseñas no coinsiden.\n" + "Revise he intente nuevamente", "Error", 0);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Datos no modificados", "Info", JOptionPane.INFORMATION_MESSAGE);
-        }
     }//GEN-LAST:event_btnmodificarActionPerformed
 
     private void txtidMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtidMousePressed

@@ -16,9 +16,10 @@ public class ClientSocket {
     private static DataOutputStream dout = null;
     private static BufferedReader br = null;
 
+    /*-----------------Conexion Port 7000-----------------*/
     public static Object SMsgStream(String task, String id) {
         try {
-            serverSocket = new ServerSocket(7778);// server chat
+            serverSocket = new ServerSocket(7000);// server chat
             System.out.println("Server is Waiting for client request... ");
 
             Socket socket = serverSocket.accept();
@@ -32,7 +33,7 @@ public class ClientSocket {
             while (!strFromClient.equals("stop")) {
 //Switch---------------------------------
                 switch (strFromClient) {
-                    case "buscarcliente":
+                    case "buscarCliente":
                         dout.writeUTF(strToClient); //Task
                         dout.flush();
 
@@ -51,48 +52,47 @@ public class ClientSocket {
 //                        conexionSocket();
 //                        System.out.println("Im in if doit");
 //                        strFromClient = din.readUTF();
-                        
-                    case "objetodeJasonCLIENTE()":
+                    case "objetodeJsonCLIENTE()":
                         Cliente cli = new Cliente();
-                        cli = objetodeJasonCLIENTE();
+                        cli = objetodeJsonCLIENTE();
                         dout.writeUTF("stop");
                         dout.flush();
                         return cli;
 
-                    case "objetodeJasonUSER()":
+                    case "objetodeJsonUSER()":
                         UserAdmin usu = new UserAdmin();
-                        usu = objetodeJasonUSER();
+                        usu = objetodeJsonUSER();
                         dout.writeUTF("stop");
                         dout.flush();
                         return usu;
 
-                    case "objetodeJasonAUTO()":
+                    case "objetodeJsonAUTO()":
                         Auto aut = new Auto();
-                        aut = objetodeJasonAUTO();
+                        aut = objetodeJsonAUTO();
                         dout.writeUTF("stop");
                         dout.flush();
                         return aut;
-                        
+
                     case "no existe":
                         JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
                         dout.writeUTF("stop");
                         dout.flush();
-                        
+
                     case "id vacio":
                         JOptionPane.showMessageDialog(null, "El campo de identificación no puede estar vacio", "Campo vacio", 2);
                         dout.writeUTF("stop");
                         dout.flush();
-                        
+
                     case "correcto":
                         JOptionPane.showMessageDialog(null, "Datos almacenados correctamente.", "Info", 1);
                         dout.writeUTF("stop");
                         dout.flush();
-                        
+
                     case "error almacenar":
                         JOptionPane.showMessageDialog(null, "Error al almacenar los datos", "Error", 0);
                         dout.writeUTF("stop");
                         dout.flush();
-                        
+
                     case "duplicado":
                         JOptionPane.showMessageDialog(null, "El dato ya existe.", "Error", 0);
                         dout.writeUTF("stop");
@@ -125,20 +125,20 @@ public class ClientSocket {
 //
 //                    strFromClient = din.readUTF();
 //
-//                    if ("objetodeJasonCLIENTE()".equals(strFromClient)) {
+//                    if ("objetodeJsonCLIENTE()".equals(strFromClient)) {
 //                        Cliente cli = new Cliente();
-//                        cli = objetodeJasonCLIENTE();
+//                        cli = objetodeJsonCLIENTE();
 //                        dout.writeUTF("stop");
 //                        dout.flush();
-//                    } else if ("objetodeJasonUSER()".equals(strFromClient)) {
+//                    } else if ("objetodeJsonUSER()".equals(strFromClient)) {
 //                        UserAdmin usu = new UserAdmin();
-//                        usu = objetodeJasonUSER();
+//                        usu = objetodeJsonUSER();
 //                        dout.writeUTF("stop");
 //                        dout.flush();
 //                        return usu;
-//                    } else if ("objetodeJasonAUTO()".equals(strFromClient)) {
+//                    } else if ("objetodeJsonAUTO()".equals(strFromClient)) {
 //                        Auto aut = new Auto();
-//                        aut = objetodeJasonAUTO();
+//                        aut = objetodeJsonAUTO();
 //                        dout.writeUTF("stop");
 //                        dout.flush();
 //                        return aut;
@@ -214,6 +214,7 @@ public class ClientSocket {
         return null;
     }
 
+    /*-----------------Conexion Port 5000-----------------*/
     public static void envioJson() {
         try ( Socket socket = new Socket("localhost", 5000)) {
             dataInputStream = new DataInputStream(socket.getInputStream());
@@ -228,6 +229,21 @@ public class ClientSocket {
         }
     }
 
+    /*----------------------Recibe archivo JSON----------------------*/
+    private static void receiveFile(String fileName) throws Exception {
+        int bytes = 0;
+        FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+
+        long size = dataInputStream.readLong();     // read file size
+        byte[] buffer = new byte[4 * 1024];
+        while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
+            fileOutputStream.write(buffer, 0, bytes);
+            size -= bytes;      // read upto file size
+        }
+        fileOutputStream.close();
+    }
+
+    /*-----------------Envia archivo JSON-----------------*/
     public static void sendFile(String path) throws Exception {
         int bytes = 0;
         File file = new File(path);
@@ -244,6 +260,7 @@ public class ClientSocket {
         fileInputStream.close();
     }
 
+    /*-----------------Object to JSON-----------------*/
     public static boolean toJson(Object obj) {
         boolean done;
         try {
@@ -263,6 +280,7 @@ public class ClientSocket {
         }
     }
 
+    /*----------------------Port 5007 para archivo----------------------*/
     public static void conexionSocket() {
         try ( ServerSocket serverSocket = new ServerSocket(5007)) {
             System.out.println("listening to port:5000");
@@ -282,7 +300,7 @@ public class ClientSocket {
         }
     }
 
-    public static Cliente objetodeJasonCLIENTE() {
+    public static Cliente objetodeJsonCLIENTE() {
         try {
             Gson gson = new Gson();
 
@@ -298,7 +316,7 @@ public class ClientSocket {
         return null;
     }
 
-    public static UserAdmin objetodeJasonUSER() {
+    public static UserAdmin objetodeJsonUSER() {
         try {
             Gson gson = new Gson();
 
@@ -314,7 +332,7 @@ public class ClientSocket {
         return null;
     }
 
-    public static Auto objetodeJasonAUTO() {
+    public static Auto objetodeJsonAUTO() {
         try {
             Gson gson = new Gson();
 
@@ -330,16 +348,4 @@ public class ClientSocket {
         return null;
     }
 
-    private static void receiveFile(String fileName) throws Exception {
-        int bytes = 0;
-        FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-
-        long size = dataInputStream.readLong();     // read file size
-        byte[] buffer = new byte[4 * 1024];
-        while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
-            fileOutputStream.write(buffer, 0, bytes);
-            size -= bytes;      // read upto file size
-        }
-        fileOutputStream.close();
-    }
 }

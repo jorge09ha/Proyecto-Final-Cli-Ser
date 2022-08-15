@@ -4,7 +4,7 @@ package Servidor;
  *
  * @author jorge
  */
-public class Auto extends Vehiculo implements IOperaciones {
+public class Auto extends Vehiculo {
 
     protected String rentar;
 
@@ -72,23 +72,6 @@ public class Auto extends Vehiculo implements IOperaciones {
     @Override
     public void setTransmision(String transmision) {
         this.transmision = transmision;
-    }
-
-    @Override
-    public void Create(Object obj) {
-    }
-
-    @Override
-    public Object Retrieve(String key) {
-        return null;
-    }
-
-    @Override
-    public void Update(Object obj) {
-    }
-
-    @Override
-    public void Delete(String key) {
     }
 
 }

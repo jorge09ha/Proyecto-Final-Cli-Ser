@@ -4,7 +4,7 @@ package Servidor;
  *
  * @author jorge
  */
-public class UserAdmin extends Persona implements IOperaciones {
+public class UserAdmin extends Persona {
 
     protected String user, pass;
 
@@ -71,23 +71,6 @@ public class UserAdmin extends Persona implements IOperaciones {
 
     public void setPass(String pass) {
         this.pass = pass;
-    }
-
-    @Override
-    public void Create(Object obj) {
-    }
-
-    @Override
-    public Object Retrieve(String key) {
-        return null;
-    }
-
-    @Override
-    public void Update(Object obj) {
-    }
-
-    @Override
-    public void Delete(String key) {
     }
 
 }

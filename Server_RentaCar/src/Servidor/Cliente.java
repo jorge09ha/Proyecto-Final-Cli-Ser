@@ -1,10 +1,16 @@
 package Servidor;
 
+import static Servidor.Server.toJson;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import static Servidor.Server.objetoJson;
+
 /**
  *
  * @author jorge
  */
-public class Cliente extends Persona implements IOperaciones {
+public class Cliente extends Persona {
 
     protected String email, telefono;
 
@@ -71,23 +77,6 @@ public class Cliente extends Persona implements IOperaciones {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    @Override
-    public void Create(Object obj) {
-    }
-
-    @Override
-    public Object Retrieve(String key) {
-        return null;
-    }
-
-    @Override
-    public void Update(Object obj) {
-    }
-
-    @Override
-    public void Delete(String key) {
     }
 
 }
