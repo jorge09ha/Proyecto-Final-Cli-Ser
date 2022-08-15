@@ -34,12 +34,12 @@ public class Server {
     ResultSet rs;
 
     public static void main(String[] args) {
-        conexionSocket();
-        CMsgStream();
+        entradaArchivoJson();
+        clienteProtocolo();
     }
 
     /*-----------------Conexion Port 7000-----------------*/
-    public static void CMsgStream() {
+    public static void clienteProtocolo() {
         Socket socket = null;
         DataInputStream din = null;
         DataOutputStream dout = null;
@@ -53,39 +53,87 @@ public class Server {
             OutputStream outputStream = socket.getOutputStream();
             dout = new DataOutputStream(outputStream);
 
-            String strFromServer = "", strToClient = "";
+            String strFromServer = "", strToClient = "", id = "";
 
-            while (!strToClient.equals("stop")) {
-                strFromServer = din.readUTF();// Recibe task
-                String id;
+            while (!strFromServer.equals("stop")) {
 
                 switch (strFromServer) {
                     /*----------------------Clientes----------------------*/
                     case "agregarCliente":
-                        strToClient = agregarCliente(); // client
-                        dout.writeUTF(strToClient); // cliente
+                        strToClient = agregarCliente(); // el metodo hace un return tipo String con el resultado de lo que hiso
+
+                        dout.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         dout.flush();
-                        strFromServer = din.readUTF(); // lee msg stop
+
+                        strFromServer = din.readUTF(); // lee msg stop del cliente
+
+                        break;
 
                     case "buscarCliente":
-                        dout.writeUTF("id"); // preguta por id //linea 61
+                        dout.writeUTF("id"); // preguta por id 
                         dout.flush();
+
                         id = din.readUTF(); //recibe el ID
-                        strToClient = buscarCliente(id); // client  
+
+                        strToClient = buscarCliente(id); // client                    
+                        id = strToClient;
                         dout.writeUTF(strToClient); // cliente
                         dout.flush();
+
                         strFromServer = din.readUTF();
                         if ("servidorA".equals(strFromServer)) {
-                            envioJson();
+                            envioArchivoJson();
                         }
-                        strToClient = "objetodeJson()"; // client                    
+                        strToClient = "objetodeJasonCLIENTE"; // client                    
                         dout.writeUTF(strToClient); // cliente
                         dout.flush();
+
+                        if (id == "doit") {
+                            dout.writeUTF(id); // cliente
+                            dout.flush();
+                        }
+
                         strFromServer = din.readUTF(); // lee msg stop
 
+                        break;
+
                     case "editarCliente":
+                        dout.writeUTF("id"); // preguta por id //linea 61
+                        dout.flush();
+
+                        id = din.readUTF(); //recibe el ID
+
+                        strToClient = editarCliente(id); // client                    
+                        dout.writeUTF(strToClient); // cliente
+                        dout.flush();
+
+                        strFromServer = din.readUTF();
+                        if ("servidorA".equals(strFromServer)) {
+                            System.out.println("Server envio json: ");
+                            envioArchivoJson();
+                        }
+                        strToClient = "objetodeJason()"; // client                    
+                        dout.writeUTF(strToClient); // cliente
+                        dout.flush();
+
+                        strFromServer = din.readUTF(); // lee msg stop
+
+                        break;
 
                     case "eliminarCliente":
+                        dout.writeUTF("id"); // preguta por id //linea 61
+                        dout.flush();
+
+                        id = din.readUTF(); //recibe el ID
+
+                        strToClient = borrarCliente(id); // client                    
+                        dout.writeUTF(strToClient); // cliente
+                        dout.flush();
+
+                        strFromServer = din.readUTF(); // lee msg stop
+
+                        break;
+
                     /*----------------------Usuarios----------------------*/
                     case "agregarUsuario":
                         strToClient = agregarUsuario();
@@ -102,9 +150,9 @@ public class Server {
                         dout.flush();
                         strFromServer = din.readUTF();
                         if ("servidorA".equals(strFromServer)) {
-                            envioJson();
+                            envioArchivoJson();
                         }
-                        strToClient = "objetodeJson()";
+                        strToClient = "objetodeJsonUSER";
                         dout.writeUTF(strToClient);
                         dout.flush();
                         strFromServer = din.readUTF();
@@ -127,9 +175,9 @@ public class Server {
                         dout.flush();
                         strFromServer = din.readUTF();
                         if ("servidorA".equals(strFromServer)) {
-                            envioJson();
+                            envioArchivoJson();
                         }
-                        strToClient = "objetodeJson()";
+                        strToClient = "objetodeJsonAUTO";
                         dout.writeUTF(strToClient);
                         dout.flush();
                         strFromServer = din.readUTF();
@@ -142,6 +190,10 @@ public class Server {
                     case "rentarAuto":
 
                     case "retornar Auto":
+
+                    case "verRentados":
+
+                    case "verDisponibles":
 
                         break;
                     default:
@@ -175,7 +227,7 @@ public class Server {
     }
 
     /*-----------------Conexion Port 5000-----------------*/
-    public static void conexionSocket() {
+    public static void entradaArchivoJson() {
         try ( ServerSocket serverSocket = new ServerSocket(5000)) {// server archives
             System.out.println("listening to port:5000");
             Socket clientSocket = serverSocket.accept();
@@ -183,7 +235,7 @@ public class Server {
             dataInputStream = new DataInputStream(clientSocket.getInputStream());
             dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
 
-            receiveFile("NewFileFromClient.json");
+            entradaFragmentosArchivo("NewFileFromClient.json");
 
             dataInputStream.close();
             dataOutputStream.close();
@@ -195,12 +247,12 @@ public class Server {
     }
 
     /*----------------------Port 5007 para archivo----------------------*/
-    public static void envioJson() {
+    public static void envioArchivoJson() {
         try ( Socket socket = new Socket("localhost", 5007)) {
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-            sendFile("ServerSide.json");
+            envioFragmentosArchivo("ServerSide.json");
 
             dataInputStream.close();
 
@@ -210,7 +262,7 @@ public class Server {
     }
 
     /*----------------------Recibe archivo JSON----------------------*/
-    private static void receiveFile(String fileName) throws Exception {
+    private static void entradaFragmentosArchivo(String fileName) throws Exception {
         int bytes = 0;
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);
 
@@ -224,7 +276,7 @@ public class Server {
     }
 
     /*-----------------Envia archivo JSON-----------------*/
-    public static void sendFile(String path) throws Exception {
+    public static void envioFragmentosArchivo(String path) throws Exception {
         int bytes = 0;
         File file = new File(path);
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -241,14 +293,21 @@ public class Server {
     }
 
     /*----------------------JSON to Object----------------------*/
-    public static Object objetoJson() {
+    public static Object archivoJsonAObjeto(String seleccion) {
         try {
             Gson gson = new Gson();
 
-            Reader reader = Files.newBufferedReader(Paths.get("NewFileFromClient.json"));
+            Reader reader = null;
 
+            if ("default".equals(seleccion)) {
+
+                reader = Files.newBufferedReader(Paths.get("NewFileFromClient.json"));
+            } else {
+                reader = Files.newBufferedReader(Paths.get("ServerSide.json"));
+            }
             Cliente cli = gson.fromJson(reader, Cliente.class);
 
+            //System.out.println("Lectura del archivo: Cedula: "+cli.getCedula()+" Nombre: "+cli.getNombre()+" Apellido1: "+cli.getApellido1()+" Apellido2: "+cli.getApellido2()+" Correo: "+cli.getEmail()+" Telefono: "+cli.getTelefono());
             reader.close();
 
             return cli;
@@ -261,11 +320,13 @@ public class Server {
     }
 
     /*-----------------Object to JSON-----------------*/
-    public static boolean toJson(Object obj) {
+    public static boolean objetoaJson(Object obj) {
         boolean done;
         try {
             Gson gson = new Gson();
             Writer writer = Files.newBufferedWriter(Paths.get("ServerSide.json"));
+//                    System.out.println("The JSON representation of Object User is ");    
+//                    System.out.println(new Gson().objetoaJson(cli));
 
             gson.toJson(obj, writer);
             writer.close();
@@ -295,7 +356,11 @@ public class Server {
         return conn;
     }
 
-    /*-----------------CRUD Clientes-----------------*/
+    /*
+    *
+    *                   CRUD Clientes
+    *
+     */
     public static String buscarCliente(String id) {
         Cliente cli = new Cliente();
         Connection conn = getConnection();
@@ -320,7 +385,7 @@ public class Server {
                     cli.setEmail(rs.getString("correoelectronico"));
                     cli.setTelefono(rs.getString("telefono"));
 
-                    toJson(cli);
+                    objetoaJson(cli);
 
                     //envioJson();
                     msg = "doit";
@@ -332,7 +397,7 @@ public class Server {
                 return msg;
             }
         } catch (Exception e) {
-            msg = "error base";
+            msg = "error almacenar";
             return msg;
         }
         return "Error";
@@ -343,7 +408,7 @@ public class Server {
         String msg = "";
         Connection conn = getConnection();
 
-        Cliente cli = (Cliente) objetoJson();
+        Cliente cli = (Cliente) archivoJsonAObjeto("default");
 
         try {
 
@@ -366,7 +431,79 @@ public class Server {
 
     }//liso
 
-    /*-----------------CRUD Usuarios-----------------*/
+    public static String borrarCliente(String id) {
+
+        Cliente cli = new Cliente();
+        Connection conn = getConnection();
+        int resultado = 0;
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
+                String sql = "DELETE FROM clientes WHERE idcliente = '" + id + "'";
+                Statement st = conn.createStatement();
+                resultado = st.executeUpdate(sql);
+
+                msg = "correcto";
+
+                return msg;
+
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+
+    }
+
+    public static String editarCliente(String id) {
+
+        Cliente cli = new Cliente();
+        Connection conn = getConnection();
+        String buscar = id;
+        String msg;
+
+        int resultado = 0;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
+                msg = borrarCliente(id);
+                if ("doit".equals(msg)) {
+                    cli = (Cliente) archivoJsonAObjeto("default");
+                    String sql = "UPDATE clientes SET idcliente = '" + cli.getCedula() + "',nombre = '" + cli.getNombre() + "',apellido1 = '" + cli.getApellido1() + "',apellido2 = '" + cli.getApellido2() + "',correoElectronico = '" + cli.getEmail() + "',telefono = '" + cli.getTelefono() + "' WHERE idcliente = '" + id + "'";
+                    Statement st = conn.createStatement();
+                    resultado = st.executeUpdate(sql);
+
+                    if (resultado > 0) {
+                        msg = "doit";
+                        return msg;
+                    } else {
+                        msg = "no existe";
+                        return msg;
+                    }
+                }
+                msg = "doit";
+                return msg;
+            }
+
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+
+        return "Error";
+
+    }
+
+    /*
+    *
+    *                   CRUD Usuarios
+    *
+     */
     public static String buscarUsusario(String id) {
         UserAdmin usu = new UserAdmin();
         Connection conn = getConnection();
@@ -391,7 +528,7 @@ public class Server {
                     usu.setUser(rs.getString("usuario"));
                     usu.setPass(rs.getString("contrasena"));
 
-                    toJson(usu);
+                    objetoaJson(usu);
 
                     //envioJson();
                     msg = "doit";
@@ -403,10 +540,10 @@ public class Server {
                 return msg;
             }
         } catch (Exception e) {
-            msg = "error base";
+            msg = "error almacenar";
             return msg;
         }
-        return "Error";
+        return "error";
     }//listo
 
     public static String agregarUsuario() {
@@ -414,8 +551,7 @@ public class Server {
         String msg = "";
         Connection conn = getConnection();
 
-        UserAdmin usu = (UserAdmin) objetoJson();
-
+        UserAdmin usu = (UserAdmin) archivoJsonAObjeto("default");
         try {
 
             String sql = "INSERT INTO usuarios  Values ('" + usu.getCedula() + "','" + usu.getNombre() + "','" + usu.getApellido1() + "','" + usu.getApellido2() + "','" + usu.getUser() + "','" + usu.getPass() + "')";
@@ -437,7 +573,11 @@ public class Server {
 
     }//listo
 
-    /*-----------------CRUD Autos-----------------*/
+    /*
+    *
+    *                   CRUD Autos
+    *
+     */
     public static String buscarAuto(String id) {
         Auto aut = new Auto();
         Connection conn = getConnection();
@@ -462,7 +602,7 @@ public class Server {
                     aut.setTransmision(rs.getString("transmision"));
                     aut.setRentar(rs.getString("rentar"));
 
-                    toJson(aut);
+                    objetoaJson(aut);
 
                     //envioJson();
                     msg = "doit";
@@ -474,7 +614,7 @@ public class Server {
                 return msg;
             }
         } catch (Exception e) {
-            msg = "error base";
+            msg = "error almacenar";
             return msg;
         }
         return "Error";
@@ -486,7 +626,7 @@ public class Server {
         String msg = "";
         Connection conn = getConnection();
 
-        Auto aut = (Auto) objetoJson();
+        Auto aut = (Auto) archivoJsonAObjeto("default");
 
         try {
 
@@ -508,4 +648,10 @@ public class Server {
         }
 
     }//listo
+
+    /*
+    *
+    *                   CRUD Rentar
+    *
+     */
 }

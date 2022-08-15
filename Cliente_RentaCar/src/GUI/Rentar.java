@@ -3,12 +3,12 @@ package GUI;
 import rentACar.Cliente;
 import rentACar.Auto;
 import java.util.*;
-import static rentACar.ClientSocket.SMsgStream;
-import static rentACar.ClientSocket.toJson;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import static rentACar.ClientSocket.servidorProtocolo;
+import static rentACar.ClientSocket.objetoaJson;
 
 public class Rentar extends javax.swing.JPanel {
 
@@ -293,11 +293,11 @@ public class Rentar extends javax.swing.JPanel {
             Cliente cli = new Cliente();
 
             cli.setCedula(txtid.getText());
-            toJson(cli);
+            objetoaJson(cli);
 
             String task = "buscarcliente";
 
-            cli = (Cliente) SMsgStream(task, cli.getCedula());
+            cli = (Cliente) servidorProtocolo(task, cli.getCedula());
 
             if (cli.getCedula() == null) {
                 JOptionPane.showMessageDialog(null, "El usuario no existe.\n" + "Puede agregarlos desde la sección clientes", "Info", 1);
@@ -382,11 +382,11 @@ public class Rentar extends javax.swing.JPanel {
             Auto aut = new Auto();
 
             aut.setPlaca(txtid.getText());
-            toJson(aut);
+            objetoaJson(aut);
 
             String task = "buscarcliente";
 
-            aut = (Auto) SMsgStream(task, aut.getPlaca());
+            aut = (Auto) servidorProtocolo(task, aut.getPlaca());
 
             if (aut.getPlaca() == null) {
                 presentarTableAuto();

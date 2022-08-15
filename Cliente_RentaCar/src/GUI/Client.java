@@ -286,10 +286,10 @@ public class Client extends javax.swing.JPanel {
                     cli.setApellido2(txtapellido2.getText());
                     cli.setEmail(txtemail.getText());
                     cli.setTelefono(txttelefono.getText());
-                    boolean resultado = toJson(cli);
+                    boolean resultado = objetoaJson(cli);
                     String task = "agregarCliente";
 
-                    SMsgStream(task, cli.getCedula());
+                    servidorProtocolo(task, cli.getCedula());
 
                     if (resultado == false) {
 
@@ -362,11 +362,11 @@ public class Client extends javax.swing.JPanel {
                 Cliente cli = new Cliente();
 
                 cli.setCedula(txtid.getText());
-                toJson(cli);
+                objetoaJson(cli);
 
                 String task = "buscarCliente";
 
-                cli = (Cliente) SMsgStream(task, cli.getCedula());
+                cli = (Cliente) servidorProtocolo(task, cli.getCedula());
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());

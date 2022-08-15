@@ -1,9 +1,9 @@
 package GUI;
 
 import rentACar.UserAdmin;
-import static rentACar.ClientSocket.SMsgStream;
-import static rentACar.ClientSocket.toJson;
 import javax.swing.*;
+import static rentACar.ClientSocket.servidorProtocolo;
+import static rentACar.ClientSocket.objetoaJson;
 
 public class Users extends javax.swing.JPanel {
 
@@ -340,10 +340,10 @@ public class Users extends javax.swing.JPanel {
                         usu.setApellido2(txtapellido2.getText());
                         usu.setUser(txtUserName.getText());
                         usu.setPass(txtPass1.getText());
-                        boolean resultado = toJson(usu);
+                        boolean resultado = objetoaJson(usu);
                         String task = "agregarUsuario";
 
-                        SMsgStream(task, usu.getCedula());
+                        servidorProtocolo(task, usu.getCedula());
 
                         if (resultado == false) {
                             txtnombre.setText("Ingrese el nombre");
@@ -377,11 +377,11 @@ public class Users extends javax.swing.JPanel {
 
                 UserAdmin usu = new UserAdmin();
                 usu.setCedula(txtid.getText());
-                toJson(usu);
+                objetoaJson(usu);
 
                 String task = "buscarUsuario";
 
-                usu = (UserAdmin) SMsgStream(task, usu.getCedula());
+                usu = (UserAdmin) servidorProtocolo(task, usu.getCedula());
 
                 txtid.setText(usu.getCedula());
                 txtnombre.setText(usu.getNombre());

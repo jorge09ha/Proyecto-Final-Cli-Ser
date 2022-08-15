@@ -1,9 +1,9 @@
 package GUI;
 
 import rentACar.Auto;
-import static rentACar.ClientSocket.SMsgStream;
-import static rentACar.ClientSocket.toJson;
 import javax.swing.*;
+import static rentACar.ClientSocket.servidorProtocolo;
+import static rentACar.ClientSocket.objetoaJson;
 
 public class Autos extends javax.swing.JPanel {
 
@@ -348,11 +348,11 @@ public class Autos extends javax.swing.JPanel {
                 Auto aut = new Auto();
 
                 aut.setPlaca(txtid.getText());
-                toJson(aut);
+                objetoaJson(aut);
 
                 String task = "buscarcliente";
 
-                aut = (Auto) SMsgStream(task, aut.getPlaca());
+                aut = (Auto) servidorProtocolo(task, aut.getPlaca());
 
                 txtid.setText(aut.getPlaca());
                 txtMarca.setText(aut.getMarca());

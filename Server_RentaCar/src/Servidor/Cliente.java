@@ -1,10 +1,10 @@
 package Servidor;
 
-import static Servidor.Server.toJson;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import static Servidor.Server.objetoJson;
+import static Servidor.Server.archivoJsonAObjeto;
+import static Servidor.Server.objetoaJson;
 
 /**
  *
