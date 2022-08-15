@@ -1,4 +1,4 @@
-package RentaCar;
+package rentACar;
 
 import com.google.gson.Gson;
 

@@ -1,13 +1,11 @@
 package GUI;
 
-import RentaCar.*;
-import static RentaCar.ClientSocket.SMsgStream;
-import static RentaCar.ClientSocket.toJson;
+import rentACar.UserAdmin;
+import static rentACar.ClientSocket.SMsgStream;
+import static rentACar.ClientSocket.toJson;
 import javax.swing.*;
 
 public class Users extends javax.swing.JPanel {
-
-    String search = "";
 
     public Users() {
         initComponents();
@@ -383,14 +381,14 @@ public class Users extends javax.swing.JPanel {
 
             int response = JOptionPane.showConfirmDialog(null, "Desea buscar al usuario?\nCedula: " + txtid.getText(), "Buscar Usuario", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
-                
+
                 UserAdmin usu = new UserAdmin();
                 usu.setCedula(txtid.getText());
                 toJson(usu);
 
                 String task = "buscarUsuario";
 
-                usu = SMsgStream(task, usu.getCedula());
+                usu = (UserAdmin) SMsgStream(task, usu.getCedula());
 
                 txtid.setText(usu.getCedula());
                 txtnombre.setText(usu.getNombre());

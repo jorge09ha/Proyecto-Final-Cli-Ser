@@ -1,6 +1,6 @@
 package GUI;
 
-import RentaCar.*;
+import rentACar.ClientSocket;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -24,10 +24,10 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard() {
 
         initComponents();
-        txtUserName.setText("Usermane: " + ClientSocket.getUserL());
+        //txtUserName.setText("Usermane: " + ClientSocket.getUserL());
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
         conn = new ClientSocket();
-        reg = conn.getConnection();
+        //reg = conn.getConnection();
 
         LocalDate now = LocalDate.now();
         int year = now.getYear();

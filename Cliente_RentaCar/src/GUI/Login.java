@@ -1,6 +1,5 @@
 package GUI;
 
-import RentaCar.*;
 import java.awt.Color;
 import java.awt.Toolkit;
 
@@ -254,7 +253,7 @@ public class Login extends javax.swing.JFrame {
         userSelec = userTxt.getText();
         passSelec = passTxt.getText();
         
-        ClientSocket.validarLogin(userSelec, passSelec);
+        //ClientSocket.validarLogin(userSelec, passSelec);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

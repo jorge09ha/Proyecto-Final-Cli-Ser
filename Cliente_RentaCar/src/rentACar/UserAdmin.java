@@ -1,20 +1,20 @@
-package RentaCar;
+package rentACar;
 
 /**
  *
  * @author jorge
  */
-public class Cliente extends Persona implements IOperaciones {
+public class UserAdmin extends Persona implements IOperaciones {
 
-    protected String email, telefono;
+    protected String user, pass;
 
-    public Cliente(String email, String telefono, String cedula, String nombre, String apellido1, String apellido2) {
+    public UserAdmin(String user, String pass, String cedula, String nombre, String apellido1, String apellido2) {
         super(cedula, nombre, apellido1, apellido2);
-        this.email = email;
-        this.telefono = telefono;
+        this.user = user;
+        this.pass = pass;
     }
 
-    public Cliente() {
+    public UserAdmin() {
     }
 
     @Override
@@ -57,20 +57,20 @@ public class Cliente extends Persona implements IOperaciones {
         this.apellido2 = apellido2;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUser() {
+        return user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public String getPass() {
+        return pass;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     @Override

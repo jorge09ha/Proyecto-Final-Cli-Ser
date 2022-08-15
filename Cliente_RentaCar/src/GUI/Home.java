@@ -1,7 +1,6 @@
 package GUI;
 
-import RentaCar.ClientSocket;
-import RentaCar.*;
+import rentACar.ClientSocket;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.Connection;
@@ -16,16 +15,16 @@ import java.util.ArrayList;
 public class Home extends javax.swing.JPanel {
 
     public Home() {
-        ArrayList<Auto> aD = ClientSocket.listEstadosHome("D");
-        ArrayList<Auto> aR = ClientSocket.listEstadosHome("R");
-        ArrayList<Cliente> lCli = ClientSocket.listClientes();
-        ArrayList<UserAdmin> usAdm = ClientSocket.listUsuarios();
+        //ArrayList<Auto> aD = ClientSocket.listEstadosHome("D");
+        //ArrayList<Auto> aR = ClientSocket.listEstadosHome("R");
+        //ArrayList<Cliente> lCli = ClientSocket.listClientes();
+        //ArrayList<UserAdmin> usAdm = ClientSocket.listUsuarios();
         
         initComponents();
-        aDisponibles.setText(Integer.toString(aD.size()));
-        aRentados.setText(Integer.toString(aR.size()));
-        lClientes.setText(Integer.toString(lCli.size()));
-        admUsers.setText(Integer.toString(usAdm.size()));
+        //aDisponibles.setText(Integer.toString(aD.size()));
+        //aRentados.setText(Integer.toString(aR.size()));
+        //lClientes.setText(Integer.toString(lCli.size()));
+        //admUsers.setText(Integer.toString(usAdm.size()));
 
     }
 

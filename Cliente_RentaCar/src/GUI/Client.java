@@ -1,9 +1,9 @@
 package GUI;
 
+import rentACar.Cliente;
 import javax.swing.*;
-import RentaCar.ClientSocket;
-import RentaCar.*;
-import static RentaCar.ClientSocket.*;
+import rentACar.ClientSocket;
+import static rentACar.ClientSocket.*;
 
 public class Client extends javax.swing.JPanel {
 
@@ -362,7 +362,7 @@ public class Client extends javax.swing.JPanel {
                 
                 String task = "buscarcliente";
 
-                cli = SMsgStream(task, cli.getCedula());
+                cli = (Cliente) SMsgStream(task, cli.getCedula());
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());

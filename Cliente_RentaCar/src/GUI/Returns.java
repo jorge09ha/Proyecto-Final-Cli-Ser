@@ -1,6 +1,5 @@
 package GUI;
 
-import RentaCar.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
@@ -15,45 +14,45 @@ public class Returns extends javax.swing.JPanel {
     }
 
     private void presentarTableAuto() {
-        DefaultTableModel modelo = (DefaultTableModel) TableRentados.getModel();
-        TableRentados.setModel(modelo);
-        //TableModel modeloDatos = TableRentados.getModel();
-
-        try {
-            ResultSet rs = ClientSocket.listRentados();
-
-            ResultSetMetaData metaData = rs.getMetaData();
-
-            // Names of columns
-            Vector<String> columnNames = new Vector<String>();
-            int columnCount = (metaData.getColumnCount()) - 1;
-
-            columnNames.add("Placa");
-            columnNames.add("Marca");
-            columnNames.add("Modelo");
-            columnNames.add("Cedula");
-            columnNames.add("Nombre");
-            columnNames.add("Apellido1");
-            columnNames.add("Apellido2");
-            columnNames.add("Correo");
-            columnNames.add("Telefono");
-
-            // Data of the table
-            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-            while (rs.next()) {
-                Vector<Object> vector = new Vector<Object>();
-                for (int i = 1; i <= columnCount; i++) {
-                    vector.add(rs.getObject(i));
-                }
-                data.add(vector);
-            }
-
-            modelo.setDataVector(data, columnNames);
-            //TableAuto.setEnabled(false);
-
-        } catch (Exception e) {
-
-        }
+//        DefaultTableModel modelo = (DefaultTableModel) TableRentados.getModel();
+//        TableRentados.setModel(modelo);
+//        //TableModel modeloDatos = TableRentados.getModel();
+//
+//        try {
+//            ResultSet rs = ClientSocket.listRentados();
+//
+//            ResultSetMetaData metaData = rs.getMetaData();
+//
+//            // Names of columns
+//            Vector<String> columnNames = new Vector<String>();
+//            int columnCount = (metaData.getColumnCount()) - 1;
+//
+//            columnNames.add("Placa");
+//            columnNames.add("Marca");
+//            columnNames.add("Modelo");
+//            columnNames.add("Cedula");
+//            columnNames.add("Nombre");
+//            columnNames.add("Apellido1");
+//            columnNames.add("Apellido2");
+//            columnNames.add("Correo");
+//            columnNames.add("Telefono");
+//
+//            // Data of the table
+//            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+//            while (rs.next()) {
+//                Vector<Object> vector = new Vector<Object>();
+//                for (int i = 1; i <= columnCount; i++) {
+//                    vector.add(rs.getObject(i));
+//                }
+//                data.add(vector);
+//            }
+//
+//            modelo.setDataVector(data, columnNames);
+//            //TableAuto.setEnabled(false);
+//
+//        } catch (Exception e) {
+//
+//        }
     }
 
     /**

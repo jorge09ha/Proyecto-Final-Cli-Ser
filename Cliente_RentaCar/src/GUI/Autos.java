@@ -1,8 +1,8 @@
 package GUI;
 
-import RentaCar.*;
-import static RentaCar.ClientSocket.SMsgStream;
-import static RentaCar.ClientSocket.toJson;
+import rentACar.Auto;
+import static rentACar.ClientSocket.SMsgStream;
+import static rentACar.ClientSocket.toJson;
 import javax.swing.*;
 
 public class Autos extends javax.swing.JPanel {
@@ -248,7 +248,7 @@ public class Autos extends javax.swing.JPanel {
             int response = JOptionPane.showConfirmDialog(null, "Desea borrar el auto?", "Borrar Auto", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
 
-                ClientSocket.borrarAuto(txtid.getText());
+                //ClientSocket.borrarAuto(txtid.getText());
                 txtid.setText("Ingrese la placa");
                 txtMarca.setText("Ingrese la marca");
                 txtModelo.setText("Ingrese el modelo");
@@ -280,7 +280,7 @@ public class Autos extends javax.swing.JPanel {
                     aut.setAnnio(cbAnnio.getSelectedItem().toString());
                     aut.setTransmision(cbTransm.getSelectedItem().toString());
                     aut.setRentar("D");
-                    ClientSocket.registrarAuto(aut);
+                   // ClientSocket.registrarAuto(aut);
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
@@ -306,7 +306,7 @@ public class Autos extends javax.swing.JPanel {
                 aut.setTransmision(cbTransm.getSelectedItem().toString());
                 aut.setRentar("D");
 
-                ClientSocket.modificarAuto(aut);
+               // ClientSocket.modificarAuto(aut);
             } else {
                 JOptionPane.showMessageDialog(null, "Datos no modificados", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -352,7 +352,7 @@ public class Autos extends javax.swing.JPanel {
 
                 String task = "buscarcliente";
 
-                aut = SMsgStream(task, aut.getPlaca());
+                aut = (Auto) SMsgStream(task, aut.getPlaca());
 
                 txtid.setText(aut.getPlaca());
                 txtMarca.setText(aut.getMarca());

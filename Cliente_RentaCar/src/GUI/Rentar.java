@@ -1,9 +1,10 @@
 package GUI;
 
+import rentACar.Cliente;
+import rentACar.Auto;
 import java.util.*;
-import RentaCar.*;
-import static RentaCar.ClientSocket.SMsgStream;
-import static RentaCar.ClientSocket.toJson;
+import static rentACar.ClientSocket.SMsgStream;
+import static rentACar.ClientSocket.toJson;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.sql.ResultSet;
@@ -21,50 +22,50 @@ public class Rentar extends javax.swing.JPanel {
         modelo.setRowCount(0);
 
         Cliente cli = new Cliente();
-        cli = ClientSocket.buscarcliente(txtid.getText());
+        //cli = ClientSocket.buscarcliente(txtid.getText());
 
         int numFila = 0;
         modelo.insertRow(numFila, new Object[]{cli.getNombre(), cli.getApellido1(), cli.getApellido2(), cli.getEmail(), cli.getTelefono()});
     }
 
     private void presentarTableAuto() {
-        DefaultTableModel modelo = (DefaultTableModel) TableAuto.getModel();
-
-        TableAuto.setModel(modelo);
-
-        TableModel modeloDatos = TableAuto.getModel();
-
-        try {
-            ResultSet rs = ClientSocket.listEstados("D");
-
-            ResultSetMetaData metaData = rs.getMetaData();
-
-            // Names of columns
-            Vector<String> columnNames = new Vector<String>();
-            int columnCount = (metaData.getColumnCount()) - 1;
-
-            columnNames.add("Placa");
-            columnNames.add("Marca");
-            columnNames.add("Modelo");
-            columnNames.add("Año");
-            columnNames.add("Transmision");
-
-            // Data of the table
-            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-            while (rs.next()) {
-                Vector<Object> vector = new Vector<Object>();
-                for (int i = 1; i <= columnCount; i++) {
-                    vector.add(rs.getObject(i));
-                }
-                data.add(vector);
-            }
-
-            modelo.setDataVector(data, columnNames);
-            //TableAuto.setEnabled(false);
-
-        } catch (Exception e) {
-
-        }
+//        DefaultTableModel modelo = (DefaultTableModel) TableAuto.getModel();
+//
+//        TableAuto.setModel(modelo);
+//
+//        TableModel modeloDatos = TableAuto.getModel();
+//
+//        try {
+//            //ResultSet rs = ClientSocket.listEstados("D");
+//
+//            ResultSetMetaData metaData = rs.getMetaData();
+//
+//            // Names of columns
+//            Vector<String> columnNames = new Vector<String>();
+//            int columnCount = (metaData.getColumnCount()) - 1;
+//
+//            columnNames.add("Placa");
+//            columnNames.add("Marca");
+//            columnNames.add("Modelo");
+//            columnNames.add("Año");
+//            columnNames.add("Transmision");
+//
+//            // Data of the table
+//            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+//            while (rs.next()) {
+//                Vector<Object> vector = new Vector<Object>();
+//                for (int i = 1; i <= columnCount; i++) {
+//                    vector.add(rs.getObject(i));
+//                }
+//                data.add(vector);
+//            }
+//
+//            modelo.setDataVector(data, columnNames);
+//            //TableAuto.setEnabled(false);
+//
+//        } catch (Exception e) {
+//
+//        }
     }
 
     private void showAuto() {
@@ -72,7 +73,7 @@ public class Rentar extends javax.swing.JPanel {
         modelo.setRowCount(0);
 
         Auto aut = new Auto();
-        aut = ClientSocket.buscarAuto(txtPlaca.getText());
+        //aut = ClientSocket.buscarAuto(txtPlaca.getText());
 
         int numFila = 0;
         modelo.insertRow(numFila, new Object[]{aut.getPlaca(), aut.getMarca(), aut.getModelo(), aut.getAnnio(), aut.getTransmision(), aut.getRentar()});
@@ -296,7 +297,7 @@ public class Rentar extends javax.swing.JPanel {
 
             String task = "buscarcliente";
 
-            cli = SMsgStream(task, cli.getCedula());
+            cli = (Cliente) SMsgStream(task, cli.getCedula());
 
             if (cli.getCedula() == null) {
                 JOptionPane.showMessageDialog(null, "El usuario no existe.\n" + "Puede agregarlos desde la sección clientes", "Info", 1);
@@ -310,7 +311,6 @@ public class Rentar extends javax.swing.JPanel {
 
     private void btmActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmActualizarActionPerformed
         // TODO add your handling code here:;
-
         try {
 
             presentarTableAuto();
@@ -342,13 +342,13 @@ public class Rentar extends javax.swing.JPanel {
                 if (response == JOptionPane.YES_OPTION) {
 
                     Cliente cli = new Cliente();
-                    cli = ClientSocket.buscarcliente(txtid.getText());
+                    //cli = ClientSocket.buscarcliente(txtid.getText());
 
                     Auto aut = new Auto();
-                    aut = ClientSocket.verEstados(txtPlaca.getText(), "D");
+                    //aut = ClientSocket.verEstados(txtPlaca.getText(), "D");
 
                     if (aut != null && cli != null) {
-                        ClientSocket.addRentados(aut, cli);
+                        //ClientSocket.addRentados(aut, cli);
                     } else {
                         JOptionPane.showMessageDialog(null, "HAY UN ERROR", "ERROR", 0);
                     }
@@ -386,7 +386,7 @@ public class Rentar extends javax.swing.JPanel {
 
             String task = "buscarcliente";
 
-            aut = SMsgStream(task, aut.getPlaca());
+            aut = (Auto) SMsgStream(task, aut.getPlaca());
 
             if (aut.getPlaca() == null) {
                 presentarTableAuto();
