@@ -61,108 +61,127 @@ public class ServidorHilo extends Thread {
 
             try {
 //Segun la tarea ejecuta...
+
+                //Envio la solicitid de tarea
+                out.writeUTF("tarea");
+
+                // Pido al cliente la tarea.
+                tarea = in.readUTF();
+                System.out.println("Tarea: " + tarea);//print--------------->
+
+                //Envio la solicitid de tarea
+                out.writeUTF("id");
+
+                // Pido al cliente el ID de busqueda (Placa o cedula).
+                id = in.readUTF();
+                System.out.println("Id: " + tarea);//print--------------->
+
                 switch (tarea) {
 
                     /*----------------------Clientes----------------------*/
                     case "agregarCliente":
-                        msjSalida = agregarCliente(); // el metodo hace un return tipo String con el resultado de lo que hiso
-
-                        out.writeUTF(msjSalida); // Se envia a cliente el resulado del registro
-                        out.flush();
-
-                        msjEntrada = in.readUTF(); // lee msg stop del cliente
-
+//                        msjSalida = agregarCliente(); // el metodo hace un return tipo String con el resultado de lo que hiso
+//
+//                        out.writeUTF(msjSalida); // Se envia a cliente el resulado del registro
+//                        out.flush();
+//
+//                        msjEntrada = in.readUTF(); // lee msg stop del cliente
+                        System.out.println("METODO agregarCliente");
+                        sc.close();
                         break;
 
                     case "buscarCliente":
-                        out.writeUTF("id"); // preguta por id 
-                        out.flush();
-
-                        id = in.readUTF(); //recibe el ID
-
-                        msjSalida = buscarCliente(id); // client                    
-                        id = msjSalida;
-                        out.writeUTF(msjSalida); // cliente
-                        out.flush();
-
-                        msjEntrada = in.readUTF();
-                        if ("servidorA".equals(msjEntrada)) {
-                            serverSalidaJson();
-                        }
-                        msjSalida = "objetodeJasonCLIENTE"; // client                    
-                        out.writeUTF(msjSalida); // cliente
-                        out.flush();
-
-                        if (id == "doit") {
-                            out.writeUTF(id); // cliente
-                            out.flush();
-                        }
-
-                        msjEntrada = in.readUTF(); // lee msg stop
-
+//                        out.writeUTF("id"); // preguta por id 
+//                        out.flush();
+//
+//                        id = in.readUTF(); //recibe el ID
+//
+//                        msjSalida = buscarCliente(id); // client                    
+//                        id = msjSalida;
+//                        out.writeUTF(msjSalida); // cliente
+//                        out.flush();
+//
+//                        msjEntrada = in.readUTF();
+//                        if ("servidorA".equals(msjEntrada)) {
+//                            serverSalidaJson();
+//                        }
+//                        msjSalida = "objetodeJasonCLIENTE"; // client                    
+//                        out.writeUTF(msjSalida); // cliente
+//                        out.flush();
+//
+//                        if (id == "doit") {
+//                            out.writeUTF(id); // cliente
+//                            out.flush();
+//                        }
+//
+//                        msjEntrada = in.readUTF(); // lee msg stop
+                        System.out.println("METODO buscarCliente");
+                        sc.close();
                         break;
 
                     case "editarCliente":
-                        out.writeUTF("id"); // preguta por id //linea 61
-                        out.flush();
-
-                        id = in.readUTF(); //recibe el ID
-
-                        msjSalida = editarCliente(id); // client                    
-                        out.writeUTF(msjSalida); // cliente
-                        out.flush();
-
-                        msjEntrada = in.readUTF();
-                        if ("servidorA".equals(msjEntrada)) {
-                            System.out.println("Server envio json: ");
-                            serverSalidaJson();
-                        }
-                        msjSalida = "objetodeJason()"; // client                    
-                        out.writeUTF(msjSalida); // cliente
-                        out.flush();
-
-                        msjEntrada = in.readUTF(); // lee msg stop
-
+//                        out.writeUTF("id"); // preguta por id //linea 61
+//                        out.flush();
+//
+//                        id = in.readUTF(); //recibe el ID
+//
+//                        msjSalida = editarCliente(id); // client                    
+//                        out.writeUTF(msjSalida); // cliente
+//                        out.flush();
+//
+//                        msjEntrada = in.readUTF();
+//                        if ("servidorA".equals(msjEntrada)) {
+//                            System.out.println("Server envio json: ");
+//                            serverSalidaJson();
+//                        }
+//                        msjSalida = "objetodeJason()"; // client                    
+//                        out.writeUTF(msjSalida); // cliente
+//                        out.flush();
+//
+//                        msjEntrada = in.readUTF(); // lee msg stop
+                        System.out.println("METODO editarCliente");
+                        sc.close();
                         break;
 
                     case "borrarCliente":
-                        out.writeUTF("id"); // preguta por id //linea 61
-                        out.flush();
-
-                        id = in.readUTF(); //recibe el ID
-
-                        msjSalida = borrarCliente(id); // client                    
-                        out.writeUTF(msjSalida); // cliente
-                        out.flush();
-
-                        msjEntrada = in.readUTF(); // lee msg stop
-
+//                        out.writeUTF("id"); // preguta por id //linea 61
+//                        out.flush();
+//
+//                        id = in.readUTF(); //recibe el ID
+//
+//                        msjSalida = borrarCliente(id); // client                    
+//                        out.writeUTF(msjSalida); // cliente
+//                        out.flush();
+//
+//                        msjEntrada = in.readUTF(); // lee msg stop
+                        System.out.println("METODO borrarCliente");
+                        sc.close();
                         break;
 
                     /*----------------------Usuarios------------------*/
                     case "agregarUsuario":
-                        msjSalida = agregarUsuario();
-                        out.writeUTF(msjSalida);
-                        out.flush();
-                        msjEntrada = in.readUTF();
+//                        msjSalida = agregarUsuario();
+//                        out.writeUTF(msjSalida);
+//                        out.flush();
+//                        msjEntrada = in.readUTF();
 
                         break;
 
                     case "buscarUsuario":
-                        out.writeUTF("id");
-                        out.flush();
-                        id = in.readUTF();
-                        msjSalida = buscarUsusario(id);
-                        out.writeUTF(msjSalida);
-                        out.flush();
-                        msjEntrada = in.readUTF();
-                        if ("servidorA".equals(msjEntrada)) {
-                            serverSalidaJson();
-                        }
-                        msjSalida = "objetodeJsonUSER";
-                        out.writeUTF(msjSalida);
-                        out.flush();
-                        msjEntrada = in.readUTF();
+//                        out.writeUTF("id");
+//                        out.flush();
+//                        id = in.readUTF();
+//                        msjSalida = buscarUsusario(id);
+//                        out.writeUTF(msjSalida);
+//                        out.flush();
+//                        msjEntrada = in.readUTF();
+//                        if ("servidorA".equals(msjEntrada)) {
+//                            serverSalidaJson();
+//                        }
+//                        msjSalida = "objetodeJsonUSER";
+//                        out.writeUTF(msjSalida);
+//                        out.flush();
+//                        msjEntrada = in.readUTF();
 
                         break;
 
@@ -176,28 +195,28 @@ public class ServidorHilo extends Thread {
 
                     /*----------------------Autos----------------------*/
                     case "agregarAuto":
-                        msjSalida = agregarAuto();
-                        out.writeUTF(msjSalida);
-                        out.flush();
-                        msjEntrada = in.readUTF();
+//                        msjSalida = agregarAuto();
+//                        out.writeUTF(msjSalida);
+//                        out.flush();
+//                        msjEntrada = in.readUTF();
 
                         break;
 
                     case "buscarAuto":
-                        out.writeUTF("id");
-                        out.flush();
-                        id = in.readUTF();
-                        msjSalida = buscarAuto(id);
-                        out.writeUTF(msjSalida);
-                        out.flush();
-                        msjEntrada = in.readUTF();
-                        if ("servidorA".equals(msjEntrada)) {
-                            serverSalidaJson();
-                        }
-                        msjSalida = "objetodeJsonAUTO";
-                        out.writeUTF(msjSalida);
-                        out.flush();
-                        msjEntrada = in.readUTF();
+//                        out.writeUTF("id");
+//                        out.flush();
+//                        id = in.readUTF();
+//                        msjSalida = buscarAuto(id);
+//                        out.writeUTF(msjSalida);
+//                        out.flush();
+//                        msjEntrada = in.readUTF();
+//                        if ("servidorA".equals(msjEntrada)) {
+//                            serverSalidaJson();
+//                        }
+//                        msjSalida = "objetodeJsonAUTO";
+//                        out.writeUTF(msjSalida);
+//                        out.flush();
+//                        msjEntrada = in.readUTF();
 
                         break;
 

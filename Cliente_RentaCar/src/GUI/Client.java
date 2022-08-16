@@ -6,7 +6,6 @@ import static Conexion.ClienteHilo.toJson;
 import Conexion.ClienteSocket;
 import static Conexion.ClienteSocket.clientToServer;
 
-
 public class Client extends javax.swing.JPanel {
 
     String search = "";
@@ -291,7 +290,7 @@ public class Client extends javax.swing.JPanel {
                     boolean resultado = toJson(cli);
                     String task = "agregarCliente";
 
-                    clientToServer(task, cli.getCedula());
+                    clientToServer(task, txtid.getText());
 
                     if (resultado == false) {
 
@@ -366,9 +365,9 @@ public class Client extends javax.swing.JPanel {
                 cli.setCedula(txtid.getText());
                 toJson(cli);
 
-                String tara = "buscarCliente";
-                
-                cli = (Cliente) clientToServer(tara, txtid.getText());
+                String task = "buscarCliente";
+
+                cli = (Cliente) clientToServer(task, txtid.getText());
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());
@@ -414,7 +413,7 @@ public class Client extends javax.swing.JPanel {
 //                    
                 String task = "modificarCliente";
 
-                cli = (Cliente) clientToServer(task, cli.getCedula());
+                cli = (Cliente) clientToServer(task, txtid.getText());
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());
@@ -455,7 +454,7 @@ public class Client extends javax.swing.JPanel {
 
                 String task = "borrarCliente";
 
-                cli = (Cliente) clientToServer(task, cli.getCedula());
+                cli = (Cliente) clientToServer(task, txtid.getText());
 
             } else {
                 JOptionPane.showMessageDialog(null, "Datos no Borrados", "Info", 1);

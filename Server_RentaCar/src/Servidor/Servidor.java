@@ -30,22 +30,8 @@ public class Servidor {
 
                 System.out.println("*****Cliente conectado.******");//print--------------->
 
-                //Envio la solicitid de tarea
-                out.writeUTF("tarea");
-
-                // Pido al cliente la tarea.
-                tarea = in.readUTF();
-                System.out.println("Tarea: " + tarea);//print--------------->
-
-                //Envio la solicitid de tarea
-                out.writeUTF("id");
-
-                // Pido al cliente el ID de busqueda (Placa o cedula).
-                id = in.readUTF();
-                System.out.println("Id: " + tarea);//print--------------->
-
                 // Inicio el hilo
-                System.out.println("Se inicia el Hilo. Tarea: " + tarea + "ID: " + id);//print--------------->
+                System.out.println("Se inicia el Hilo.");//print--------------->
                 ServidorHilo hilo = new ServidorHilo(sc, in, out, tarea, id);
                 hilo.start();
 

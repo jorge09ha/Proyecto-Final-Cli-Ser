@@ -28,12 +28,12 @@ public class ClienteHilo extends Thread {
     private static DataInputStream inF = null;
     private DataInputStream in;
     private DataOutputStream out;
-    private String task, id;
+    private String tarea, id;
 
-    public ClienteHilo(DataInputStream in, DataOutputStream out, String task, String id) {
+    public ClienteHilo(DataInputStream in, DataOutputStream out, String tarea, String id) {
         this.in = in;
         this.out = out;
-        this.task = task;
+        this.tarea = tarea;
         this.id = id;
     }
 
@@ -45,166 +45,180 @@ public class ClienteHilo extends Thread {
 
         try {
 
-            //Envio la tarea
-            mensaje = task;
-            out.writeUTF(mensaje);
-            out.flush();
-            System.out.println("Envio la tarea: " + mensaje);//print---------------
+            //Espero msg del servidor
+            String msg = in.readUTF();
+            System.out.println("Servidor: " + msg);
 
-            while (!exit) {
+            if (msg.equals("tarea")) {
 
-                try {
-                    switch (mensaje) {
-                        /*----------------------Clientes----------------------*/
-                        case "agregarCliente":
-                            break;
+                // Envia la tarea y se lo manda al servidor.
+                out.writeUTF(tarea);
+                out.flush();
+                System.out.println("Envio la tarea: " + tarea);//print--------------->
 
-                        case "editarCliente":
-                            out.writeUTF(mensaje); //Task
-                            out.flush();
-                            mensaje = in.readUTF();
-                            out.writeUTF(id); //send id
-                            out.flush();
-                            mensaje = in.readUTF(); //doit
-                            mensaje = "servidorA";
-                            out.writeUTF(mensaje);
-                            out.flush();
-                            break;
-                            
-                        case "buscarCliente":
-                            
-                            break;
+                if (msg.equals("id")) {
 
-                        case "borrarCliente":
-                            out.writeUTF(mensaje); //Task
-                            out.flush();
-                            mensaje = in.readUTF();
-                            out.writeUTF(id); //send id
-                            out.flush();
-                            mensaje = in.readUTF(); //doit
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        /*----------------------Usuarios----------------------*/
-                        case "agregarUsuario":
-                            break;
-
-                        case "editarUsuario":
-                            out.writeUTF(mensaje); //Task
-                            out.flush();
-                            mensaje = in.readUTF();
-                            out.writeUTF(id); //send id
-                            out.flush();
-                            mensaje = in.readUTF(); //doit
-                            mensaje = "servidorA";
-                            out.writeUTF(mensaje);
-                            out.flush();
-                            break;
-
-                        case "buscarUsuario":
-                            break;
-
-                        case "borrarUsuario":
-                            out.writeUTF(mensaje); //Task
-                            out.flush();
-                            mensaje = in.readUTF();
-                            out.writeUTF(id); //send id
-                            out.flush();
-                            mensaje = in.readUTF(); //doit
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        /*----------------------Autos----------------------*/
-                        case "agregarAuto":
-                            break;
-
-                        case "editarAuto":
-                            out.writeUTF(mensaje); //Task
-                            out.flush();
-                            mensaje = in.readUTF();
-                            out.writeUTF(id); //send id
-                            out.flush();
-                            mensaje = in.readUTF(); //doit
-                            mensaje = "servidorA";
-                            out.writeUTF(mensaje);
-                            out.flush();
-                            break;
-
-                        case "buscarAuto":
-                            break;
-
-                        case "borrarAuto":
-                            out.writeUTF(mensaje); //Task
-                            out.flush();
-                            mensaje = in.readUTF();
-                            out.writeUTF(id); //send id
-                            out.flush();
-                            mensaje = in.readUTF(); //doit
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        /*----------------------Rentar----------------------*/
-                        case "rentar":
-                            break;
-
-                        case "retornar":
-                            break;
-
-                        case "verRentados":
-                            break;
-
-                        case "verDisponibles":
-                            break;
-
-                        /*----------------------Errores y notificaciones----------------------*/
-                        case "no existe":
-                            JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        case "id vacio":
-                            JOptionPane.showMessageDialog(null, "El campo de id no puede estar vacio", "Campo vacio", 2);
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        case "correcto":
-                            JOptionPane.showMessageDialog(null, "Datos almacenados correctamente.", "Info", 1);
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        case "error almacenar":
-                            JOptionPane.showMessageDialog(null, "Error al almacenar los datos", "Error", 0);
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        case "duplicado":
-                            JOptionPane.showMessageDialog(null, "El dato ya existe.", "Error", 0);
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        case "error":
-                            JOptionPane.showMessageDialog(null, "Se precento un error.", "Error", 0);
-                            out.writeUTF("stop");
-                            out.flush();
-                            break;
-
-                        default:
-                            mensaje = "exit";
-                            System.out.println(mensaje);
-                    }
-
-                } catch (IOException ex) {
-                    Logger.getLogger(ClienteHilo.class.getName()).log(Level.SEVERE, null, ex);
+                    // Envia el id y se lo manda al servidor.
+                    out.writeUTF(id);
+                    out.flush();
+                    System.out.println("Envio la id: " + id);//print--------------->
                 }
 
+                while (!exit) {
+
+                    try {
+                        switch (mensaje) {
+                            /*----------------------Clientes----------------------*/
+                            case "agregarCliente":
+                                break;
+
+                            case "editarCliente":
+                                out.writeUTF(mensaje); //Task
+                                out.flush();
+                                mensaje = in.readUTF();
+                                out.writeUTF(id); //send id
+                                out.flush();
+                                mensaje = in.readUTF(); //doit
+                                mensaje = "servidorA";
+                                out.writeUTF(mensaje);
+                                out.flush();
+                                break;
+
+                            case "buscarCliente":
+
+                                break;
+
+                            case "borrarCliente":
+                                out.writeUTF(mensaje); //Task
+                                out.flush();
+                                mensaje = in.readUTF();
+                                out.writeUTF(id); //send id
+                                out.flush();
+                                mensaje = in.readUTF(); //doit
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            /*----------------------Usuarios----------------------*/
+                            case "agregarUsuario":
+                                break;
+
+                            case "editarUsuario":
+                                out.writeUTF(mensaje); //Task
+                                out.flush();
+                                mensaje = in.readUTF();
+                                out.writeUTF(id); //send id
+                                out.flush();
+                                mensaje = in.readUTF(); //doit
+                                mensaje = "servidorA";
+                                out.writeUTF(mensaje);
+                                out.flush();
+                                break;
+
+                            case "buscarUsuario":
+                                break;
+
+                            case "borrarUsuario":
+                                out.writeUTF(mensaje); //Task
+                                out.flush();
+                                mensaje = in.readUTF();
+                                out.writeUTF(id); //send id
+                                out.flush();
+                                mensaje = in.readUTF(); //doit
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            /*----------------------Autos----------------------*/
+                            case "agregarAuto":
+                                break;
+
+                            case "editarAuto":
+                                out.writeUTF(mensaje); //Task
+                                out.flush();
+                                mensaje = in.readUTF();
+                                out.writeUTF(id); //send id
+                                out.flush();
+                                mensaje = in.readUTF(); //doit
+                                mensaje = "servidorA";
+                                out.writeUTF(mensaje);
+                                out.flush();
+                                break;
+
+                            case "buscarAuto":
+                                break;
+
+                            case "borrarAuto":
+                                out.writeUTF(mensaje); //Task
+                                out.flush();
+                                mensaje = in.readUTF();
+                                out.writeUTF(id); //send id
+                                out.flush();
+                                mensaje = in.readUTF(); //doit
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            /*----------------------Rentar----------------------*/
+                            case "rentar":
+                                break;
+
+                            case "retornar":
+                                break;
+
+                            case "verRentados":
+                                break;
+
+                            case "verDisponibles":
+                                break;
+
+                            /*----------------------Errores y notificaciones----------------------*/
+                            case "no existe":
+                                JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            case "id vacio":
+                                JOptionPane.showMessageDialog(null, "El campo de id no puede estar vacio", "Campo vacio", 2);
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            case "correcto":
+                                JOptionPane.showMessageDialog(null, "Datos almacenados correctamente.", "Info", 1);
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            case "error almacenar":
+                                JOptionPane.showMessageDialog(null, "Error al almacenar los datos", "Error", 0);
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            case "duplicado":
+                                JOptionPane.showMessageDialog(null, "El dato ya existe.", "Error", 0);
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            case "error":
+                                JOptionPane.showMessageDialog(null, "Se precento un error.", "Error", 0);
+                                out.writeUTF("stop");
+                                out.flush();
+                                break;
+
+                            default:
+                                mensaje = "exit";
+                                System.out.println(mensaje);
+                        }
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(ClienteHilo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(ClienteHilo.class.getName()).log(Level.SEVERE, null, ex);
