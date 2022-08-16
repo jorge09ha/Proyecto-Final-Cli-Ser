@@ -50,6 +50,9 @@ public class ServidorHilo extends Thread {
     @Override
     public void run() {
 
+        String msjSalida = null;
+        String msjEntrada = null;
+        String id = null;
         boolean exit = false;
 
         while (!exit) {
@@ -57,7 +60,166 @@ public class ServidorHilo extends Thread {
             try {
 //Segun la tarea ejecuta...
                 switch (tarea) {
+
+                    /*----------------------Clientes----------------------*/
                     case "agregarCliente":
+                        msjSalida = agregarCliente(); // el metodo hace un return tipo String con el resultado de lo que hiso
+
+                        out.writeUTF(msjSalida); // Se envia a cliente el resulado del registro
+                        out.flush();
+
+                        msjEntrada = in.readUTF(); // lee msg stop del cliente
+
+                        break;
+
+                    case "buscarCliente":
+                        out.writeUTF("id"); // preguta por id 
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+
+                        msjSalida = buscarCliente(id); // client                    
+                        id = msjSalida;
+                        out.writeUTF(msjSalida); // cliente
+                        out.flush();
+
+                        msjEntrada = in.readUTF();
+                        if ("servidorA".equals(msjEntrada)) {
+                            serverSalidaJson();
+                        }
+                        msjSalida = "objetodeJasonCLIENTE"; // client                    
+                        out.writeUTF(msjSalida); // cliente
+                        out.flush();
+
+                        if (id == "doit") {
+                            out.writeUTF(id); // cliente
+                            out.flush();
+                        }
+
+                        msjEntrada = in.readUTF(); // lee msg stop
+
+                        break;
+
+                    case "editarCliente":
+                        out.writeUTF("id"); // preguta por id //linea 61
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+
+                        msjSalida = editarCliente(id); // client                    
+                        out.writeUTF(msjSalida); // cliente
+                        out.flush();
+
+                        msjEntrada = in.readUTF();
+                        if ("servidorA".equals(msjEntrada)) {
+                            System.out.println("Server envio json: ");
+                            serverSalidaJson();
+                        }
+                        msjSalida = "objetodeJason()"; // client                    
+                        out.writeUTF(msjSalida); // cliente
+                        out.flush();
+
+                        msjEntrada = in.readUTF(); // lee msg stop
+
+                        break;
+
+                    case "borrarCliente":
+                        out.writeUTF("id"); // preguta por id //linea 61
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+
+                        msjSalida = borrarCliente(id); // client                    
+                        out.writeUTF(msjSalida); // cliente
+                        out.flush();
+
+                        msjEntrada = in.readUTF(); // lee msg stop
+
+                        break;
+
+                    /*----------------------Usuarios------------------*/
+                    case "agregarUsuario":
+                        msjSalida = agregarUsuario();
+                        out.writeUTF(msjSalida);
+                        out.flush();
+                        msjEntrada = in.readUTF();
+                        
+                        break;
+
+                    case "buscarUsuario":
+                        out.writeUTF("id");
+                        out.flush();
+                        id = in.readUTF();
+                        msjSalida = buscarUsusario(id);
+                        out.writeUTF(msjSalida);
+                        out.flush();
+                        msjEntrada = in.readUTF();
+                        if ("servidorA".equals(msjEntrada)) {
+                            serverSalidaJson();
+                        }
+                        msjSalida = "objetodeJsonUSER";
+                        out.writeUTF(msjSalida);
+                        out.flush();
+                        msjEntrada = in.readUTF();
+                        
+                        break;
+
+                    case "editarUsuario":
+                        
+                        break;
+
+                    case "eliminarUsuario":
+                        
+                        break;
+                        
+                    /*----------------------Autos----------------------*/
+                    case "agregarAuto":
+                        msjSalida = agregarAuto();
+                        out.writeUTF(msjSalida);
+                        out.flush();
+                        msjEntrada = in.readUTF();
+
+                        break;
+
+                    case "buscarAuto":
+                        out.writeUTF("id");
+                        out.flush();
+                        id = in.readUTF();
+                        msjSalida = buscarAuto(id);
+                        out.writeUTF(msjSalida);
+                        out.flush();
+                        msjEntrada = in.readUTF();
+                        if ("servidorA".equals(msjEntrada)) {
+                            serverSalidaJson();
+                        }
+                        msjSalida = "objetodeJsonAUTO";
+                        out.writeUTF(msjSalida);
+                        out.flush();
+                        msjEntrada = in.readUTF();
+
+                        break;
+
+                    case "editarAuto":
+
+                        break;
+
+                    case "borrarAuto":
+
+                        break;
+                    /*----------------------Rentar---------------------*/
+                    case "rentar":
+
+                        break;
+
+                    case "retornar":
+
+                        break;
+
+                    case "verRentados":
+
+                        break;
+
+                    case "verDisponibles":
 
                         break;
 
@@ -261,4 +423,303 @@ public class ServidorHilo extends Thread {
 
         return conn;
     }
+
+    /*
+    *
+    *                   CRUD Clientes
+    *
+     */
+    public static String buscarCliente(String id) {
+        Cliente cli = new Cliente();
+        Connection conn = getConnection();
+        String msg;
+
+        try {
+            if (!id.equals("") && !id.equals(null) && !id.equals("Ingrese la identificacion")) {
+                String sql = "SELECT * FROM clientes WHERE idcliente = '" + id + "'";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+                    cli.setCedula(rs.getString("idcliente"));
+                    cli.setNombre(rs.getString("nombre"));
+                    cli.setApellido1(rs.getString("apellido1"));
+                    cli.setApellido2(rs.getString("apellido2"));
+                    cli.setEmail(rs.getString("correoelectronico"));
+                    cli.setTelefono(rs.getString("telefono"));
+
+                    objetoaJson(cli);
+
+                    //envioJson();
+                    msg = "doit";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error almacenar";
+            return msg;
+        }
+        return "Error";
+    }
+
+    public static String agregarCliente() {
+        int resultado = 0;
+        String msg = "";
+        Connection conn = getConnection();
+
+        Cliente cli = (Cliente) objetodeJsonCLIENTE("default");
+
+        try {
+
+            String sql = "INSERT INTO clientes  Values ('" + cli.getCedula() + "','" + cli.getNombre() + "','" + cli.getApellido1() + "','" + cli.getApellido2() + "','" + cli.getEmail() + "','" + cli.getTelefono() + "')";
+            Statement st = conn.createStatement();
+            resultado = st.executeUpdate(sql);
+
+            if (resultado > 0) {
+                msg = "correcto";
+                return msg;
+            } else {
+                msg = "error almacenar";
+                return msg;
+            }
+
+        } catch (Exception e) {
+            msg = "duplicado";
+            return msg;
+        }
+
+    }//liso
+
+    public static String borrarCliente(String id) {
+
+        Cliente cli = new Cliente();
+        Connection conn = getConnection();
+        int resultado = 0;
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
+                String sql = "DELETE FROM clientes WHERE idcliente = '" + id + "'";
+                Statement st = conn.createStatement();
+                resultado = st.executeUpdate(sql);
+
+                msg = "correcto";
+
+                return msg;
+
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+
+    }
+
+    public static String editarCliente(String id) {
+
+        Cliente cli = new Cliente();
+        Connection conn = getConnection();
+        String buscar = id;
+        String msg;
+
+        int resultado = 0;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
+                msg = borrarCliente(id);
+                if ("doit".equals(msg)) {
+                    cli = (Cliente) objetodeJsonCLIENTE("default");
+                    String sql = "UPDATE clientes SET idcliente = '" + cli.getCedula() + "',nombre = '" + cli.getNombre() + "',apellido1 = '" + cli.getApellido1() + "',apellido2 = '" + cli.getApellido2() + "',correoElectronico = '" + cli.getEmail() + "',telefono = '" + cli.getTelefono() + "' WHERE idcliente = '" + id + "'";
+                    Statement st = conn.createStatement();
+                    resultado = st.executeUpdate(sql);
+
+                    if (resultado > 0) {
+                        msg = "doit";
+                        return msg;
+                    } else {
+                        msg = "no existe";
+                        return msg;
+                    }
+                }
+                msg = "doit";
+                return msg;
+            }
+
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+
+        return "Error";
+
+    }
+
+    /*
+    *
+    *                   CRUD Usuarios
+    *
+     */
+    public static String buscarUsusario(String id) {
+        UserAdmin usu = new UserAdmin();
+        Connection conn = getConnection();
+        String msg;
+
+        try {
+            if (!id.equals("") && !id.equals(null) && !id.equals("Ingrese la identificacion")) {
+                String sql = "SELECT * FROM usuarios WHERE idcliente = '" + id + "'";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+                    usu.setCedula(rs.getString("idcliente"));
+                    usu.setNombre(rs.getString("nombre"));
+                    usu.setApellido1(rs.getString("apellido1"));
+                    usu.setApellido2(rs.getString("apellido2"));
+                    usu.setUser(rs.getString("usuario"));
+                    usu.setPass(rs.getString("contrasena"));
+
+                    objetoaJson(usu);
+
+                    //envioJson();
+                    msg = "doit";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error almacenar";
+            return msg;
+        }
+        return "error";
+    }//listo
+
+    public static String agregarUsuario() {
+        int resultado = 0;
+        String msg = "";
+        Connection conn = getConnection();
+
+        UserAdmin usu = (UserAdmin) objetodeJsonUSER("default");
+        try {
+
+            String sql = "INSERT INTO usuarios  Values ('" + usu.getCedula() + "','" + usu.getNombre() + "','" + usu.getApellido1() + "','" + usu.getApellido2() + "','" + usu.getUser() + "','" + usu.getPass() + "')";
+            Statement st = conn.createStatement();
+            resultado = st.executeUpdate(sql);
+
+            if (resultado > 0) {
+                msg = "correcto";
+                return msg;
+            } else {
+                msg = "error almacenar";
+                return msg;
+            }
+
+        } catch (Exception e) {
+            msg = "duplicado";
+            return msg;
+        }
+
+    }//listo
+
+    /*
+    *
+    *                   CRUD Autos
+    *
+     */
+    public static String buscarAuto(String id) {
+        Auto aut = new Auto();
+        Connection conn = getConnection();
+        String msg;
+
+        try {
+            if (!id.equals("") && !id.equals(null) && !id.equals("Ingrese la placa")) {
+                String sql = "SELECT * FROM autos WHERE idauto = '" + id + "'";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+                    aut.setPlaca(rs.getString("idauto"));
+                    aut.setMarca(rs.getString("marca"));
+                    aut.setModelo(rs.getString("modelo"));
+                    aut.setAnnio(rs.getString("annio"));
+                    aut.setTransmision(rs.getString("transmision"));
+                    aut.setRentar(rs.getString("rentar"));
+
+                    objetoaJson(aut);
+
+                    //envioJson();
+                    msg = "doit";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error almacenar";
+            return msg;
+        }
+        return "Error";
+
+    }
+
+    public static String agregarAuto() {
+        int resultado = 0;
+        String msg = "";
+        Connection conn = getConnection();
+
+        Auto aut = (Auto) objetodeJsonAUTO("default");
+
+        try {
+
+            String sql = "INSERT INTO autos  Values ('" + aut.getPlaca() + "','" + aut.getMarca() + "','" + aut.getModelo() + "','" + aut.getAnnio() + "','" + aut.getTransmision() + "','" + aut.getRentar() + "')";
+            Statement st = conn.createStatement();
+            resultado = st.executeUpdate(sql);
+
+            if (resultado > 0) {
+                msg = "correcto";
+                return msg;
+            } else {
+                msg = "error almacenar";
+                return msg;
+            }
+
+        } catch (Exception e) {
+            msg = "duplicado";
+            return msg;
+        }
+
+    }//listo
+
+    /*
+    *
+    *                   CRUD Rentar
+    *
+     */
 }
