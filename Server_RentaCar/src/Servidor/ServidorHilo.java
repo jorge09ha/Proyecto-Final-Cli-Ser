@@ -39,12 +39,14 @@ public class ServidorHilo extends Thread {
     private DataInputStream in;
     private DataOutputStream out;
     private String tarea;
+    private String id;
 
-    public ServidorHilo(Socket sc, DataInputStream in, DataOutputStream out, String tarea) {
+    public ServidorHilo(Socket sc, DataInputStream in, DataOutputStream out, String tarea, String id) {
         this.sc = sc;
         this.in = in;
         this.out = out;
         this.tarea = tarea;
+        this.id = id;
     }
 
     @Override
@@ -143,7 +145,7 @@ public class ServidorHilo extends Thread {
                         out.writeUTF(msjSalida);
                         out.flush();
                         msjEntrada = in.readUTF();
-                        
+
                         break;
 
                     case "buscarUsuario":
@@ -161,17 +163,17 @@ public class ServidorHilo extends Thread {
                         out.writeUTF(msjSalida);
                         out.flush();
                         msjEntrada = in.readUTF();
-                        
+
                         break;
 
                     case "editarUsuario":
-                        
+
                         break;
 
                     case "eliminarUsuario":
-                        
+
                         break;
-                        
+
                     /*----------------------Autos----------------------*/
                     case "agregarAuto":
                         msjSalida = agregarAuto();

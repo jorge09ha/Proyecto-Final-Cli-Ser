@@ -7,8 +7,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import static rentACar.ClienteHilo.toJson;
-import static rentACar.ClienteS.clientToServer;
+import static Conexion.ClienteHilo.toJson;
+import static Conexion.ClienteSocket.clientToServer;
 
 public class Rentar extends javax.swing.JPanel {
 

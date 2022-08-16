@@ -2,9 +2,9 @@ package GUI;
 
 import rentACar.Cliente;
 import javax.swing.*;
-import static rentACar.ClienteHilo.toJson;
-import rentACar.ClienteS;
-import static rentACar.ClienteS.clientToServer;
+import static Conexion.ClienteHilo.toJson;
+import Conexion.ClienteSocket;
+import static Conexion.ClienteSocket.clientToServer;
 
 
 public class Client extends javax.swing.JPanel {
@@ -366,9 +366,9 @@ public class Client extends javax.swing.JPanel {
                 cli.setCedula(txtid.getText());
                 toJson(cli);
 
-                String task = "buscarCliente";
+                String tara = "buscarCliente";
                 
-                cli = (Cliente) clientToServer(task, cli.getCedula());
+                cli = (Cliente) clientToServer(tara, txtid.getText());
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());

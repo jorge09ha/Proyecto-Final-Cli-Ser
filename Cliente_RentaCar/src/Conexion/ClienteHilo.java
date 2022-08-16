@@ -1,4 +1,4 @@
-package rentACar;
+package Conexion;
 
 import com.google.gson.Gson;
 import java.io.DataInputStream;
@@ -18,6 +18,9 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import rentACar.Auto;
+import rentACar.Cliente;
+import rentACar.UserAdmin;
 
 public class ClienteHilo extends Thread {
 

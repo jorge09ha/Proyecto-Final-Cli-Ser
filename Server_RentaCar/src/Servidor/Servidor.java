@@ -16,24 +16,37 @@ public class Servidor {
             ServerSocket server = new ServerSocket(38000);
             Socket sc;
 
-            System.out.println("Servidor iniciado");
+            System.out.println("Servidor iniciado. Puerto: 38000");//print--------------->
             while (true) {
 
                 // Espero la conexion del cliente
                 sc = server.accept();
 
+                String tarea = null;
+                String id = null;
+
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
-                System.out.println(sc.getInetAddress().getAddress() + " conectado.");
+                System.out.println("*****Cliente conectado.******");//print--------------->
+
+                //Envio la solicitid de tarea
+                out.writeUTF("tarea");
 
                 // Pido al cliente la tarea.
-                String tarea = in.readUTF();
+                tarea = in.readUTF();
+                System.out.println("Tarea: " + tarea);//print--------------->
 
-                System.out.println("Tarea: " + tarea);
+                //Envio la solicitid de tarea
+                out.writeUTF("id");
+
+                // Pido al cliente el ID de busqueda (Placa o cedula).
+                id = in.readUTF();
+                System.out.println("Id: " + tarea);//print--------------->
 
                 // Inicio el hilo
-                ServidorHilo hilo = new ServidorHilo(sc, in, out, tarea);
+                System.out.println("Se inicia el Hilo. Tarea: " + tarea + "ID: " + id);//print--------------->
+                ServidorHilo hilo = new ServidorHilo(sc, in, out, tarea, id);
                 hilo.start();
 
             }
