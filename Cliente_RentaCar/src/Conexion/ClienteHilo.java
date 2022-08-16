@@ -41,12 +41,9 @@ public class ClienteHilo extends Thread {
     @Override
     public void run() {
 
-        String strFromClient = null;
-        String strToClient = null;
-        String msg = null;
-
         try {
 
+            String strFromClient = "", strToClient = "", msg = "";
             strToClient = tarea;
 
             Cliente cli = new Cliente();
@@ -54,7 +51,6 @@ public class ClienteHilo extends Thread {
             UserAdmin usu = new UserAdmin();
 
             while (!strFromClient.equals("stop")) {
-
                 switch (strToClient) {
 
                     /*----------------------Clientes----------------------*/

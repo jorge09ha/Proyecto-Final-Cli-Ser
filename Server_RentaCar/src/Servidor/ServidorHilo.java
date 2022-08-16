@@ -48,23 +48,19 @@ public class ServidorHilo extends Thread {
     @Override
     public void run() {
 
-        String strToClient = null;
-        String strFromServer = null;
-        String id = null;
-
         try {
+            String strFromServer = "", strToClient = "", id = "";
 
             strFromServer = in.readUTF();// Recibe la tarea
-            System.out.println("Cliente: Tarea=" + strFromServer);//print--------------->
 
             while (!strFromServer.equals("stop")) {
 
-                /*
+                    /*
                  *
                  * Switch ejecuta el metodo sugun la tarea.
                  *
-                 */
-                switch (strFromServer) {
+                     */
+                    switch (strFromServer) {
                     /*----------------------Clientes----------------------*/
                     case "registrarCliente":
 

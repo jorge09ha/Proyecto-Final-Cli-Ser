@@ -15,14 +15,13 @@ public class ClienteSocket {
         try {
             //Creo el socket.
             Socket sc = new Socket("127.0.0.1", 7777);
-            System.out.println("Server is Waiting for client request... ");
 
             //Defino la entrada y la salida.
             DataInputStream in = new DataInputStream(sc.getInputStream());
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
             // Ejecutamos el hilo.
-            System.out.println("Se inicia el Hilo.");//print--------------->
+            System.out.println("Se inicia el Hilo."+tarea+id);//print--------------->
             ClienteHilo hilo = new ClienteHilo(in, out, tarea, id);
             hilo.start();
             hilo.join();
