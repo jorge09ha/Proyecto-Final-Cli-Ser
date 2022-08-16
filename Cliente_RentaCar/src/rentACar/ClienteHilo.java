@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class ClienteHilo extends Thread {
 
@@ -35,19 +36,25 @@ public class ClienteHilo extends Thread {
 
     @Override
     public void run() {
+
         String mensaje = null;
         boolean exit = false;
+
         try {
+
             //Envio la tarea
             mensaje = task;
             out.writeUTF(mensaje);
             out.flush();
-            System.out.println("envio la tarea: " + mensaje);//print---------------
+            System.out.println("Envio la tarea: " + mensaje);//print---------------
+
             while (!exit) {
 
                 try {
                     switch (mensaje) {
+                        /*----------------------Clientes----------------------*/
                         case "agregarCliente":
+                            break;
 
                         case "editarCliente":
                             out.writeUTF(mensaje); //Task
@@ -59,6 +66,11 @@ public class ClienteHilo extends Thread {
                             mensaje = "servidorA";
                             out.writeUTF(mensaje);
                             out.flush();
+                            break;
+                            
+                        case "buscarCliente":
+                            
+                            break;
 
                         case "borrarCliente":
                             out.writeUTF(mensaje); //Task
@@ -69,8 +81,117 @@ public class ClienteHilo extends Thread {
                             mensaje = in.readUTF(); //doit
                             out.writeUTF("stop");
                             out.flush();
+                            break;
 
-                        case "mostrarCliente":
+                        /*----------------------Usuarios----------------------*/
+                        case "agregarUsuario":
+                            break;
+
+                        case "editarUsuario":
+                            out.writeUTF(mensaje); //Task
+                            out.flush();
+                            mensaje = in.readUTF();
+                            out.writeUTF(id); //send id
+                            out.flush();
+                            mensaje = in.readUTF(); //doit
+                            mensaje = "servidorA";
+                            out.writeUTF(mensaje);
+                            out.flush();
+                            break;
+
+                        case "buscarUsuario":
+                            break;
+
+                        case "borrarUsuario":
+                            out.writeUTF(mensaje); //Task
+                            out.flush();
+                            mensaje = in.readUTF();
+                            out.writeUTF(id); //send id
+                            out.flush();
+                            mensaje = in.readUTF(); //doit
+                            out.writeUTF("stop");
+                            out.flush();
+                            break;
+
+                        /*----------------------Autos----------------------*/
+                        case "agregarAuto":
+                            break;
+
+                        case "editarAuto":
+                            out.writeUTF(mensaje); //Task
+                            out.flush();
+                            mensaje = in.readUTF();
+                            out.writeUTF(id); //send id
+                            out.flush();
+                            mensaje = in.readUTF(); //doit
+                            mensaje = "servidorA";
+                            out.writeUTF(mensaje);
+                            out.flush();
+                            break;
+
+                        case "buscarAuto":
+                            break;
+
+                        case "borrarAuto":
+                            out.writeUTF(mensaje); //Task
+                            out.flush();
+                            mensaje = in.readUTF();
+                            out.writeUTF(id); //send id
+                            out.flush();
+                            mensaje = in.readUTF(); //doit
+                            out.writeUTF("stop");
+                            out.flush();
+                            break;
+
+                        /*----------------------Rentar----------------------*/
+                        case "rentar":
+                            break;
+
+                        case "retornar":
+                            break;
+
+                        case "verRentados":
+                            break;
+
+                        case "verDisponibles":
+                            break;
+
+                        /*----------------------Errores y notificaciones----------------------*/
+                        case "no existe":
+                            JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
+                            out.writeUTF("stop");
+                            out.flush();
+                            break;
+
+                        case "id vacio":
+                            JOptionPane.showMessageDialog(null, "El campo de id no puede estar vacio", "Campo vacio", 2);
+                            out.writeUTF("stop");
+                            out.flush();
+                            break;
+
+                        case "correcto":
+                            JOptionPane.showMessageDialog(null, "Datos almacenados correctamente.", "Info", 1);
+                            out.writeUTF("stop");
+                            out.flush();
+                            break;
+
+                        case "error almacenar":
+                            JOptionPane.showMessageDialog(null, "Error al almacenar los datos", "Error", 0);
+                            out.writeUTF("stop");
+                            out.flush();
+                            break;
+
+                        case "duplicado":
+                            JOptionPane.showMessageDialog(null, "El dato ya existe.", "Error", 0);
+                            out.writeUTF("stop");
+                            out.flush();
+                            break;
+
+                        case "error":
+                            JOptionPane.showMessageDialog(null, "Se precento un error.", "Error", 0);
+                            out.writeUTF("stop");
+                            out.flush();
+                            break;
 
                         default:
                             mensaje = "exit";
@@ -89,12 +210,12 @@ public class ClienteHilo extends Thread {
     }
 
     /*--------Conexion puerto 6000 salida de archivos---------*/
-    public static void serverOutJson() {
+    public static void serverSalidaJson() {
         try ( Socket socket = new Socket("localhost", 6000)) {
             inF = new DataInputStream(socket.getInputStream());
             outF = new DataOutputStream(socket.getOutputStream());
 
-            outFileJson("ClientSide.json");
+            salidaFileJson("ClientSide.json");
 
             inF.close();
 
@@ -104,7 +225,7 @@ public class ClienteHilo extends Thread {
     }
 
     /*--------Conexion puerto 7000 entrada de archivos---------*/
-    public static void serverInJson() {
+    public static void serverEntradaJson() {
         try ( ServerSocket serverSocket = new ServerSocket(7000)) {
             System.out.println("listening to port:5000");
             Socket clientSocket = serverSocket.accept();
@@ -112,7 +233,7 @@ public class ClienteHilo extends Thread {
             inF = new DataInputStream(clientSocket.getInputStream());
             outF = new DataOutputStream(clientSocket.getOutputStream());
 
-            inFileJson("NewFileFromServer.json");
+            entradaFileJson("NewFileFromServer.json");
 
             inF.close();
             outF.close();
@@ -124,7 +245,7 @@ public class ClienteHilo extends Thread {
     }
 
     /*----------------Recibe archivo JSON-----------------*/
-    private static void inFileJson(String fileName) throws Exception {
+    private static void entradaFileJson(String fileName) throws Exception {
         int bytes = 0;
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);
 
@@ -138,7 +259,7 @@ public class ClienteHilo extends Thread {
     }
 
     /*-----------------Envia archivo JSON-----------------*/
-    public static void outFileJson(String path) throws Exception {
+    public static void salidaFileJson(String path) throws Exception {
         int bytes = 0;
         File file = new File(path);
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -213,7 +334,7 @@ public class ClienteHilo extends Thread {
             gson.toJson(cli, writer);
             writer.close();
 
-            serverOutJson();
+            serverSalidaJson();
 
             return done = true;
 

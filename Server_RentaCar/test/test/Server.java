@@ -1,4 +1,6 @@
-package Servidor;
+package test;
+
+
 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
@@ -121,7 +123,7 @@ public class Server {
 
                         break;
 
-                    case "eliminarCliente":
+                    case "borrarCliente":
                         out.writeUTF("id"); // preguta por id //linea 61
                         out.flush();
 

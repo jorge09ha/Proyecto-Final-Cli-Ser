@@ -3,8 +3,7 @@ package Servidor;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import static Servidor.Server.archivoJsonAObjeto;
-import static Servidor.Server.objetoaJson;
+
 
 /**
  *
