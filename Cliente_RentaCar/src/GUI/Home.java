@@ -1,6 +1,5 @@
 package GUI;
 
-import rentACar.ClientSocket;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.Connection;

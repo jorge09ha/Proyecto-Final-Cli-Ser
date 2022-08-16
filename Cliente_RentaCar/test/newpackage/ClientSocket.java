@@ -1,4 +1,4 @@
-package rentACar;
+package newpackage;
 
 import com.google.gson.Gson;
 import java.io.*;
@@ -6,11 +6,13 @@ import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.swing.JOptionPane;
+import rentACar.Auto;
+import rentACar.Cliente;
+import rentACar.UserAdmin;
 
 public class ClientSocket {
 
-    private static DataOutputStream dataOutputStream = null;
-    private static DataInputStream dataInputStream = null;
+ 
     private static DataInputStream din = null;
     private static ServerSocket serverSocket = null;
     private static DataOutputStream dout = null;

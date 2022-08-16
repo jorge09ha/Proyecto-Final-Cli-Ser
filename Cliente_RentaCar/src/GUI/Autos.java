@@ -2,7 +2,8 @@ package GUI;
 
 import rentACar.Auto;
 import javax.swing.*;
-import static rentACar.ClientSocket.clientToServer;
+import static rentACar.ClienteHilo.toJson;
+import static rentACar.ClienteS.clientToServer;
 
 public class Autos extends javax.swing.JPanel {
 

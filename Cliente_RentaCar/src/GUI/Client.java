@@ -2,8 +2,10 @@ package GUI;
 
 import rentACar.Cliente;
 import javax.swing.*;
-import rentACar.ClientSocket;
-import static rentACar.ClientSocket.*;
+import static rentACar.ClienteHilo.toJson;
+import rentACar.ClienteS;
+import static rentACar.ClienteS.clientToServer;
+
 
 public class Client extends javax.swing.JPanel {
 
@@ -365,6 +367,7 @@ public class Client extends javax.swing.JPanel {
                 toJson(cli);
 
                 String task = "buscarCliente";
+                //cli = SMsgStream(task, cli.getCedula());
                 cli = (Cliente) clientToServer(task, cli.getCedula());
 
                 txtid.setText(cli.getCedula());
@@ -450,7 +453,7 @@ public class Client extends javax.swing.JPanel {
                 cli.setCedula(txtid.getText());
                 toJson(cli);
 
-                String task = "eliminarcliente";
+                String task = "borrarCliente";
 
                 cli = (Cliente) clientToServer(task, cli.getCedula());
 

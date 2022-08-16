@@ -1,6 +1,5 @@
 package rentACar;
 
-import com.google.gson.Gson;
 
 public interface IOperaciones<T> {
 

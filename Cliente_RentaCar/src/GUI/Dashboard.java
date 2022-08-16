@@ -1,6 +1,5 @@
 package GUI;
 
-import rentACar.ClientSocket;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -15,7 +14,6 @@ public class Dashboard extends javax.swing.JFrame {
 
     int xMouse;
     int yMouse;
-    ClientSocket conn;
     Connection reg;
 
     /**
@@ -26,7 +24,6 @@ public class Dashboard extends javax.swing.JFrame {
         initComponents();
         //txtUserName.setText("Usermane: " + ClientSocket.getUserL());
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
-        conn = new ClientSocket();
         //reg = conn.getConnection();
 
         LocalDate now = LocalDate.now();
