@@ -1,8 +1,8 @@
 package GUI;
 
+import Conexion.ClienteHilo;
 import rentACar.Cliente;
 import javax.swing.*;
-import static Conexion.ClienteHilo.toJson;
 import Conexion.ClienteSocket;
 import static Conexion.ClienteSocket.clientToServer;
 
@@ -276,9 +276,10 @@ public class Client extends javax.swing.JPanel {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        try {
+       try
+        {
             if (camposVacios() == false) {
-                int response = JOptionPane.showConfirmDialog(null, "Desea registrar al cliente?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Desea Registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
                     Cliente cli = new Cliente();
                     cli.setCedula(txtid.getText());
@@ -287,12 +288,14 @@ public class Client extends javax.swing.JPanel {
                     cli.setApellido2(txtapellido2.getText());
                     cli.setEmail(txtemail.getText());
                     cli.setTelefono(txttelefono.getText());
-                    boolean resultado = toJson(cli);
-                    String task = "agregarCliente";
-
-                    clientToServer(task, txtid.getText());
-
-                    if (resultado == false) {
+                    ClienteHilo.objetoaJsonCLIENTE(cli);
+                    
+                    String task = "registrarCliente";
+                    
+                    cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
+                    // sobreescrivo el cli con el return de servidor protocolo, se usa el campo de nombre como propiedad de msg
+                    
+                    if ("correcto".equals(cli.getNombre())) { // se evalua si la propiedad nombre tiene como msg "correcto"
 
                         txtnombre.setText("Ingrese el nombre");
                         txtapellido1.setText("Ingrese el apellido 1");
@@ -309,7 +312,7 @@ public class Client extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
-
+        
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
@@ -356,18 +359,19 @@ public class Client extends javax.swing.JPanel {
 
     private void btnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarActionPerformed
         // TODO add your handling code here:
+
         try {
 
-            int response = JOptionPane.showConfirmDialog(null, "Desea Buscar al cliente?\nCedula: " + txtid.getText(), "Buscar Cliente", JOptionPane.YES_NO_OPTION);
+            int response = JOptionPane.showConfirmDialog(null, "Desea Buscar al Cliente?", "Buscar Cliente", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
                 Cliente cli = new Cliente();
 
                 cli.setCedula(txtid.getText());
-                toJson(cli);
+                ClienteHilo.objetoaJsonCLIENTE(cli);
 
                 String task = "buscarCliente";
 
-                cli = (Cliente) clientToServer(task, txtid.getText());
+                cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());
@@ -391,6 +395,7 @@ public class Client extends javax.swing.JPanel {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
+
         }
     }//GEN-LAST:event_btnbuscarActionPerformed
 
@@ -409,19 +414,20 @@ public class Client extends javax.swing.JPanel {
                 cli.setEmail(txtemail.getText());
                 cli.setTelefono(txttelefono.getText());
 
-                toJson(cli);
+                ClienteHilo.objetoaJsonCLIENTE(cli);
 //                    
-                String task = "editarCliente";
+                String task = "modificarCliente";
 
-                cli = (Cliente) clientToServer(task, txtid.getText());
+                cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
 
-                txtid.setText(cli.getCedula());
-                txtnombre.setText(cli.getNombre());
-                txtapellido1.setText(cli.getApellido1());
-                txtapellido2.setText(cli.getApellido2());
-                txtemail.setText(cli.getEmail());
-                txttelefono.setText(cli.getTelefono());
-
+                if (cli.getNombre() == "correcto") {
+                    txtid.setText(cli.getCedula());
+                    txtnombre.setText(cli.getNombre());
+                    txtapellido1.setText(cli.getApellido1());
+                    txtapellido2.setText(cli.getApellido2());
+                    txtemail.setText(cli.getEmail());
+                    txttelefono.setText(cli.getTelefono());
+                }
                 if (cli == null) {
 
                     txtnombre.setText("Ingrese el nombre");
@@ -445,17 +451,27 @@ public class Client extends javax.swing.JPanel {
     private void btnborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnborrarActionPerformed
         // TODO add your handling code here:
         try {
+
             int response = JOptionPane.showConfirmDialog(null, "Desea Eliminar al Cliente?", "Eliminar Cliente", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
                 Cliente cli = new Cliente();
 
                 cli.setCedula(txtid.getText());
-                toJson(cli);
+                ClienteHilo.objetoaJsonCLIENTE(cli);
 
-                String task = "borrarCliente";
+                String task = "eliminarCliente";
 
-                cli = (Cliente) clientToServer(task, txtid.getText());
+                cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
 
+                if ("correcto".equals(cli.getNombre())) {
+
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtemail.setText("Ingrese el correo electronico");
+                    txttelefono.setText("Ingrese el telefono");
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Datos no Borrados", "Info", 1);
             }

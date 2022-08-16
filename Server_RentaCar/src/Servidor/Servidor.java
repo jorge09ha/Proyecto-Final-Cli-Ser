@@ -13,10 +13,9 @@ public class Servidor {
     public static void main(String[] args) {
 
         try {
-            ServerSocket server = new ServerSocket(38000);
+            ServerSocket server = new ServerSocket(7777);
             Socket sc;
-
-            System.out.println("Servidor iniciado. Puerto: 38000");//print--------------->
+            System.out.println("Servidor iniciado. Puerto: 7777");//print--------------->
             while (true) {
 
                 // Espero la conexion del cliente

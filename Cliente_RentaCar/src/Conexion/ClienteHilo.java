@@ -24,19 +24,18 @@ import rentACar.UserAdmin;
 
 public class ClienteHilo extends Thread {
 
-    private static DataOutputStream outF = null;
-    private static DataInputStream inF = null;
+    private static DataOutputStream dataOutputStream = null;
+    private static DataInputStream dataInputStream = null;
     private Socket sc;
     private DataInputStream in;
     private DataOutputStream out;
     private String tarea, id;
 
-    public ClienteHilo(Socket sc, DataInputStream in, DataOutputStream out, String tarea, String id) {
+    public ClienteHilo(DataInputStream in, DataOutputStream out, String tarea, String id) {
         this.in = in;
         this.out = out;
         this.tarea = tarea;
         this.id = id;
-        this.sc = sc;
     }
 
     @Override
@@ -59,85 +58,7 @@ public class ClienteHilo extends Thread {
                 switch (strToClient) {
 
                     /*----------------------Clientes----------------------*/
-                    case "agregarCliente":
-                        System.out.println("Cliente: Tarea=" + strToClient);//print--------------->
-                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
-                        out.flush();
-
-                        strFromClient = in.readUTF();
-                        msg = strFromClient;
-                        cli.setNombre(msg);
-
-                        out.writeUTF("stop");
-                        out.flush();
-
-                        strFromClient = in.readUTF();
-
-                        break;
-
-                    case "borarCliente":
-                        System.out.println("Cliente: Tarea=" + strToClient);//print--------------->
-                        out.writeUTF(strToClient); //Task
-                        out.flush();
-
-                        strFromClient = in.readUTF();
-
-                        out.writeUTF(id); //send id
-                        out.flush();
-
-                        strFromClient = in.readUTF(); //correcto
-                        msg = strFromClient;
-                        cli.setNombre(msg);
-
-                        out.writeUTF("stop");
-                        out.flush();
-
-                        strFromClient = in.readUTF();
-
-                        break;
-
-                    case "buscarCliente":
-                        System.out.println("Cliente: Tarea=" + strToClient);//print--------------->
-                        out.writeUTF(strToClient); //Task
-                        out.flush();
-
-                        strFromClient = in.readUTF();
-
-                        out.writeUTF(id); //send id
-                        out.flush();
-
-                        strFromClient = in.readUTF(); // msg correcto
-                        msg = strFromClient;
-
-                        if ("correcto".equals(strFromClient)) {
-                            strToClient = "servidorA";
-                            out.writeUTF(strToClient);
-                            out.flush();
-
-                            entradaArchivoJson();
-
-                            strFromClient = in.readUTF();
-
-                            if ("objetodeJsonCLIENTE()".equals(strFromClient)) {
-                                cli = objetodeJsonCLIENTE();
-                            }
-
-                            out.writeUTF("stop");
-                            out.flush();
-
-                            strFromClient = in.readUTF();
-
-                        }
-
-                        out.writeUTF("stop");
-                        out.flush();
-
-                        strFromClient = in.readUTF();
-
-                        break;
-
-                    case "editarCliente":
-                        System.out.println("Cliente: Tarea=" + strToClient);//print--------------->
+                    case "modificarCliente":
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -158,7 +79,7 @@ public class ClienteHilo extends Thread {
                             strFromClient = in.readUTF();
 
                             //if("objetodeJason()".equals(strFromClient))
-                            cli = objetodeJsonCLIENTE();
+                            cli = archivoJsonAObjetoCLIENTE();
 
                             out.writeUTF("stop");
                             out.flush();
@@ -173,6 +94,79 @@ public class ClienteHilo extends Thread {
 
                         break;
 
+                    case "eliminarCliente":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); //correcto
+                        msg = strFromClient;
+                        cli.setNombre(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        break;
+
+                    case "buscarCliente":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); // msg correcto
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            if ("objetodeJasonCLIENTE()".equals(strFromClient)) {
+                                cli = archivoJsonAObjetoCLIENTE();
+                            }
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+
+                        }
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        break;
+
+                    case "registrarCliente":
+                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+                        msg = strFromClient;
+                        cli.setNombre(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        break;
 
                     /*----------------------Usuarios----------------------*/
                     case "agregarUsuario":
@@ -273,34 +267,34 @@ public class ClienteHilo extends Thread {
 
     }
 
-    /*--------Conexion puerto 6000 salida de archivos---------*/
+    /*--------Conexion puerto 5000 salida de archivos---------*/
     public static void envioArchivoJson() {
-        try ( Socket socket = new Socket("localhost", 6000)) {
-            inF = new DataInputStream(socket.getInputStream());
-            outF = new DataOutputStream(socket.getOutputStream());
+        try ( Socket socket = new Socket("localhost", 5000)) {
+            dataInputStream = new DataInputStream(socket.getInputStream());
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
             envioFragmentosArchivo("ClientSide.json");
 
-            inF.close();
+            dataInputStream.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /*--------Conexion puerto 7000 entrada de archivos---------*/
+    /*--------Conexion puerto 5007 entrada de archivos---------*/
     public static void entradaArchivoJson() {
-        try ( ServerSocket serverSocket = new ServerSocket(7000)) {
+        try ( ServerSocket serverSocket = new ServerSocket(5007)) {
             System.out.println("listening to port:5000");
             Socket clientSocket = serverSocket.accept();
             System.out.println(clientSocket + " connected.");
-            inF = new DataInputStream(clientSocket.getInputStream());
-            outF = new DataOutputStream(clientSocket.getOutputStream());
+            dataInputStream = new DataInputStream(clientSocket.getInputStream());
+            dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
 
             entradaFragmentosArchivo("NewFileFromServer.json");
 
-            inF.close();
-            outF.close();
+            dataInputStream.close();
+            dataOutputStream.close();
             clientSocket.close();
 
         } catch (Exception e) {
@@ -308,39 +302,39 @@ public class ClienteHilo extends Thread {
         }
     }
 
-    /*----------------Recibe archivo JSON-----------------*/
+    /*----------------Recibe y envia archivo JSON-----------------*/
     private static void entradaFragmentosArchivo(String fileName) throws Exception {
         int bytes = 0;
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);
 
-        long size = inF.readLong();     // read file size
+        long size = dataInputStream.readLong();     // read file size
         byte[] buffer = new byte[4 * 1024];
-        while (size > 0 && (bytes = inF.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
+        while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
             fileOutputStream.write(buffer, 0, bytes);
             size -= bytes;      // read upto file size
         }
         fileOutputStream.close();
+
     }
 
-    /*-----------------Envia archivo JSON-----------------*/
     public static void envioFragmentosArchivo(String path) throws Exception {
         int bytes = 0;
         File file = new File(path);
         FileInputStream fileInputStream = new FileInputStream(file);
 
         // send file size
-        outF.writeLong(file.length());
+        dataOutputStream.writeLong(file.length());
         // break file into chunks
         byte[] buffer = new byte[4 * 1024];
         while ((bytes = fileInputStream.read(buffer)) != -1) {
-            outF.write(buffer, 0, bytes);
-            outF.flush();
+            dataOutputStream.write(buffer, 0, bytes);
+            dataOutputStream.flush();
         }
         fileInputStream.close();
     }
 
     /*------------------------JSON to Object---------------------*/
-    public static Cliente objetodeJsonCLIENTE() {
+    public static Cliente archivoJsonAObjetoCLIENTE() {
         try {
             Gson gson = new Gson();
 
@@ -357,7 +351,7 @@ public class ClienteHilo extends Thread {
         return null;
     }
 
-    public static UserAdmin objetodeJsonUSER() {
+    public static UserAdmin archivoJsonAObjetoUSER() {
         try {
             Gson gson = new Gson();
 
@@ -374,7 +368,7 @@ public class ClienteHilo extends Thread {
         return null;
     }
 
-    public static Auto objetodeJsonAUTO() {
+    public static Auto archivoJsonAObjetoAUTO() {
         try {
             Gson gson = new Gson();
 
@@ -410,7 +404,7 @@ public class ClienteHilo extends Thread {
             return done = false;
         }
     }
-    
+
     public static boolean objetoaJsonUSER(UserAdmin usu) {
         boolean done;
         try {
@@ -429,7 +423,7 @@ public class ClienteHilo extends Thread {
             return done = false;
         }
     }
-    
+
     public static boolean objetoaJsonAUTO(Auto aut) {
         boolean done;
         try {

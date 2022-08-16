@@ -23,7 +23,7 @@ public class ClienteSocket {
 
             // Ejecutamos el hilo.
             System.out.println("Se inicia el Hilo.");//print--------------->
-            ClienteHilo hilo = new ClienteHilo(sc, in, out, tarea, id);
+            ClienteHilo hilo = new ClienteHilo(in, out, tarea, id);
             hilo.start();
             hilo.join();
 
