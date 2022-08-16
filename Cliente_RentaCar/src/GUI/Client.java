@@ -286,10 +286,10 @@ public class Client extends javax.swing.JPanel {
                     cli.setApellido2(txtapellido2.getText());
                     cli.setEmail(txtemail.getText());
                     cli.setTelefono(txttelefono.getText());
-                    boolean resultado = objetoaJson(cli);
+                    boolean resultado = toJson(cli);
                     String task = "agregarCliente";
 
-                    servidorProtocolo(task, cli.getCedula());
+                    clientToServer(task, cli.getCedula());
 
                     if (resultado == false) {
 
@@ -362,11 +362,10 @@ public class Client extends javax.swing.JPanel {
                 Cliente cli = new Cliente();
 
                 cli.setCedula(txtid.getText());
-                objetoaJson(cli);
+                toJson(cli);
 
                 String task = "buscarCliente";
-
-                cli = (Cliente) servidorProtocolo(task, cli.getCedula());
+                cli = (Cliente) clientToServer(task, cli.getCedula());
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());
@@ -395,12 +394,74 @@ public class Client extends javax.swing.JPanel {
 
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
         // TODO add your handling code here:
+        try {
+
+            int response = JOptionPane.showConfirmDialog(null, "Desea Modificar al Cliente?", "Modificar Cliente", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                Cliente cli = new Cliente();
+
+                cli.setCedula(txtid.getText());
+                cli.setNombre(txtnombre.getText());
+                cli.setApellido1(txtapellido1.getText());
+                cli.setApellido2(txtapellido2.getText());
+                cli.setEmail(txtemail.getText());
+                cli.setTelefono(txttelefono.getText());
+
+                toJson(cli);
+//                    
+                String task = "modificarCliente";
+
+                cli = (Cliente) clientToServer(task, cli.getCedula());
+
+                txtid.setText(cli.getCedula());
+                txtnombre.setText(cli.getNombre());
+                txtapellido1.setText(cli.getApellido1());
+                txtapellido2.setText(cli.getApellido2());
+                txtemail.setText(cli.getEmail());
+                txttelefono.setText(cli.getTelefono());
+
+                if (cli == null) {
+
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtemail.setText("Ingrese el correo electronico");
+                    txttelefono.setText("Ingrese el telefono");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
+
+        }
 
     }//GEN-LAST:event_btnmodificarActionPerformed
 
     private void btnborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnborrarActionPerformed
         // TODO add your handling code here:
+        try {
+            int response = JOptionPane.showConfirmDialog(null, "Desea Eliminar al Cliente?", "Eliminar Cliente", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                Cliente cli = new Cliente();
 
+                cli.setCedula(txtid.getText());
+                toJson(cli);
+
+                String task = "eliminarcliente";
+
+                cli = (Cliente) clientToServer(task, cli.getCedula());
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Datos no Borrados", "Info", 1);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al Eliminar. " + e + "", "Error", 0);
+
+        }
     }//GEN-LAST:event_btnborrarActionPerformed
 
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed

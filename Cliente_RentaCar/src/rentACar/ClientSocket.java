@@ -16,10 +16,10 @@ public class ClientSocket {
     private static DataOutputStream dout = null;
     private static BufferedReader br = null;
 
-    /*-----------------Conexion Port 7000-----------------*/
-    public static Object servidorProtocolo(String task, String id) {
+    /*-----------------Conexion Port 5000-----------------*/
+    public static Object clientToServer(String task, String id) {
         try {
-            serverSocket = new ServerSocket(7777);// server chat
+            serverSocket = new ServerSocket(5000);// server chat
             System.out.println("Server is Waiting for client request... ");
 
             Socket socket = serverSocket.accept();
@@ -67,7 +67,7 @@ public class ClientSocket {
                         dout.flush();
 
                     case "doit":
-                        conexionSocket();
+                        serverInJson();
                         System.out.println("Im in if doit");
                         strFromClient = din.readUTF();
 
@@ -149,13 +149,13 @@ public class ClientSocket {
         return null;
     }
 
-    /*-----------------Conexion Port 5000-----------------*/
-    public static void envioArchivoJson() {
-        try ( Socket socket = new Socket("localhost", 5000)) {
+    /*--------Conexion puerto 6000 salida de archivos---------*/
+    public static void serverOutJson() {
+        try ( Socket socket = new Socket("localhost", 6000)) {
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-            envioFragmentosArchivo("ClientSide.json");
+            outFileJson("ClientSide.json");
 
             dataInputStream.close();
 
@@ -164,8 +164,28 @@ public class ClientSocket {
         }
     }
 
-    /*----------------------Recibe archivo JSON----------------------*/
-    private static void entradaFragmentosArchivo(String fileName) throws Exception {
+    /*--------Conexion puerto 7000 entrada de archivos---------*/
+    public static void serverInJson() {
+        try ( ServerSocket serverSocket = new ServerSocket(7000)) {
+            System.out.println("listening to port:5000");
+            Socket clientSocket = serverSocket.accept();
+            System.out.println(clientSocket + " connected.");
+            dataInputStream = new DataInputStream(clientSocket.getInputStream());
+            dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
+
+            inFileJson("NewFileFromServer.json");
+
+            dataInputStream.close();
+            dataOutputStream.close();
+            clientSocket.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*----------------Recibe archivo JSON-----------------*/
+    private static void inFileJson(String fileName) throws Exception {
         int bytes = 0;
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);
 
@@ -179,7 +199,7 @@ public class ClientSocket {
     }
 
     /*-----------------Envia archivo JSON-----------------*/
-    public static void envioFragmentosArchivo(String path) throws Exception {
+    public static void outFileJson(String path) throws Exception {
         int bytes = 0;
         File file = new File(path);
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -193,46 +213,6 @@ public class ClientSocket {
             dataOutputStream.flush();
         }
         fileInputStream.close();
-    }
-
-    /*-----------------Object to JSON-----------------*/
-    public static boolean objetoaJson(Object obj) {
-        boolean done;
-        try {
-            Gson gson = new Gson();
-            Writer writer = Files.newBufferedWriter(Paths.get("ClientSide.json"));
-
-            gson.toJson(obj, writer);
-            writer.close();
-
-            envioArchivoJson();
-            //Abrir comunicacion manejo de errores
-            return done = true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return done = false;
-        }
-    }
-
-    /*----------------------Port 5007 para archivo----------------------*/
-    public static void conexionSocket() {
-        try ( ServerSocket serverSocket = new ServerSocket(5007)) {
-            System.out.println("listening to port:5000");
-            Socket clientSocket = serverSocket.accept();
-            System.out.println(clientSocket + " connected.");
-            dataInputStream = new DataInputStream(clientSocket.getInputStream());
-            dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
-
-            entradaFragmentosArchivo("NewFileFromServer.json");
-
-            dataInputStream.close();
-            dataOutputStream.close();
-            clientSocket.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /*------------------------JSON to Object---------------------*/
@@ -282,6 +262,26 @@ public class ClientSocket {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /*------------------------Object to JSON---------------------*/
+    public static boolean toJson(Cliente cli) {
+        boolean done;
+        try {
+            Gson gson = new Gson();
+            Writer writer = Files.newBufferedWriter(Paths.get("ClientSide.json"));
+
+            gson.toJson(cli, writer);
+            writer.close();
+
+            serverOutJson();
+
+            return done = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return done = false;
+        }
     }
 
 }

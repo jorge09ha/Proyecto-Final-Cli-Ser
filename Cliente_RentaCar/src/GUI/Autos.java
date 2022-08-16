@@ -2,8 +2,7 @@ package GUI;
 
 import rentACar.Auto;
 import javax.swing.*;
-import static rentACar.ClientSocket.servidorProtocolo;
-import static rentACar.ClientSocket.objetoaJson;
+import static rentACar.ClientSocket.clientToServer;
 
 public class Autos extends javax.swing.JPanel {
 
@@ -348,11 +347,11 @@ public class Autos extends javax.swing.JPanel {
                 Auto aut = new Auto();
 
                 aut.setPlaca(txtid.getText());
-                objetoaJson(aut);
+                //objetoaJson(aut);
 
                 String task = "buscarcliente";
 
-                aut = (Auto) servidorProtocolo(task, aut.getPlaca());
+                aut = (Auto) clientToServer(task, aut.getPlaca());
 
                 txtid.setText(aut.getPlaca());
                 txtMarca.setText(aut.getMarca());

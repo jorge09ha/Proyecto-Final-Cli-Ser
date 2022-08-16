@@ -2,8 +2,7 @@ package GUI;
 
 import rentACar.UserAdmin;
 import javax.swing.*;
-import static rentACar.ClientSocket.servidorProtocolo;
-import static rentACar.ClientSocket.objetoaJson;
+
 
 public class Users extends javax.swing.JPanel {
 
@@ -340,20 +339,20 @@ public class Users extends javax.swing.JPanel {
                         usu.setApellido2(txtapellido2.getText());
                         usu.setUser(txtUserName.getText());
                         usu.setPass(txtPass1.getText());
-                        boolean resultado = objetoaJson(usu);
+                        //boolean resultado = objetoaJson(usu);
                         String task = "agregarUsuario";
 
-                        servidorProtocolo(task, usu.getCedula());
+                        //clientToServer(task, usu.getCedula());
 
-                        if (resultado == false) {
-                            txtnombre.setText("Ingrese el nombre");
-                            txtapellido1.setText("Ingrese el apellido 1");
-                            txtapellido2.setText("Ingrese el apellido 2");
-                            txtid.setText("Ingrese la identificacion");
-                            txtUserName.setText("Ingrese el nombre de usuario");
-                            txtPass1.setText("contraseña");
-                            txtPass2.setText("contraseña");
-                        }
+//                        if (resultado == false) {
+//                            txtnombre.setText("Ingrese el nombre");
+//                            txtapellido1.setText("Ingrese el apellido 1");
+//                            txtapellido2.setText("Ingrese el apellido 2");
+//                            txtid.setText("Ingrese la identificacion");
+//                            txtUserName.setText("Ingrese el nombre de usuario");
+//                            txtPass1.setText("contraseña");
+//                            txtPass2.setText("contraseña");
+//                        }
                     } else {
                         JOptionPane.showMessageDialog(null, "Las contraseñas no son iguales", "Info", 1);
                     }
@@ -377,11 +376,11 @@ public class Users extends javax.swing.JPanel {
 
                 UserAdmin usu = new UserAdmin();
                 usu.setCedula(txtid.getText());
-                objetoaJson(usu);
+                //objetoaJson(usu);
 
                 String task = "buscarUsuario";
 
-                usu = (UserAdmin) servidorProtocolo(task, usu.getCedula());
+               //usu = (UserAdmin) clientToServer(task, usu.getCedula());
 
                 txtid.setText(usu.getCedula());
                 txtnombre.setText(usu.getNombre());

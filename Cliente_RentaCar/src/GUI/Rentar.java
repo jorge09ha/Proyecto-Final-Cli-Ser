@@ -7,8 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import static rentACar.ClientSocket.servidorProtocolo;
-import static rentACar.ClientSocket.objetoaJson;
+import static rentACar.ClientSocket.clientToServer;
 
 public class Rentar extends javax.swing.JPanel {
 
@@ -293,11 +292,11 @@ public class Rentar extends javax.swing.JPanel {
             Cliente cli = new Cliente();
 
             cli.setCedula(txtid.getText());
-            objetoaJson(cli);
+            //objetoaJson(cli);
 
             String task = "buscarcliente";
 
-            cli = (Cliente) servidorProtocolo(task, cli.getCedula());
+            cli = (Cliente) clientToServer(task, cli.getCedula());
 
             if (cli.getCedula() == null) {
                 JOptionPane.showMessageDialog(null, "El usuario no existe.\n" + "Puede agregarlos desde la sección clientes", "Info", 1);
@@ -382,11 +381,11 @@ public class Rentar extends javax.swing.JPanel {
             Auto aut = new Auto();
 
             aut.setPlaca(txtid.getText());
-            objetoaJson(aut);
+            //objetoaJson(aut);
 
             String task = "buscarcliente";
 
-            aut = (Auto) servidorProtocolo(task, aut.getPlaca());
+            aut = (Auto) clientToServer(task, aut.getPlaca());
 
             if (aut.getPlaca() == null) {
                 presentarTableAuto();

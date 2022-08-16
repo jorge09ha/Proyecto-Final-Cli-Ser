@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 public class Server {
 
@@ -41,17 +42,17 @@ public class Server {
     /*-----------------Conexion Port 7000-----------------*/
     public static void clienteProtocolo() {
         Socket socket = null;
-        DataInputStream din = null;
-        DataOutputStream dout = null;
+        DataInputStream in = null;
+        DataOutputStream out = null;
         BufferedReader br = null;
 
         try {
-            socket = new Socket("localhost", 7000);
+            socket = new Socket("localhost", 5000);
             System.out.println(socket + " connected.");
-            din = new DataInputStream(socket.getInputStream());
+            in = new DataInputStream(socket.getInputStream());
 
             OutputStream outputStream = socket.getOutputStream();
-            dout = new DataOutputStream(outputStream);
+            out = new DataOutputStream(outputStream);
 
             String strFromServer = "", strToClient = "", id = "";
 
@@ -62,100 +63,100 @@ public class Server {
                     case "agregarCliente":
                         strToClient = agregarCliente(); // el metodo hace un return tipo String con el resultado de lo que hiso
 
-                        dout.writeUTF(strToClient); // Se envia a cliente el resulado del registro
-                        dout.flush();
+                        out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
+                        out.flush();
 
-                        strFromServer = din.readUTF(); // lee msg stop del cliente
+                        strFromServer = in.readUTF(); // lee msg stop del cliente
 
                         break;
 
                     case "buscarCliente":
-                        dout.writeUTF("id"); // preguta por id 
-                        dout.flush();
+                        out.writeUTF("id"); // preguta por id 
+                        out.flush();
 
-                        id = din.readUTF(); //recibe el ID
+                        id = in.readUTF(); //recibe el ID
 
                         strToClient = buscarCliente(id); // client                    
                         id = strToClient;
-                        dout.writeUTF(strToClient); // cliente
-                        dout.flush();
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
 
-                        strFromServer = din.readUTF();
+                        strFromServer = in.readUTF();
                         if ("servidorA".equals(strFromServer)) {
                             envioArchivoJson();
                         }
                         strToClient = "objetodeJasonCLIENTE"; // client                    
-                        dout.writeUTF(strToClient); // cliente
-                        dout.flush();
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
 
                         if (id == "doit") {
-                            dout.writeUTF(id); // cliente
-                            dout.flush();
+                            out.writeUTF(id); // cliente
+                            out.flush();
                         }
 
-                        strFromServer = din.readUTF(); // lee msg stop
+                        strFromServer = in.readUTF(); // lee msg stop
 
                         break;
 
                     case "editarCliente":
-                        dout.writeUTF("id"); // preguta por id //linea 61
-                        dout.flush();
+                        out.writeUTF("id"); // preguta por id //linea 61
+                        out.flush();
 
-                        id = din.readUTF(); //recibe el ID
+                        id = in.readUTF(); //recibe el ID
 
                         strToClient = editarCliente(id); // client                    
-                        dout.writeUTF(strToClient); // cliente
-                        dout.flush();
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
 
-                        strFromServer = din.readUTF();
+                        strFromServer = in.readUTF();
                         if ("servidorA".equals(strFromServer)) {
                             System.out.println("Server envio json: ");
                             envioArchivoJson();
                         }
                         strToClient = "objetodeJason()"; // client                    
-                        dout.writeUTF(strToClient); // cliente
-                        dout.flush();
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
 
-                        strFromServer = din.readUTF(); // lee msg stop
+                        strFromServer = in.readUTF(); // lee msg stop
 
                         break;
 
                     case "eliminarCliente":
-                        dout.writeUTF("id"); // preguta por id //linea 61
-                        dout.flush();
+                        out.writeUTF("id"); // preguta por id //linea 61
+                        out.flush();
 
-                        id = din.readUTF(); //recibe el ID
+                        id = in.readUTF(); //recibe el ID
 
                         strToClient = borrarCliente(id); // client                    
-                        dout.writeUTF(strToClient); // cliente
-                        dout.flush();
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
 
-                        strFromServer = din.readUTF(); // lee msg stop
+                        strFromServer = in.readUTF(); // lee msg stop
 
                         break;
 
                     /*----------------------Usuarios----------------------*/
                     case "agregarUsuario":
                         strToClient = agregarUsuario();
-                        dout.writeUTF(strToClient);
-                        dout.flush();
-                        strFromServer = din.readUTF();
+                        out.writeUTF(strToClient);
+                        out.flush();
+                        strFromServer = in.readUTF();
 
                     case "buscarUsuario":
-                        dout.writeUTF("id");
-                        dout.flush();
-                        id = din.readUTF();
+                        out.writeUTF("id");
+                        out.flush();
+                        id = in.readUTF();
                         strToClient = buscarUsusario(id);
-                        dout.writeUTF(strToClient);
-                        dout.flush();
-                        strFromServer = din.readUTF();
+                        out.writeUTF(strToClient);
+                        out.flush();
+                        strFromServer = in.readUTF();
                         if ("servidorA".equals(strFromServer)) {
                             envioArchivoJson();
                         }
                         strToClient = "objetodeJsonUSER";
-                        dout.writeUTF(strToClient);
-                        dout.flush();
-                        strFromServer = din.readUTF();
+                        out.writeUTF(strToClient);
+                        out.flush();
+                        strFromServer = in.readUTF();
 
                     case "editarUsuario":
 
@@ -163,24 +164,24 @@ public class Server {
                     /*----------------------Autos----------------------*/
                     case "agregarAuto":
                         strToClient = agregarAuto();
-                        dout.writeUTF(strToClient);
-                        dout.flush();
-                        strFromServer = din.readUTF();
+                        out.writeUTF(strToClient);
+                        out.flush();
+                        strFromServer = in.readUTF();
                     case "buscarAuto":
-                        dout.writeUTF("id");
-                        dout.flush();
-                        id = din.readUTF();
+                        out.writeUTF("id");
+                        out.flush();
+                        id = in.readUTF();
                         strToClient = buscarAuto(id);
-                        dout.writeUTF(strToClient);
-                        dout.flush();
-                        strFromServer = din.readUTF();
+                        out.writeUTF(strToClient);
+                        out.flush();
+                        strFromServer = in.readUTF();
                         if ("servidorA".equals(strFromServer)) {
                             envioArchivoJson();
                         }
                         strToClient = "objetodeJsonAUTO";
-                        dout.writeUTF(strToClient);
-                        dout.flush();
-                        strFromServer = din.readUTF();
+                        out.writeUTF(strToClient);
+                        out.flush();
+                        strFromServer = in.readUTF();
 
                     case "editarAuto":
 
@@ -194,6 +195,37 @@ public class Server {
                     case "verRentados":
 
                     case "verDisponibles":
+                        
+                     /*----------------------Errores y notificaciones----------------------*/   
+                     case "no existe":
+                        JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
+                        out.writeUTF("stop");
+                        out.flush();
+
+                    case "id vacio":
+                        JOptionPane.showMessageDialog(null, "El campo de identificación no puede estar vacio", "Campo vacio", 2);
+                        out.writeUTF("stop");
+                        out.flush();
+
+                    case "correcto":
+                        JOptionPane.showMessageDialog(null, "Datos almacenados correctamente.", "Info", 1);
+                        out.writeUTF("stop");
+                        out.flush();
+
+                    case "error almacenar":
+                        JOptionPane.showMessageDialog(null, "Error al almacenar los datos", "Error", 0);
+                        out.writeUTF("stop");
+                        out.flush();
+
+                    case "duplicado":
+                        JOptionPane.showMessageDialog(null, "El dato ya existe.", "Error", 0);
+                        out.writeUTF("stop");
+                        out.flush();
+
+                    case "error":
+                        JOptionPane.showMessageDialog(null, "Se precento un error.", "Error", 0);
+                        out.writeUTF("stop");
+                        out.flush();
 
                         break;
                     default:
@@ -202,8 +234,8 @@ public class Server {
                 }
 
                 strFromServer = "stop";
-                dout.writeUTF(strFromServer);
-                dout.flush();
+                out.writeUTF(strFromServer);
+                out.flush();
 
             }
 
@@ -211,12 +243,12 @@ public class Server {
         } finally {
             try {
 
-                if (din != null) {
-                    din.close();
+                if (in != null) {
+                    in.close();
                 }
 
-                if (dout != null) {
-                    dout.close();
+                if (out != null) {
+                    out.close();
                 }
                 if (socket != null) {
                     socket.close();
@@ -226,9 +258,9 @@ public class Server {
         }
     }
 
-    /*-----------------Conexion Port 5000-----------------*/
+    /*-----------------Conexion Port 6000-----------------*/
     public static void entradaArchivoJson() {
-        try ( ServerSocket serverSocket = new ServerSocket(5000)) {// server archives
+        try ( ServerSocket serverSocket = new ServerSocket(6000)) {// server archives
             System.out.println("listening to port:5000");
             Socket clientSocket = serverSocket.accept();
             System.out.println(clientSocket + " connected.");
@@ -246,9 +278,9 @@ public class Server {
         }
     }
 
-    /*----------------------Port 5007 para archivo----------------------*/
+    /*----------------------Port 7000 para archivo----------------------*/
     public static void envioArchivoJson() {
-        try ( Socket socket = new Socket("localhost", 5007)) {
+        try ( Socket socket = new Socket("localhost", 7000)) {
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
