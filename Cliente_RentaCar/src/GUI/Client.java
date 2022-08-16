@@ -411,7 +411,7 @@ public class Client extends javax.swing.JPanel {
 
                 toJson(cli);
 //                    
-                String task = "modificarCliente";
+                String task = "editarCliente";
 
                 cli = (Cliente) clientToServer(task, txtid.getText());
 
