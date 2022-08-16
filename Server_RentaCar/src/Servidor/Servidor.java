@@ -13,7 +13,7 @@ public class Servidor {
     public static void main(String[] args) {
 
         try {
-            ServerSocket server = new ServerSocket(5000);
+            ServerSocket server = new ServerSocket(38000);
             Socket sc;
 
             System.out.println("Servidor iniciado");
@@ -25,10 +25,11 @@ public class Servidor {
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
+                System.out.println(sc.getInetAddress().getAddress() + " conectado.");
+
                 // Pido al cliente la tarea.
                 String tarea = in.readUTF();
 
-                System.out.println(sc.getInetAddress().getAddress() + " conectado.");
                 System.out.println("Tarea: " + tarea);
 
                 // Inicio el hilo

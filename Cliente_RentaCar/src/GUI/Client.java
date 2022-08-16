@@ -367,7 +367,7 @@ public class Client extends javax.swing.JPanel {
                 toJson(cli);
 
                 String task = "buscarCliente";
-                //cli = SMsgStream(task, cli.getCedula());
+                
                 cli = (Cliente) clientToServer(task, cli.getCedula());
 
                 txtid.setText(cli.getCedula());
