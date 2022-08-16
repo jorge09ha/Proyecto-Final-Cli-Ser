@@ -46,38 +46,38 @@ public class ClienteHilo extends Thread {
         try {
 
             //Espero msg del servidor
-            String msg = in.readUTF();
-            System.out.println("Servidor: " + msg);
+            mensaje = in.readUTF();
+            System.out.println("Servidor: " + mensaje);
 
-            if (msg.equals("tarea")) {
+            if (mensaje.equals("tarea")) {
 
-                // Envia la tarea y se lo manda al servidor.
+                // Carga la tarea y se lo manda al servidor.
                 out.writeUTF(tarea);
                 out.flush();
-                System.out.println("Envio la tarea: " + tarea);//print--------------->
+                System.out.println("Cliente: " + tarea);//print--------------->
 
-                if (msg.equals("id")) {
+                //Espero msg del servidor
+                mensaje = in.readUTF();
+                System.out.println("Servidor: " + mensaje);
 
-                    // Envia el id y se lo manda al servidor.
-                    out.writeUTF(id);
-                    out.flush();
-                    System.out.println("Envio la id: " + id);//print--------------->
-                }
+                // Carga el id y se lo manda al servidor.
+                out.writeUTF(id);
+                out.flush();
+                System.out.println("Envio la id: " + id);//print--------------->
 
                 while (!exit) {
 
                     try {
-                        switch (mensaje) {
+                        //Espero msg del servidor
+                        mensaje = in.readUTF();
+                        System.out.println("Servidor: " + mensaje);
+
+                        switch (tarea) {
                             /*----------------------Clientes----------------------*/
                             case "agregarCliente":
                                 break;
 
                             case "editarCliente":
-                                out.writeUTF(mensaje); //Task
-                                out.flush();
-                                mensaje = in.readUTF();
-                                out.writeUTF(id); //send id
-                                out.flush();
                                 mensaje = in.readUTF(); //doit
                                 mensaje = "servidorA";
                                 out.writeUTF(mensaje);
@@ -89,14 +89,13 @@ public class ClienteHilo extends Thread {
                                 break;
 
                             case "borrarCliente":
-                                out.writeUTF(mensaje); //Task
-                                out.flush();
-                                mensaje = in.readUTF();
-                                out.writeUTF(id); //send id
-                                out.flush();
                                 mensaje = in.readUTF(); //doit
                                 out.writeUTF("stop");
                                 out.flush();
+                                
+                                if ("stop".equals(mensaje)) {
+                                    exit=true;
+                                }
                                 break;
 
                             /*----------------------Usuarios----------------------*/
@@ -104,11 +103,11 @@ public class ClienteHilo extends Thread {
                                 break;
 
                             case "editarUsuario":
-                                out.writeUTF(mensaje); //Task
-                                out.flush();
-                                mensaje = in.readUTF();
-                                out.writeUTF(id); //send id
-                                out.flush();
+//                                out.writeUTF(mensaje); //Task
+//                                out.flush();
+//                                mensaje = in.readUTF();
+//                                out.writeUTF(id); //send id
+//                                out.flush();
                                 mensaje = in.readUTF(); //doit
                                 mensaje = "servidorA";
                                 out.writeUTF(mensaje);
@@ -119,11 +118,11 @@ public class ClienteHilo extends Thread {
                                 break;
 
                             case "borrarUsuario":
-                                out.writeUTF(mensaje); //Task
-                                out.flush();
-                                mensaje = in.readUTF();
-                                out.writeUTF(id); //send id
-                                out.flush();
+//                                out.writeUTF(mensaje); //Task
+//                                out.flush();
+//                                mensaje = in.readUTF();
+//                                out.writeUTF(id); //send id
+//                                out.flush();
                                 mensaje = in.readUTF(); //doit
                                 out.writeUTF("stop");
                                 out.flush();
@@ -134,11 +133,11 @@ public class ClienteHilo extends Thread {
                                 break;
 
                             case "editarAuto":
-                                out.writeUTF(mensaje); //Task
-                                out.flush();
-                                mensaje = in.readUTF();
-                                out.writeUTF(id); //send id
-                                out.flush();
+//                                out.writeUTF(mensaje); //Task
+//                                out.flush();
+//                                mensaje = in.readUTF();
+//                                out.writeUTF(id); //send id
+//                                out.flush();
                                 mensaje = in.readUTF(); //doit
                                 mensaje = "servidorA";
                                 out.writeUTF(mensaje);
@@ -149,11 +148,11 @@ public class ClienteHilo extends Thread {
                                 break;
 
                             case "borrarAuto":
-                                out.writeUTF(mensaje); //Task
-                                out.flush();
-                                mensaje = in.readUTF();
-                                out.writeUTF(id); //send id
-                                out.flush();
+//                                out.writeUTF(mensaje); //Task
+//                                out.flush();
+//                                mensaje = in.readUTF();
+//                                out.writeUTF(id); //send id
+//                                out.flush();
                                 mensaje = in.readUTF(); //doit
                                 out.writeUTF("stop");
                                 out.flush();
@@ -186,7 +185,7 @@ public class ClienteHilo extends Thread {
                                 break;
 
                             case "correcto":
-                                JOptionPane.showMessageDialog(null, "Datos almacenados correctamente.", "Info", 1);
+                                //JOptionPane.showMessageDialog(null, "Datos almacenados correctamente.", "Info", 1);
                                 out.writeUTF("stop");
                                 out.flush();
                                 break;

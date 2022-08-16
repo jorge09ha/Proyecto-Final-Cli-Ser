@@ -16,8 +16,8 @@ public class Client extends javax.swing.JPanel {
     }
 
     public void iniciar() {
-        btnmodificar.setVisible(false);
-        btnborrar.setVisible(false);
+        btnmodificar.setVisible(true);
+        btnborrar.setVisible(true);
     }
 
     public boolean camposVacios() {

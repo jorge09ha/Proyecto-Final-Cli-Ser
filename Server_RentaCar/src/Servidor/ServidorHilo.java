@@ -41,12 +41,10 @@ public class ServidorHilo extends Thread {
     private String tarea;
     private String id;
 
-    public ServidorHilo(Socket sc, DataInputStream in, DataOutputStream out, String tarea, String id) {
+    public ServidorHilo(Socket sc, DataInputStream in, DataOutputStream out) {
         this.sc = sc;
         this.in = in;
         this.out = out;
-        this.tarea = tarea;
-        this.id = id;
     }
 
     @Override
@@ -60,62 +58,63 @@ public class ServidorHilo extends Thread {
         while (!exit) {
 
             try {
-//Segun la tarea ejecuta...
 
                 //Envio la solicitid de tarea
+                System.out.println("Tarea?");//print--------------->
                 out.writeUTF("tarea");
+                out.flush();
 
                 // Pido al cliente la tarea.
                 tarea = in.readUTF();
                 System.out.println("Tarea: " + tarea);//print--------------->
 
                 //Envio la solicitid de tarea
-                out.writeUTF("id");
+                System.out.println("ID?");//print--------------->
+                out.writeUTF("ok");
+                out.flush();
 
                 // Pido al cliente el ID de busqueda (Placa o cedula).
                 id = in.readUTF();
-                System.out.println("Id: " + tarea);//print--------------->
+                System.out.println("Id: " + id);//print--------------->
 
+                //Segun la tarea ejecuta...
                 switch (tarea) {
 
                     /*----------------------Clientes----------------------*/
                     case "agregarCliente":
-//                        msjSalida = agregarCliente(); // el metodo hace un return tipo String con el resultado de lo que hiso
-//
-//                        out.writeUTF(msjSalida); // Se envia a cliente el resulado del registro
-//                        out.flush();
-//
-//                        msjEntrada = in.readUTF(); // lee msg stop del cliente
-                        System.out.println("METODO agregarCliente");
-                        sc.close();
+                        System.out.println("METODO agregarCliente");//print--------------->
+
+                        msjSalida = agregarCliente(); // el metodo hace un return tipo String con el resultado de lo que hizo.
+
+                        out.writeUTF(msjSalida); // Se envia a cliente el resulado del registro.
+                        out.flush();
+
+                        msjEntrada = in.readUTF(); // lee msg stop del cliente
+
                         break;
 
                     case "buscarCliente":
-//                        out.writeUTF("id"); // preguta por id 
-//                        out.flush();
-//
-//                        id = in.readUTF(); //recibe el ID
-//
-//                        msjSalida = buscarCliente(id); // client                    
-//                        id = msjSalida;
-//                        out.writeUTF(msjSalida); // cliente
-//                        out.flush();
-//
-//                        msjEntrada = in.readUTF();
-//                        if ("servidorA".equals(msjEntrada)) {
-//                            serverSalidaJson();
-//                        }
-//                        msjSalida = "objetodeJasonCLIENTE"; // client                    
-//                        out.writeUTF(msjSalida); // cliente
-//                        out.flush();
-//
-//                        if (id == "doit") {
-//                            out.writeUTF(id); // cliente
-//                            out.flush();
-//                        }
-//
-//                        msjEntrada = in.readUTF(); // lee msg stop
-                        System.out.println("METODO buscarCliente");
+                        System.out.println("METODO buscarCliente");//print--------------->
+
+                        msjSalida = buscarCliente(id); // client                    
+                        id = msjSalida;
+                        out.writeUTF(msjSalida); // cliente
+                        out.flush();
+
+                        msjEntrada = in.readUTF();
+                        if ("servidorA".equals(msjEntrada)) {
+                            serverSalidaJson();
+                        }
+                        msjSalida = "objetodeJasonCLIENTE"; // client                    
+                        out.writeUTF(msjSalida); // cliente
+                        out.flush();
+
+                        if (id == "doit") {
+                            out.writeUTF(id); // cliente
+                            out.flush();
+                        }
+
+                        msjEntrada = in.readUTF(); // lee msg stop
                         sc.close();
                         break;
 
@@ -144,18 +143,13 @@ public class ServidorHilo extends Thread {
                         break;
 
                     case "borrarCliente":
-//                        out.writeUTF("id"); // preguta por id //linea 61
-//                        out.flush();
-//
-//                        id = in.readUTF(); //recibe el ID
-//
-//                        msjSalida = borrarCliente(id); // client                    
-//                        out.writeUTF(msjSalida); // cliente
-//                        out.flush();
-//
-//                        msjEntrada = in.readUTF(); // lee msg stop
+
+                        msjSalida = borrarCliente(id); // client                    
+                        out.writeUTF(msjSalida); // cliente
+                        out.flush();
+
+                        msjEntrada = in.readUTF(); // lee msg stop
                         System.out.println("METODO borrarCliente");
-                        sc.close();
                         break;
 
                     /*----------------------Usuarios------------------*/
@@ -522,31 +516,31 @@ public class ServidorHilo extends Thread {
 
     public static String borrarCliente(String id) {
 
-        Cliente cli = new Cliente();
-        Connection conn = getConnection();
-        int resultado = 0;
-        String buscar = id;
+//        Cliente cli = new Cliente();
+//        Connection conn = getConnection();
+//        int resultado = 0;
+//        String buscar = id;
         String msg;
-
-        try {
-            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
-                String sql = "DELETE FROM clientes WHERE idcliente = '" + id + "'";
-                Statement st = conn.createStatement();
-                resultado = st.executeUpdate(sql);
-
+//
+//        try {
+//            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
+//                String sql = "DELETE FROM clientes WHERE idcliente = '" + id + "'";
+//                Statement st = conn.createStatement();
+//                resultado = st.executeUpdate(sql);
+//
                 msg = "correcto";
-
-                return msg;
-
-            } else {
-                msg = "id vacio";
-                return msg;
-            }
-        } catch (Exception e) {
-            msg = "error base";
-            return msg;
-        }
-
+//
+//                return msg;
+//
+//            } else {
+//                msg = "id vacio";
+//                return msg;
+//            }
+//        } catch (Exception e) {
+//            msg = "error base";
+//            return msg;
+//        }
+return msg;
     }
 
     public static String editarCliente(String id) {

@@ -32,7 +32,7 @@ public class Servidor {
 
                 // Inicio el hilo
                 System.out.println("Se inicia el Hilo.");//print--------------->
-                ServidorHilo hilo = new ServidorHilo(sc, in, out, tarea, id);
+                ServidorHilo hilo = new ServidorHilo(sc, in, out);
                 hilo.start();
 
             }

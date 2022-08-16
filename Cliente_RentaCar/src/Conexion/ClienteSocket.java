@@ -21,7 +21,7 @@ public class ClienteSocket {
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
             // Ejecutamos el hilo.
-            System.out.println("Se inicia el Hilo. Tarea: " + tarea + "ID: " + id);//print--------------->
+            System.out.println("Se inicia el Hilo.");//print--------------->
             ClienteHilo hilo = new ClienteHilo(in, out, tarea, id);
             hilo.start();
             hilo.join();
