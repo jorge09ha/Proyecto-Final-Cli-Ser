@@ -22,6 +22,7 @@ public class RentarGUI extends javax.swing.JPanel {
     static String URL = "jdbc:mysql://localhost:3306/rentacar";
     static String USERNAME = "root";
     static String PASS = "admin01";
+    static String mensaje = null;
 
     public RentarGUI() {
         initComponents();
@@ -29,11 +30,15 @@ public class RentarGUI extends javax.swing.JPanel {
     }
 
     private void presentarTableCliente(Cliente cli) {
-        DefaultTableModel modelo = (DefaultTableModel) TableCliente.getModel();
-        modelo.setRowCount(0);
+        try {
+            DefaultTableModel modelo = (DefaultTableModel) TableCliente.getModel();
+            modelo.setRowCount(0);
 
-        int numFila = 0;
-        modelo.insertRow(numFila, new Object[]{cli.getNombre(), cli.getApellido1(), cli.getApellido2(), cli.getEmail(), cli.getTelefono()});
+            int numFila = 0;
+            modelo.insertRow(numFila, new Object[]{cli.getNombre(), cli.getApellido1(), cli.getApellido2(), cli.getEmail(), cli.getTelefono()});
+        } catch (Exception e) {
+
+        }
     }
 
     public static Connection getConnection() {
@@ -112,6 +117,39 @@ public class RentarGUI extends javax.swing.JPanel {
             return false;
         }
     }
+    //ventanas para mostrar la respuesta que envió el servidor
+
+    public void ventanasMsjs() {
+
+        switch (mensaje) {
+
+            case "correcto":
+                JOptionPane.showMessageDialog(null, "Accion ejecutada de forma correcta.", "Info", 1);
+
+                break;
+
+            case "duplicado":
+                JOptionPane.showMessageDialog(null, "La cédula ya existe.", "Error", 0);
+                break;
+
+            case "no existe":
+                JOptionPane.showMessageDialog(null, "El usuario no existe.\n" + "Puede agregarlos desde la sección clientes", "Info", 1);
+                break;
+
+            case "id vacio":
+                JOptionPane.showMessageDialog(null, "El campo de identificación no puede estar vacio", "Campo vacio", 2);
+                break;
+
+            case "error base":
+                JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 1);
+                break;
+        }
+    }
+//distintos mensajes que envías el peor según la consulta
+
+    public static void mensajes(String msg) {
+        mensaje = msg;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -136,6 +174,7 @@ public class RentarGUI extends javax.swing.JPanel {
         txtid = new javax.swing.JTextField();
         txtPlaca = new javax.swing.JTextField();
         btnBucarPlaca = new javax.swing.JButton();
+        btncancelar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setAlignmentX(0.0F);
@@ -174,7 +213,7 @@ public class RentarGUI extends javax.swing.JPanel {
                 btnBuscarActionPerformed(evt);
             }
         });
-        add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 100, 40));
+        add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 60, 110, 30));
 
         btmRentar.setBackground(new java.awt.Color(18, 90, 173));
         btmRentar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -187,7 +226,7 @@ public class RentarGUI extends javax.swing.JPanel {
                 btmRentarActionPerformed(evt);
             }
         });
-        add(btmRentar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 390, 100, 40));
+        add(btmRentar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, 110, 30));
 
         TableAuto.setBackground(new java.awt.Color(255, 255, 255));
         TableAuto.setModel(new javax.swing.table.DefaultTableModel(
@@ -261,7 +300,7 @@ public class RentarGUI extends javax.swing.JPanel {
                 btmActualizarActionPerformed(evt);
             }
         });
-        add(btmActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 100, 40));
+        add(btmActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 110, 30));
 
         txtid.setBackground(new java.awt.Color(255, 255, 255));
         txtid.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
@@ -307,7 +346,19 @@ public class RentarGUI extends javax.swing.JPanel {
                 btnBucarPlacaActionPerformed(evt);
             }
         });
-        add(btnBucarPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 210, 100, 40));
+        add(btnBucarPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, 110, 30));
+
+        btncancelar.setBackground(new java.awt.Color(255, 102, 102));
+        btncancelar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        btncancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btncancelar.setText("CANCELAR");
+        btncancelar.setBorder(null);
+        btncancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelarActionPerformed(evt);
+            }
+        });
+        add(btncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 110, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -323,10 +374,13 @@ public class RentarGUI extends javax.swing.JPanel {
             cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
             cli = ClienteHilo.archivoJsonAObjetoCLIENTE();
 
-            if (cli.getCedula() == null) {
-                JOptionPane.showMessageDialog(null, "El usuario no existe.\n" + "Puede agregarlos desde la sección clientes", "Info", 1);
-            } else {
+            cli = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
+
+            if ("correcto".equals(mensaje)) {
                 presentarTableCliente(cli);
+                ventanasMsjs();
+            } else {
+                ventanasMsjs();
             }
         } catch (Exception e) {
 
@@ -423,6 +477,15 @@ public class RentarGUI extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnBucarPlacaActionPerformed
 
+    private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
+        // TODO add your handling code here:
+
+        txtid.setText("Ingrese la identificacion");
+        txtPlaca.setText("Ingrese la placa");
+        presentarTableCliente(null);
+
+    }//GEN-LAST:event_btncancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TableAuto;
@@ -433,6 +496,7 @@ public class RentarGUI extends javax.swing.JPanel {
     private javax.swing.JButton btmRentar;
     private javax.swing.JButton btnBucarPlaca;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btncancelar;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel txt1;

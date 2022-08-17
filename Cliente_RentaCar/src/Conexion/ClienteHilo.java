@@ -465,6 +465,7 @@ public class ClienteHilo extends Thread {
                 UsuariosGUI.mensajes(msg);
                 AutosGUI.mensajes(msg);
                 GUI.LoginGUI.mensajes(msg);
+                GUI.RentarGUI.mensajes(msg);
 
             }
         } catch (IOException ex) {
