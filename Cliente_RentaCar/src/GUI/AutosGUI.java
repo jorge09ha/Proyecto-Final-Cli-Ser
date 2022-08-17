@@ -2,19 +2,23 @@ package GUI;
 
 import Conexion.ClienteHilo;
 import Conexion.ClienteSocket;
-import rentACar.Auto;
+import ClasesRentaCar.Auto;
 import javax.swing.*;
 import static Conexion.ClienteSocket.clientToServer;
-import rentACar.Cliente;
+import ClasesRentaCar.Cliente;
 
-public class Autos extends javax.swing.JPanel {
+/**
+ * @author Jorge Hernandez Araya
+ */
+public class AutosGUI extends javax.swing.JPanel {
 
     static String mensaje = null;
 
-    public Autos() {
+    public AutosGUI() {
         initComponents();
         iniciar();
     }
+//iniciar botones de modificar eliminar invisibles
 
     public void iniciar() {
         btnmodificar.setVisible(false);
@@ -22,6 +26,7 @@ public class Autos extends javax.swing.JPanel {
         cbAnnio.setSelectedItem(null);
         cbTransm.setSelectedItem(null);
     }
+//Indica los campos vacíos
 
     public boolean camposVacios() {
 
@@ -34,6 +39,7 @@ public class Autos extends javax.swing.JPanel {
             return false;
         }
     }
+//ventanas para mostrar la respuesta que envió el servidor
 
     public void ventanasMsjs() {
 
@@ -61,6 +67,7 @@ public class Autos extends javax.swing.JPanel {
                 break;
         }
     }
+//distintos mensajes que envías el peor según la consulta
 
     public static void mensajes(String msg) {
         mensaje = msg;
@@ -367,7 +374,7 @@ public class Autos extends javax.swing.JPanel {
                         btmAgregar.setVisible(true);
                         ventanasMsjs(); /////ventanas
                     } else {
-                        
+
                         txtid.setText("Ingrese la placa");
                         txtMarca.setText("Ingrese la marca");
                         txtModelo.setText("Ingrese el modelo");

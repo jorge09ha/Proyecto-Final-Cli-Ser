@@ -1,11 +1,14 @@
-package rentACar;
+package ClasesRentaCar;
 
 /**
- *
- * @author jorge
+ * @author Jorge Hernandez Araya
  */
-public class UserAdmin extends Persona implements IOperaciones {
+public class UserAdmin extends Persona {
 
+    /*
+    Esta clase hereda de persona e incorpora dos nuevas variables user y pass.
+    Indica el usuario y la contraseña de inicio de sesión del aplicativo
+     */
     protected String user, pass;
 
     public UserAdmin(String user, String pass, String cedula, String nombre, String apellido1, String apellido2) {
@@ -71,27 +74,6 @@ public class UserAdmin extends Persona implements IOperaciones {
 
     public void setPass(String pass) {
         this.pass = pass;
-    }
-
-    @Override
-    public void Create(Object obj) {
-    }
-
-    @Override
-    public Object Retrieve(String key) {
-        return null;
-    }
-
-    @Override
-    public void Update(Object obj) {
-    }
-
-    @Override
-    public void Delete(String key) {
-    }
-
-    public void getUser(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

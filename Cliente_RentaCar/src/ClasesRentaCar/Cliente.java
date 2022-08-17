@@ -1,11 +1,13 @@
-package rentACar;
+package ClasesRentaCar;
 
 /**
- *
- * @author jorge
+ * @author Jorge Hernandez Araya
  */
 public class Cliente extends Persona implements IOperaciones {
 
+    /*
+    Esta clase hereda de persona e incorpora dos nuevas variables email y teléfono.
+     */
     protected String email, telefono;
 
     public Cliente(String email, String telefono, String cedula, String nombre, String apellido1, String apellido2) {

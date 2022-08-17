@@ -1,11 +1,14 @@
-package rentACar;
+package ClasesRentaCar;
 
 /**
- *
- * @author jorge
+ * @author Jorge Hernandez Araya
  */
-public class Auto extends Vehiculo implements IOperaciones {
+public class Auto extends Vehiculo {
 
+    /*
+    Esta clase hereda de auto e incorpora una nueva variable rentar.
+    indica con una R si el vehículo está rentado o una D si el vehículo está disponible.
+     */
     protected String rentar;
 
     public Auto(String rentar, String placa, String marca, String modelo, String annio, String transmision) {
@@ -72,23 +75,6 @@ public class Auto extends Vehiculo implements IOperaciones {
     @Override
     public void setTransmision(String transmision) {
         this.transmision = transmision;
-    }
-
-    @Override
-    public void Create(Object obj) {
-    }
-
-    @Override
-    public Object Retrieve(String key) {
-        return null;
-    }
-
-    @Override
-    public void Update(Object obj) {
-    }
-
-    @Override
-    public void Delete(String key) {
     }
 
 }

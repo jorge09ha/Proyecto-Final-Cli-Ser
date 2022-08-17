@@ -1,11 +1,14 @@
-package Servidor;
+package ClasesRentaCar;
 
 /**
- *
- * @author jorge
+ * @author Jorge Hernandez Araya
  */
 public class Auto extends Vehiculo {
 
+    /*
+    Esta clase hereda de auto e incorpora una nueva variable rentar.
+    indica con una R si el vehículo está rentado o una D si el vehículo está disponible.
+     */
     protected String rentar;
 
     public Auto(String rentar, String placa, String marca, String modelo, String annio, String transmision) {

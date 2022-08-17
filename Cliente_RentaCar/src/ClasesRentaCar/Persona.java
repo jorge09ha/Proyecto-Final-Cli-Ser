@@ -1,11 +1,14 @@
-package rentACar;
+package ClasesRentaCar;
 
 /**
- *
- * @author jorge
+ * @author Jorge Hernandez Araya
  */
 public abstract class Persona {
 
+    /*
+    Personas una clase abstracta que incorpora la información básica que 
+    después va a ser heredada a clientes y usuarios administradores
+     */
     protected String cedula, nombre, apellido1, apellido2;
 
     public Persona(String cedula, String nombre, String apellido1, String apellido2) {
@@ -17,7 +20,6 @@ public abstract class Persona {
 
     public Persona() {
     }
-        
 
     public String getCedula() {
         return cedula;
@@ -50,7 +52,5 @@ public abstract class Persona {
     public void setApellido2(String apellido2) {
         this.apellido2 = apellido2;
     }
-    
-    
 
 }

@@ -1,8 +1,8 @@
 package Conexion;
 
-import GUI.Autos;
-import GUI.Client;
-import GUI.Users;
+import GUI.AutosGUI;
+import GUI.ClienteGUI;
+import GUI.UsuariosGUI;
 import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -21,11 +21,19 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import rentACar.Auto;
-import rentACar.Cliente;
-import rentACar.UserAdmin;
+import ClasesRentaCar.Auto;
+import ClasesRentaCar.Cliente;
+import ClasesRentaCar.UserAdmin;
 
+/**
+ * @author Jorge Hernandez Araya
+ */
 public class ClienteHilo extends Thread {
+
+    /**
+     * Hilo donde realiza la tarea para desplegar los números en la pantalla
+     * HOME
+     */
 
     private static DataOutputStream dataOutputStream = null;
     private static DataInputStream dataInputStream = null;
@@ -314,7 +322,7 @@ public class ClienteHilo extends Thread {
                         break;
 
 
-                    /*----------------------Autos----------------------*/
+                    /*----------------------AutosGUI----------------------*/
                     case "registrarAuto":
                         out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
                         out.flush();
@@ -453,10 +461,10 @@ public class ClienteHilo extends Thread {
                 }
 
                 /*----------------------Errores y notificaciones----------------------*/
-                Client.mensajes(msg);
-                Users.mensajes(msg);
-                Autos.mensajes(msg);
-                GUI.Login.mensajes(msg);
+                ClienteGUI.mensajes(msg);
+                UsuariosGUI.mensajes(msg);
+                AutosGUI.mensajes(msg);
+                GUI.LoginGUI.mensajes(msg);
 
             }
         } catch (IOException ex) {
@@ -554,8 +562,6 @@ public class ClienteHilo extends Thread {
             Reader reader = Files.newBufferedReader(Paths.get("NewFileFromServer.json"));
 
             Cliente cli = gson.fromJson(reader, Cliente.class);
-
-            //System.out.println("Lectura del archivo: Cedula: "+cli.getCedula()+" Nombre: "+cli.getNombre()+" Apellido1: "+cli.getApellido1()+" Apellido2: "+cli.getApellido2()+" Correo: "+cli.getEmail()+" Telefono: "+cli.getTelefono());
             reader.close();
 
             return cli;

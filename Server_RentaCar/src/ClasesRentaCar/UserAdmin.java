@@ -1,10 +1,14 @@
-package Servidor;
+package ClasesRentaCar;
 
 /**
- *
- * @author jorge
+ * @author Jorge Hernandez Araya
  */
 public class UserAdmin extends Persona {
+
+    /*
+    Esta clase hereda de persona e incorpora dos nuevas variables user y pass.
+    Indica el usuario y la contraseña de inicio de sesión del aplicativo
+     */
 
     protected String user, pass;
 

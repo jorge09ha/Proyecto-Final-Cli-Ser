@@ -1,24 +1,29 @@
 package GUI;
 
 import Conexion.ClienteHilo;
-import rentACar.Cliente;
+import ClasesRentaCar.Cliente;
 import javax.swing.*;
 import Conexion.ClienteSocket;
 import static Conexion.ClienteSocket.clientToServer;
 
-public class Client extends javax.swing.JPanel {
+/**
+ * @author Jorge Hernandez Araya
+ */
+public class ClienteGUI extends javax.swing.JPanel {
 
     static String mensaje = null;
 
-    public Client() {
+    public ClienteGUI() {
         initComponents();
         iniciar();
     }
+//iniciar botones de modificar eliminar invisibles
 
     public void iniciar() {
         btnmodificar.setVisible(false);
         btnborrar.setVisible(false);
     }
+//Indica los campos vacíos
 
     public boolean camposVacios() {
 
@@ -33,6 +38,7 @@ public class Client extends javax.swing.JPanel {
             return false;
         }
     }
+//ventanas para mostrar la respuesta que envió el servidor
 
     public void ventanasMsjs() {
 
@@ -60,6 +66,7 @@ public class Client extends javax.swing.JPanel {
                 break;
         }
     }
+//distintos mensajes que envías el peor según la consulta
 
     public static void mensajes(String msg) {
         mensaje = msg;
@@ -309,15 +316,15 @@ public class Client extends javax.swing.JPanel {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
         try {
-           
+
             if (camposVacios() == false) {
-               
+
                 int response = JOptionPane.showConfirmDialog(null, "Desea Registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
-               
+
                 if (response == JOptionPane.YES_OPTION) {
-                    
+
                     Cliente cli = new Cliente();
-                    
+
                     cli.setCedula(txtid.getText());
                     cli.setNombre(txtnombre.getText());
                     cli.setApellido1(txtapellido1.getText());
@@ -444,7 +451,7 @@ public class Client extends javax.swing.JPanel {
                 btnmodificar.setVisible(false);
                 btnborrar.setVisible(false);
                 btnRegistrar.setVisible(true);
-                
+
                 txtnombre.setText("Ingrese el nombre");
                 txtapellido1.setText("Ingrese el apellido 1");
                 txtapellido2.setText("Ingrese el apellido 2");

@@ -1,7 +1,11 @@
 package GUI;
 
 import static Conexion.HomeSocket.homeToServer;
+import javax.swing.JOptionPane;
 
+/**
+ * @author Jorge Hernandez Araya
+ */
 public class Home extends javax.swing.JPanel {
 
     static String autosdisponibles, autosrentados, adminuser, clientuser;
@@ -9,7 +13,7 @@ public class Home extends javax.swing.JPanel {
     public Home() {
         initComponents();
         homeToServer("home", "");
-        
+
         aDisponibles.setText(autosdisponibles);
         aRentados.setText(autosrentados);
         lClientes.setText(clientuser);
@@ -17,6 +21,10 @@ public class Home extends javax.swing.JPanel {
 
     }
 
+    /*
+    Clases para obtener los números visibles desde la pantalla home no 
+    obtiene mediante la conexión de HomeSocket.
+     */
     public static void autosDisponibles(String aut) {
         autosdisponibles = aut;
     }

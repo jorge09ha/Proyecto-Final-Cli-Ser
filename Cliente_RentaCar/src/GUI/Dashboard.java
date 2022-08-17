@@ -10,20 +10,22 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JPanel;
 
+/**
+ * @author Jorge Hernandez Araya
+ */
 public class Dashboard extends javax.swing.JFrame {
 
     int xMouse;
     int yMouse;
- 
-    
 
     /**
-     * Creates new form Dashboard
+     * Dashboard donde se muestran las distintas pantallas según su función
+     * inicializa tomando el nombre del usuario bloqueado junto con la fecha.
      */
     public Dashboard() {
 
         initComponents();
-        txtUserName.setText("Usermane: " + Login.userLogin);
+        txtUserName.setText("Usermane: " + LoginGUI.userLogin);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
 
         LocalDate now = LocalDate.now();
@@ -77,9 +79,6 @@ public class Dashboard extends javax.swing.JFrame {
         btn_admUsers = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        btn_reports = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
         app_name = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         Header = new javax.swing.JPanel();
@@ -345,33 +344,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         Menu.add(btn_admUsers, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, -1, -1));
 
-        btn_reports.setBackground(new java.awt.Color(18, 90, 173));
-        btn_reports.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        btn_reports.setPreferredSize(new java.awt.Dimension(270, 51));
-        btn_reports.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn_reportsMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn_reportsMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btn_reportsMousePressed(evt);
-            }
-        });
-        btn_reports.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconFILE.png"))); // NOI18N
-        btn_reports.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
-
-        jLabel12.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Reportes");
-        btn_reports.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 190, 30));
-
-        Menu.add(btn_reports, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, -1, -1));
-
         app_name.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         app_name.setForeground(new java.awt.Color(255, 255, 255));
         app_name.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/favicon.png"))); // NOI18N
@@ -472,7 +444,6 @@ public class Dashboard extends javax.swing.JFrame {
         resetColor(btn_clients);
         resetColor(btn_autos);
         resetColor(btn_admUsers);
-        resetColor(btn_reports);
         // Abrir sección
         Home p1 = new Home();
         p1.setSize(750, 430);
@@ -491,9 +462,8 @@ public class Dashboard extends javax.swing.JFrame {
         resetColor(btn_clients);
         resetColor(btn_autos);
         resetColor(btn_admUsers);
-        resetColor(btn_reports);
         // Abrir sección
-        Rentar p1 = new Rentar();
+        RentarGUI p1 = new RentarGUI();
         p1.setSize(750, 430);
         p1.setLocation(0, 0);
 
@@ -510,9 +480,8 @@ public class Dashboard extends javax.swing.JFrame {
         resetColor(btn_clients);
         resetColor(btn_autos);
         resetColor(btn_admUsers);
-        resetColor(btn_reports);
         // Abrir sección
-        Returns p1 = new Returns();
+        ReturnarGUI p1 = new ReturnarGUI();
         p1.setSize(750, 430);
         p1.setLocation(0, 0);
 
@@ -529,9 +498,8 @@ public class Dashboard extends javax.swing.JFrame {
         setColor(btn_clients);
         resetColor(btn_autos);
         resetColor(btn_admUsers);
-        resetColor(btn_reports);
         // Abrir sección
-        Client p1 = new Client();
+        ClienteGUI p1 = new ClienteGUI();
         p1.setSize(750, 430);
         p1.setLocation(0, 0);
 
@@ -548,9 +516,8 @@ public class Dashboard extends javax.swing.JFrame {
         resetColor(btn_clients);
         setColor(btn_autos);
         resetColor(btn_admUsers);
-        resetColor(btn_reports);
         // Abrir sección
-        Autos p1 = new Autos();
+        AutosGUI p1 = new AutosGUI();
         p1.setSize(750, 430);
         p1.setLocation(0, 0);
 
@@ -559,25 +526,6 @@ public class Dashboard extends javax.swing.JFrame {
         content.revalidate();
         content.repaint();
     }//GEN-LAST:event_btn_autosMousePressed
-
-    private void btn_reportsMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_reportsMousePressed
-        resetColor(btn_home);
-        resetColor(btn_rentar);
-        resetColor(btn_returns);
-        resetColor(btn_clients);
-        resetColor(btn_autos);
-        resetColor(btn_admUsers);
-        setColor(btn_reports);
-        // Abrir sección
-        Reports p1 = new Reports();
-        p1.setSize(750, 430);
-        p1.setLocation(0, 0);
-
-        content.removeAll();
-        content.add(p1, BorderLayout.CENTER);
-        content.revalidate();
-        content.repaint();
-    }//GEN-LAST:event_btn_reportsMousePressed
 
     private void red_squrMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_red_squrMousePressed
         System.exit(0);
@@ -591,7 +539,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void btn_rentarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_rentarMouseExited
         if (btn_home.getBackground().getRGB() != -15574355 || btn_clients.getBackground().getRGB() != -15574355
                 || btn_returns.getBackground().getRGB() != -15574355 || btn_autos.getBackground().getRGB() != -15574355
-                || btn_reports.getBackground().getRGB() != -15574355 || btn_admUsers.getBackground().getRGB() != -15574355)
+                || btn_admUsers.getBackground().getRGB() != -15574355)
             resetColor(btn_rentar);
     }//GEN-LAST:event_btn_rentarMouseExited
 
@@ -603,7 +551,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void btn_homeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_homeMouseExited
         if (btn_rentar.getBackground().getRGB() != -15574355 || btn_clients.getBackground().getRGB() != -15574355
                 || btn_returns.getBackground().getRGB() != -15574355 || btn_autos.getBackground().getRGB() != -15574355
-                || btn_reports.getBackground().getRGB() != -15574355 || btn_admUsers.getBackground().getRGB() != -15574355)
+                || btn_admUsers.getBackground().getRGB() != -15574355)
             resetColor(btn_home);
     }//GEN-LAST:event_btn_homeMouseExited
 
@@ -615,7 +563,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void btn_returnsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_returnsMouseExited
         if (btn_rentar.getBackground().getRGB() != -15574355 || btn_home.getBackground().getRGB() != -15574355
                 || btn_clients.getBackground().getRGB() != -15574355 || btn_autos.getBackground().getRGB() != -15574355
-                || btn_reports.getBackground().getRGB() != -15574355 || btn_admUsers.getBackground().getRGB() != -15574355)
+                || btn_admUsers.getBackground().getRGB() != -15574355)
             resetColor(btn_returns);
     }//GEN-LAST:event_btn_returnsMouseExited
 
@@ -627,7 +575,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void btn_clientsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_clientsMouseExited
         if (btn_rentar.getBackground().getRGB() != -15574355 || btn_home.getBackground().getRGB() != -15574355
                 || btn_returns.getBackground().getRGB() != -15574355 || btn_autos.getBackground().getRGB() != -15574355
-                || btn_reports.getBackground().getRGB() != -15574355 || btn_admUsers.getBackground().getRGB() != -15574355)
+                || btn_admUsers.getBackground().getRGB() != -15574355)
             resetColor(btn_clients);
     }//GEN-LAST:event_btn_clientsMouseExited
 
@@ -639,21 +587,9 @@ public class Dashboard extends javax.swing.JFrame {
     private void btn_autosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_autosMouseExited
         if (btn_rentar.getBackground().getRGB() != -15574355 || btn_home.getBackground().getRGB() != -15574355
                 || btn_returns.getBackground().getRGB() != -15574355 || btn_clients.getBackground().getRGB() != -15574355
-                || btn_reports.getBackground().getRGB() != -15574355 || btn_admUsers.getBackground().getRGB() != -15574355)
+                || btn_admUsers.getBackground().getRGB() != -15574355)
             resetColor(btn_autos);
     }//GEN-LAST:event_btn_autosMouseExited
-
-    private void btn_reportsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_reportsMouseEntered
-        if (btn_reports.getBackground().getRGB() == -15574355)
-            setColor(btn_reports);
-    }//GEN-LAST:event_btn_reportsMouseEntered
-
-    private void btn_reportsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_reportsMouseExited
-        if (btn_rentar.getBackground().getRGB() != -15574355 || btn_home.getBackground().getRGB() != -15574355
-                || btn_returns.getBackground().getRGB() != -15574355 || btn_clients.getBackground().getRGB() != -15574355
-                || btn_admUsers.getBackground().getRGB() != -15574355 || btn_autos.getBackground().getRGB() != -15574355) 
-            resetColor(btn_reports);
-    }//GEN-LAST:event_btn_reportsMouseExited
 
     private void red_squrMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_red_squrMouseEntered
         red_squr.setBackground(new Color(204, 0, 0));
@@ -683,7 +619,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void btn_admUsersMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_admUsersMouseExited
         if (btn_rentar.getBackground().getRGB() != -15574355 || btn_home.getBackground().getRGB() != -15574355
                 || btn_returns.getBackground().getRGB() != -15574355 || btn_clients.getBackground().getRGB() != -15574355
-                || btn_reports.getBackground().getRGB() != -15574355|| btn_autos.getBackground().getRGB() != -15574355)
+                || btn_autos.getBackground().getRGB() != -15574355)
             resetColor(btn_admUsers);
     }//GEN-LAST:event_btn_admUsersMouseExited
 
@@ -694,9 +630,9 @@ public class Dashboard extends javax.swing.JFrame {
         resetColor(btn_clients);
         resetColor(btn_autos);
         setColor(btn_admUsers);
-        resetColor(btn_reports);
+
         // Abrir sección
-        Users p1 = new Users();
+        UsuariosGUI p1 = new UsuariosGUI();
         p1.setSize(750, 430);
         p1.setLocation(0, 0);
 
@@ -743,6 +679,18 @@ public class Dashboard extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -763,15 +711,12 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel btn_clients;
     private javax.swing.JPanel btn_home;
     private javax.swing.JPanel btn_rentar;
-    private javax.swing.JPanel btn_reports;
     private javax.swing.JPanel btn_returns;
     public static javax.swing.JPanel content;
     private javax.swing.JLabel exit;
     private javax.swing.JLabel fecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;

@@ -7,8 +7,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import rentACar.*;
 
+/**
+ * @author Jorge Hernandez Araya
+ */
 public class ClienteSocket {
 
     //Clase de conexion al server, recive la tarea y el ID (Placa o cedula).
@@ -16,13 +18,14 @@ public class ClienteSocket {
         try {
             //Creo el socket.
             Socket sc = new Socket("127.0.0.1", 7777);
+            System.out.println("\n***Solicitud de conexion al server: 10.90.1.10:7777***");//print--------------->
 
             //Defino la entrada y la salida.
             DataInputStream in = new DataInputStream(sc.getInputStream());
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
             // Ejecutamos el hilo.
-            System.out.println("Se inicia el Hilo. " +"\nTarea= "+ tarea+"\nID="+id);//print--------------->
+             System.out.println("-Se inicia el Hilo" + "\n-Tarea= " + tarea + "\n-ID=" + id);//print--------------->
             ClienteHilo hilo = new ClienteHilo(in, out, tarea, id);
             hilo.start();
             hilo.join();
@@ -31,10 +34,9 @@ public class ClienteSocket {
             Logger.getLogger(ClienteSocket.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-//        Cliente cli = new Cliente();
-//        cli = ClienteHilo.archivoJsonAObjetoCLIENTE();
-        
+
         return null;
+
     }
 
 }

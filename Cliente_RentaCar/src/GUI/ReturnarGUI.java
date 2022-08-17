@@ -6,9 +6,12 @@ import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
-public class Returns extends javax.swing.JPanel {
+/**
+ * @author Jorge Hernandez Araya
+ */
+public class ReturnarGUI extends javax.swing.JPanel {
 
-    public Returns() {
+    public ReturnarGUI() {
         initComponents();
         presentarTableAuto();
     }

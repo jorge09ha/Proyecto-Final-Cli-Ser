@@ -1,15 +1,13 @@
-package Servidor;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
+package ClasesRentaCar;
 
 /**
- *
- * @author jorge
+ * @author Jorge Hernandez Araya
  */
 public class Cliente extends Persona {
+
+    /*
+    Esta clase hereda de persona e incorpora dos nuevas variables email y teléfono.
+     */
 
     protected String email, telefono;
 

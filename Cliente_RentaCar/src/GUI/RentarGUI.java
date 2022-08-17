@@ -2,8 +2,8 @@ package GUI;
 
 import Conexion.ClienteHilo;
 import Conexion.ClienteSocket;
-import rentACar.Cliente;
-import rentACar.Auto;
+import ClasesRentaCar.Cliente;
+import ClasesRentaCar.Auto;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
@@ -14,13 +14,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
-public class Rentar extends javax.swing.JPanel {
+/**
+ * @author Jorge Hernandez Araya
+ */
+public class RentarGUI extends javax.swing.JPanel {
 
     static String URL = "jdbc:mysql://localhost:3306/rentacar";
     static String USERNAME = "root";
     static String PASS = "admin01";
 
-    public Rentar() {
+    public RentarGUI() {
         initComponents();
         presentarTableAuto();
     }

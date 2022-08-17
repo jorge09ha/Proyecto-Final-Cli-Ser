@@ -1,15 +1,15 @@
 package Servidor;
 
+import ClasesRentaCar.UserAdmin;
+import ClasesRentaCar.Auto;
+import ClasesRentaCar.Cliente;
 import com.google.gson.Gson;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.ServerSocket;
@@ -22,11 +22,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+/**
+ * @author Jorge Hernandez Araya
+ */
 public class ServidorHilo extends Thread {
 
     private static DataOutputStream dataOutputStream = null;
@@ -34,7 +33,6 @@ public class ServidorHilo extends Thread {
     private static final String URL = "jdbc:mysql://localhost:3306/rentacar";
     private static final String USERNAME = "root";
     private static final String PASS = "admin01";
-    private static String userL = "running";
     PreparedStatement ps;
     ResultSet rs;
     private Socket sc;
@@ -46,6 +44,10 @@ public class ServidorHilo extends Thread {
         this.in = in;
         this.out = out;
     }
+    
+    /*
+    Clase donde se inicia la comunicación con el cliente y el servidor para hacer la ejecución según la tarea
+    */
 
     @Override
     public void run() {
@@ -55,6 +57,7 @@ public class ServidorHilo extends Thread {
             String strFromServer = "", strToClient = "", id = "";
 
             strFromServer = in.readUTF();// Recibe la tarea
+            System.out.println("-Se resive la tarea: " + strFromServer);//print--------------->
 
             while (!strFromServer.equals("stop")) {
 
@@ -65,9 +68,11 @@ public class ServidorHilo extends Thread {
                  */
                 switch (strFromServer) {
                     /*----------------------Clientes----------------------*/
-                    case "registrarCliente":
+                    case "registrarCliente"://------------------------------------> Reguistra Clientes
 
                         strToClient = registrarCliente(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
@@ -79,13 +84,15 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "eliminarCliente":
-                        out.writeUTF("id"); // preguta por id //linea 61
+                    case "eliminarCliente"://------------------------------------> Elimina Clientes
+                        out.writeUTF("id"); // preguta por id
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = eliminarCliente(id); // client                    
+                        strToClient = eliminarCliente(id); // client     
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
 
@@ -97,13 +104,15 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "buscarCliente":
+                    case "buscarCliente"://------------------------------------> Busca Clentes
                         out.writeUTF("id"); // preguta por id 
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = buscarCliente(id); // client                    
+                        strToClient = buscarCliente(id); // client
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         id = strToClient;
                         out.writeUTF(strToClient); // cliente
                         out.flush();
@@ -114,6 +123,7 @@ public class ServidorHilo extends Thread {
 
                             if ("servidorA".equals(strFromServer)) {
                                 envioArchivoJson();
+                                System.out.println("-Server envio json");//print----------------------#
                             }
                             strToClient = "objetodeJasonCLIENTE()"; // client                    
                             out.writeUTF(strToClient); // cliente
@@ -134,23 +144,25 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "modificarCliente":
+                    case "modificarCliente"://------------------------------------> Modifica Clientes
 
-                        out.writeUTF("id"); // preguta por id //linea 61
+                        out.writeUTF("id"); // preguta por id
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = modificarCliente(id); // client                    
+                        strToClient = modificarCliente(id); // client       
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
 
                         if ("correcto".equals(strToClient)) {
                             strFromServer = in.readUTF();
-                            //if("servidorA".equals(strFromServer)){
-                            System.out.println("Server envio json: ");
+
+                            System.out.println("-Server envio json");//print----------------------#
                             envioArchivoJson();
-                            //}
+
                             strToClient = "objetodeJasonCLIENTE()"; // client                    
                             out.writeUTF(strToClient); // cliente
                             out.flush();
@@ -171,9 +183,11 @@ public class ServidorHilo extends Thread {
 
 
                     /*----------------------Usuarios------------------*/
-                    case "registrarUsuario":
+                    case "registrarUsuario"://------------------------------------> Reguistra Usuarios
 
                         strToClient = registrarUsuario(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
@@ -185,13 +199,15 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "eliminarUsuario":
-                        out.writeUTF("id"); // preguta por id //linea 61
+                    case "eliminarUsuario"://------------------------------------> Elimina Usuarios
+                        out.writeUTF("id"); // preguta por id
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = eliminarUsuario(id); // client                    
+                        strToClient = eliminarUsuario(id); // client            
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
 
@@ -203,13 +219,15 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "buscarUsuario":
+                    case "buscarUsuario"://------------------------------------> Busca Usuarios
                         out.writeUTF("id"); // preguta por id 
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = buscarUsuario(id); // client                    
+                        strToClient = buscarUsuario(id); // client  
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         id = strToClient;
                         out.writeUTF(strToClient); // cliente
                         out.flush();
@@ -220,6 +238,7 @@ public class ServidorHilo extends Thread {
 
                             if ("servidorA".equals(strFromServer)) {
                                 envioArchivoJson();
+                                System.out.println("-Server envio json");//print----------------------#
                             }
                             strToClient = "objetodeJasonUSER()"; // client                    
                             out.writeUTF(strToClient); // cliente
@@ -240,22 +259,24 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "modificarUsuario":
+                    case "modificarUsuario"://------------------------------------> Medifica Usuarios
 
-                        out.writeUTF("id"); // preguta por id //linea 61
+                        out.writeUTF("id"); // preguta por id
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = modificarUsuario(id); // client                    
+                        strToClient = modificarUsuario(id); // client         
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
 
                         if ("correcto".equals(strToClient)) {
                             strFromServer = in.readUTF();
 
-                            System.out.println("Server envio json: ");
                             envioArchivoJson();
+                            System.out.println("-Server envio json");//print----------------------#
 
                             strToClient = "objetodeJasonUSER()"; // client                    
                             out.writeUTF(strToClient); // cliente
@@ -275,15 +296,17 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "validarUsuario":
+                    case "validarUsuario"://------------------------------------> Validacion de Usuarios login
 
                         out.writeUTF("id"); // preguta por id 
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
                         strToClient = validarUsuario(id); // client                    
                         id = strToClient;
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
 
@@ -293,6 +316,7 @@ public class ServidorHilo extends Thread {
 
                             if ("servidorA".equals(strFromServer)) {
                                 envioArchivoJson();
+                                System.out.println("-Server envio json");//print----------------------#
                             }
                             strToClient = "objetodeJasonUSER()"; // client                    
                             out.writeUTF(strToClient); // cliente
@@ -315,12 +339,16 @@ public class ServidorHilo extends Thread {
 
 
                     /*----------------------Autos----------------------*/
-                    case "registrarAuto":
+                    case "registrarAuto"://------------------------------------> Reguistra Auto
+
                         strToClient = registrarAuto(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
                         strFromServer = in.readUTF(); // lee msg stop del cliente
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
                         strToClient = "stop";
                         out.writeUTF(strToClient);
@@ -328,13 +356,16 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "eliminarAuto":
-                        out.writeUTF("id"); // preguta por id //linea 61
+                    case "eliminarAuto"://------------------------------------> Elimina Auto
+
+                        out.writeUTF("id"); // preguta por id
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = eliminarAuto(id); // client                    
+                        strToClient = eliminarAuto(id); // client    
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
 
@@ -346,13 +377,16 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "buscarAuto":
+                    case "buscarAuto"://------------------------------------> Busca Auto
+
                         out.writeUTF("id"); // preguta por id 
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = buscarAuto(id); // client                    
+                        strToClient = buscarAuto(id); // client      
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         id = strToClient;
                         out.writeUTF(strToClient); // cliente
                         out.flush();
@@ -363,6 +397,7 @@ public class ServidorHilo extends Thread {
 
                             if ("servidorA".equals(strFromServer)) {
                                 envioArchivoJson();
+                                System.out.println("-Server envio json");//print----------------------#
                             }
                             strToClient = "objetodeJasonAUTO()"; // client                    
                             out.writeUTF(strToClient); // cliente
@@ -383,22 +418,24 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "modificarAuto":
+                    case "modificarAuto"://------------------------------------> Modifica Auto
 
                         out.writeUTF("id"); // preguta por id //linea 61
                         out.flush();
 
                         id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = modificarAuto(id); // client                    
+                        strToClient = modificarAuto(id); // client   
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
 
                         if ("correcto".equals(strToClient)) {
                             strFromServer = in.readUTF();
 
-                            System.out.println("Server envio json: ");
                             envioArchivoJson();
+                            System.out.println("-Server envio json");//print----------------------#
 
                             strToClient = "objetodeJasonAUTO()"; // client                    
                             out.writeUTF(strToClient); // cliente
@@ -430,26 +467,31 @@ public class ServidorHilo extends Thread {
                     case "verDisponibles":
                         break;
 
-                    case "home":
+                    case "home": //------------------------------------> Datos de la ventana HOME
+
                         strToClient = autosDisponibles(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
                         strFromServer = in.readUTF(); //ok
 
                         strToClient = autosRentados();
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
                         strFromServer = in.readUTF(); //ok
 
                         strToClient = adminUser();
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
                         strFromServer = in.readUTF();//ok
 
                         strToClient = clientUser();
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
@@ -477,15 +519,14 @@ public class ServidorHilo extends Thread {
             } catch (IOException e) {
             }
         }
-        System.out.println("Conexion cerrada con el cliente: " + sc.getInetAddress().getHostAddress());
+        System.out.println("*Cliente DESCONECTADO: " + sc.getInetAddress().getHostAddress()+":"+sc.getPort()+"\n");
     }
 
     /*--------Conexion puerto 5000 entrada de archivos---------*/
     public static void entradaArchivoJson() {
-        try ( ServerSocket serverSocket = new ServerSocket(5000)) {// server archives
-            System.out.println("Escuchando pueto: 5000 para archivos");
+
+        try ( ServerSocket serverSocket = new ServerSocket(5000)) {// server archivos
             Socket clientSocket = serverSocket.accept();
-            System.out.println(clientSocket + " CONECTADO.");
             dataInputStream = new DataInputStream(clientSocket.getInputStream());
             dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
 
@@ -494,15 +535,16 @@ public class ServidorHilo extends Thread {
             dataInputStream.close();
             dataOutputStream.close();
             clientSocket.close();
-            System.out.println("#### Archivo Resivido ####");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /*--------Conexion puerto 5007 salida de archivos---------*/
-    public static void envioArchivoJson() {
-        try ( Socket socket = new Socket("127.0.0.1", 5007)) {
+    public void envioArchivoJson() {
+
+        try ( Socket socket = new Socket(sc.getInetAddress().getHostAddress(), 5007)) {
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
@@ -520,11 +562,11 @@ public class ServidorHilo extends Thread {
         int bytes = 0;
         FileOutputStream fileOutputStream = new FileOutputStream(fileName);
 
-        long size = dataInputStream.readLong();     // read file size
+        long size = dataInputStream.readLong();     // Lee el tamaño del archivo
         byte[] buffer = new byte[4 * 1024];
         while (size > 0 && (bytes = dataInputStream.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
             fileOutputStream.write(buffer, 0, bytes);
-            size -= bytes;      // read upto file size
+            size -= bytes;      // Lee el tamaño del archivo enviado
         }
         fileOutputStream.close();
     }
@@ -534,9 +576,10 @@ public class ServidorHilo extends Thread {
         File file = new File(path);
         FileInputStream fileInputStream = new FileInputStream(file);
 
-        // send file size
+        //Envia el tamaño del archivo
         dataOutputStream.writeLong(file.length());
-        // break file into chunks
+
+        //Dividir el archivo en fragmentos
         byte[] buffer = new byte[4 * 1024];
         while ((bytes = fileInputStream.read(buffer)) != -1) {
             dataOutputStream.write(buffer, 0, bytes);
@@ -545,7 +588,7 @@ public class ServidorHilo extends Thread {
         fileInputStream.close();
     }
 
-    /*----------------------JSON to Object----------------------*/
+    /*----------------------JSON a Objecto----------------------*/
     public static boolean objetoaJsonCLIENTE(Cliente cli) {
         boolean done;
         try {
@@ -597,7 +640,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    /*-----------------Object to JSON-----------------*/
+    /*-----------------Objecto a JSON-----------------*/
     public static Cliente archivoJsonAObjetoCLIENTE(String seleccion) {
         try {
             Gson gson = new Gson();

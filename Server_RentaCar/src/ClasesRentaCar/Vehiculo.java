@@ -1,11 +1,14 @@
-package rentACar;
+package ClasesRentaCar;
 
 /**
- *
- * @author jorge
+ * @author Jorge Hernandez Araya
  */
 public abstract class Vehiculo {
 
+    /*
+    Vehiculos es  una clase abstracta que incorpora la información básica 
+    que después va a ser heredada a autos
+     */
     protected String placa, marca, modelo, annio, transmision;
 
     public Vehiculo(String placa, String marca, String modelo, String combustible, String transmision) {
@@ -18,7 +21,7 @@ public abstract class Vehiculo {
 
     public Vehiculo() {
     }
-    
+
     public String getPlaca() {
         return placa;
     }
@@ -58,7 +61,5 @@ public abstract class Vehiculo {
     public void setTransmision(String transmision) {
         this.transmision = transmision;
     }
-    
-    
 
 }

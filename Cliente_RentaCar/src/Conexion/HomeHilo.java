@@ -1,28 +1,27 @@
 package Conexion;
 
-import GUI.Client;
 import static GUI.Home.*;
-import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import rentACar.Auto;
-import rentACar.Cliente;
-import rentACar.UserAdmin;
+import ClasesRentaCar.Auto;
+import ClasesRentaCar.Cliente;
+import ClasesRentaCar.UserAdmin;
+import java.net.Socket;
 
+/**
+ * @author Jorge Hernandez Araya
+ */
 public class HomeHilo extends Thread {
 
+    /*
+    Clase destinada para actualizar los datos que se presentan en la pantalla home
+     */
     private static DataOutputStream dataOutputStream = null;
     private static DataInputStream dataInputStream = null;
     private Socket sc;
@@ -35,6 +34,10 @@ public class HomeHilo extends Thread {
         this.out = out;
         this.tarea = tarea;
     }
+
+    /*
+    Y lo creado para realizar las distintas tareas de consulta y modificación de datos
+     */
 
     @Override
     public void run() {
@@ -51,6 +54,7 @@ public class HomeHilo extends Thread {
             String autosdisponibles, autosrentados, adminuser, clientuser;
 
             envioArchivoJson();
+            System.out.println("-Envio json");//print----------------------#
 
             while (!strFromClient.equals("stop")) {
 
@@ -60,6 +64,7 @@ public class HomeHilo extends Thread {
                     out.flush();
 
                     strFromClient = in.readUTF();// autos disponibles
+                    System.out.println("-Resultado: " + strFromClient);//print---------------#
                     autosdisponibles = strFromClient;
                     autosDisponibles(strFromClient);
 
@@ -67,6 +72,7 @@ public class HomeHilo extends Thread {
                     out.flush();
 
                     strFromClient = in.readUTF();//autos rentados
+                    System.out.println("-Resultado: " + strFromClient);//print---------------#
                     autosrentados = strFromClient;
                     autosRentados(strFromClient);
 
@@ -74,6 +80,7 @@ public class HomeHilo extends Thread {
                     out.flush();
 
                     strFromClient = in.readUTF();//adminuser
+                    System.out.println("-Resultado: " + strFromClient);//print---------------#
                     adminuser = strFromClient;
                     adminUser(strFromClient);
 
@@ -81,6 +88,7 @@ public class HomeHilo extends Thread {
                     out.flush();
 
                     strFromClient = in.readUTF();//clientuser
+                    System.out.println("-Resultado: " + strFromClient);//print---------------#
                     clientuser = strFromClient;
                     clientUser(strFromClient);
 
@@ -92,9 +100,6 @@ public class HomeHilo extends Thread {
                     break;
 
                 }
-
-                /*----------------------Errores y notificaciones----------------------*/
-                //Client.mensajes(msg);
             }
         } catch (IOException ex) {
             Logger.getLogger(HomeHilo.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,9 +119,9 @@ public class HomeHilo extends Thread {
             } catch (IOException e) {
             }
         }
-
     }
 
+    /*--------Conexion puerto 5000 salida de archivos---------*/
     public static void envioArchivoJson() {
         try ( Socket socket = new Socket("localhost", 5000)) {
             dataInputStream = new DataInputStream(socket.getInputStream());
@@ -129,8 +134,10 @@ public class HomeHilo extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
+    /*----------------------Envia archivo JSON----------------------*/
     public static void envioFragmentosArchivo(String path) throws Exception {
         int bytes = 0;
         File file = new File(path);

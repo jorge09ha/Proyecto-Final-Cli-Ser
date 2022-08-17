@@ -1,5 +1,8 @@
-package rentACar;
+package ClasesRentaCar;
 
+/**
+ * @author Jorge Hernandez Araya
+ */
 
 public interface IOperaciones<T> {
 

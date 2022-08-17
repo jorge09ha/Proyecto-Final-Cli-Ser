@@ -6,20 +6,24 @@ import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
-import rentACar.UserAdmin;
+import ClasesRentaCar.UserAdmin;
 
-public class Login extends javax.swing.JFrame {
+/**
+ * @author Jorge Hernandez Araya
+ */
+public class LoginGUI extends javax.swing.JFrame {
 
     int xMouse, yMouse;
     public static String userLogin;
     static String mensaje = null;
 
-    public Login() {
+    public LoginGUI() {
         initComponents();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
         this.setLocationRelativeTo(null);
     }
 
+    //Muestra la ventana de mensajes según el resultado del servidor
     public void ventanasMsjs() {
 
         switch (mensaje) {
@@ -34,11 +38,13 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
+    //distintos mensajes obtenidos del servidor
     public static void mensajes(String msg) {
         mensaje = msg;
 
     }
 
+    //válida el usuario y contraseña tú consulta desde el servidor
     public void validarLogin(String userSelec, String passSelec) {
 
         if ((userTxt.equals("")) || (userTxt.getText().equals("Ingrese su nombre de usuario")) || (passTxt.getText().equals("")) || (passTxt.getText().equals("contrasena"))) {
@@ -305,6 +311,7 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_userTxtActionPerformed
 
+    //Botón para llamar la validación de login
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String userSelec, passSelec;
@@ -343,14 +350,30 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -371,7 +394,7 @@ public class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new LoginGUI().setVisible(true);
             }
         });
     }

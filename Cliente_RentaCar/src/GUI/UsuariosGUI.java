@@ -1,24 +1,29 @@
 package GUI;
 
+/**
+ * @author Jorge Hernandez Araya
+ */
 import Conexion.ClienteHilo;
 import Conexion.ClienteSocket;
-import rentACar.UserAdmin;
+import ClasesRentaCar.UserAdmin;
 import javax.swing.*;
-import rentACar.Cliente;
+import ClasesRentaCar.Cliente;
 
-public class Users extends javax.swing.JPanel {
+public class UsuariosGUI extends javax.swing.JPanel {
 
     static String mensaje = null;
 
-    public Users() {
+    public UsuariosGUI() {
         initComponents();
         iniciar();
     }
+//iniciar botones de modificar eliminar invisibles
 
     public void iniciar() {
         btnmodificar.setVisible(false);
         btnborrar.setVisible(false);
     }
+//Indica los campos vacíos
 
     public boolean camposVacios() {
 
@@ -35,6 +40,7 @@ public class Users extends javax.swing.JPanel {
             return false;
         }
     }
+//ventanas para mostrar la respuesta que envió el servidor
 
     public void ventanasMsjs() {
 
@@ -62,6 +68,7 @@ public class Users extends javax.swing.JPanel {
                 break;
         }
     }
+//distintos mensajes que envías el peor según la consulta
 
     public static void mensajes(String msg) {
         mensaje = msg;
