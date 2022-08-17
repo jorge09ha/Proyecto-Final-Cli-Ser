@@ -435,6 +435,21 @@ public class ClienteHilo extends Thread {
 
                     case "verDisponibles":
                         break;
+
+                    case "listaHome":
+                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+                        msg = strFromClient;
+                        cli.setNombre(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        break;
                 }
 
                 /*----------------------Errores y notificaciones----------------------*/

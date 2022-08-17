@@ -1,30 +1,36 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JPanel;
-//import static itp_library.Dashboard.content;
-import java.sql.Statement;
-import java.util.ArrayList;
+import static Conexion.HomeSocket.homeToServer;
 
 public class Home extends javax.swing.JPanel {
 
-    public Home() {
-//        ArrayList<Auto> aD = ClientSocket.listEstadosHome("D");
-//        ArrayList<Auto> aR = ClientSocket.listEstadosHome("R");
-//        ArrayList<Cliente> lCli = ClientSocket.listClientes();
-//        ArrayList<UserAdmin> usAdm = ClientSocket.listUsuarios();
-//        
-        initComponents();
-//        aDisponibles.setText(Integer.toString(aD.size()));
-//        aRentados.setText(Integer.toString(aR.size()));
-//        lClientes.setText(Integer.toString(lCli.size()));
-//        admUsers.setText(Integer.toString(usAdm.size()));
+    static String autosdisponibles, autosrentados, adminuser, clientuser;
 
+    public Home() {
+        initComponents();
+        homeToServer("home", "");
+        
+        aDisponibles.setText(autosdisponibles);
+        aRentados.setText(autosrentados);
+        lClientes.setText(clientuser);
+        admUsers.setText(adminuser);
+
+    }
+
+    public static void autosDisponibles(String aut) {
+        autosdisponibles = aut;
+    }
+
+    public static void autosRentados(String aut) {
+        autosrentados = aut;
+    }
+
+    public static void adminUser(String aut) {
+        adminuser = aut;
+    }
+
+    public static void clientUser(String aut) {
+        clientuser = aut;
     }
 
     /**

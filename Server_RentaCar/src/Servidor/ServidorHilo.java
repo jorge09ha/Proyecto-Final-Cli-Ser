@@ -20,7 +20,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -428,6 +430,35 @@ public class ServidorHilo extends Thread {
                     case "verDisponibles":
                         break;
 
+                    case "home":
+                        strToClient = autosDisponibles(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
+                        out.flush();
+
+                        strFromServer = in.readUTF(); //ok
+
+                        strToClient = autosRentados();
+                        out.writeUTF(strToClient);
+                        out.flush();
+
+                        strFromServer = in.readUTF(); //ok
+
+                        strToClient = adminUser();
+                        out.writeUTF(strToClient);
+                        out.flush();
+
+                        strFromServer = in.readUTF();//ok
+
+                        strToClient = clientUser();
+                        out.writeUTF(strToClient);
+                        out.flush();
+
+                        strFromServer = in.readUTF(); // lee msg stop del cliente
+
+                        strToClient = "stop";
+                        out.writeUTF(strToClient);
+                        out.flush();
+                        break;
                 }
             }
         } catch (IOException exe) {
@@ -1132,4 +1163,130 @@ public class ServidorHilo extends Thread {
     *                   CRUD Rentar
     *
      */
+    public static String autosDisponibles() {
+        Auto aut = new Auto();
+        Connection conn = getConnection();
+
+        String msg;
+
+        try {
+
+            String sql = "SELECT COUNT(rentar) AS cuenta FROM autos WHERE rentar = \"D\";";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            rs.next();
+            int count = rs.getInt("cuenta");
+            rs.close();
+
+            //objetoaJsonAUTO(aut);
+            msg = Integer.toString(count);
+
+            return msg;
+
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+    }
+
+    public static String clientUser() {
+        Auto aut = new Auto();
+        Connection conn = getConnection();
+
+        String msg;
+
+        try {
+
+            String sql = "SELECT COUNT(idcliente) AS cuenta FROM clientes;";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            rs.next();
+            int count = rs.getInt("cuenta");
+            rs.close();
+
+            //objetoaJsonAUTO(aut);
+            msg = Integer.toString(count);
+
+            return msg;
+
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+    }
+
+    public static String autosRentados() {
+        Auto aut = new Auto();
+        Connection conn = getConnection();
+
+        String msg;
+
+        try {
+
+            String sql = "SELECT COUNT(rentar) AS cuenta FROM autos WHERE rentar = \"R\";";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            rs.next();
+            int count = rs.getInt("cuenta");
+            rs.close();
+
+            //objetoaJsonAUTO(aut);
+            msg = Integer.toString(count);
+
+            return msg;
+
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+    }
+
+    public static String adminUser() {
+        Auto aut = new Auto();
+        Connection conn = getConnection();
+
+        String msg;
+
+        try {
+
+            String sql = "SELECT COUNT(usuario) AS cuenta FROM usuarios;";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            rs.next();
+            int count = rs.getInt("cuenta");
+            rs.close();
+
+            //objetoaJsonAUTO(aut);
+            msg = Integer.toString(count);
+
+            return msg;
+
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+    }
+
+    public static String tablaAutos() {
+        Connection conn = getConnection();
+
+        String msg = "";
+
+        try {
+            String sql = "SELECT * FROM autos WHERE rentar = \"D\";";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            ResultSetMetaData metaData = rs.getMetaData();
+
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+        return msg;
+    }
+
 }
