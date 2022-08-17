@@ -14,7 +14,8 @@ public class Dashboard extends javax.swing.JFrame {
 
     int xMouse;
     int yMouse;
-    Connection reg;
+ 
+    
 
     /**
      * Creates new form Dashboard
@@ -22,9 +23,8 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard() {
 
         initComponents();
-        //txtUserName.setText("Usermane: " + ClientSocket.getUserL());
+        txtUserName.setText("Usermane: " + Login.userLogin);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
-        //reg = conn.getConnection();
 
         LocalDate now = LocalDate.now();
         int year = now.getYear();

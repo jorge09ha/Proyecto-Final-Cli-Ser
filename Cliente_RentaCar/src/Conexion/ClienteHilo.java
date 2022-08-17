@@ -273,6 +273,45 @@ public class ClienteHilo extends Thread {
                         strFromClient = in.readUTF();
 
                         break;
+                        
+                        case "validarUsuario":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); // msg correcto
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            if ("objetodeJasonUSER()".equals(strFromClient)) {
+                                usu = archivoJsonAObjetoUSER();
+                            }
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+
+                        } else {
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+                        }
+                        break;
 
                     /*----------------------Autos----------------------*/
                     case "registrarAuto":
@@ -398,10 +437,11 @@ public class ClienteHilo extends Thread {
                 }
 
                 /*----------------------Errores y notificaciones----------------------*/
+                
                 Client.mensajes(msg);
                 Users.mensajes(msg);
                 Autos.mensajes(msg);
-                
+                GUI.Login.mensajes(msg);
 
             }
         } catch (IOException ex) {

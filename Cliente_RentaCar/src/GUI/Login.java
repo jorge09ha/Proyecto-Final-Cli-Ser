@@ -1,21 +1,85 @@
 package GUI;
 
+import Conexion.ClienteHilo;
+import Conexion.ClienteSocket;
 import java.awt.Color;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
+import rentACar.UserAdmin;
 
 public class Login extends javax.swing.JFrame {
 
     int xMouse, yMouse;
-
-    private static void Conentar() {
-        //CONEXION AL SERVER TCP
-
-    }
+    public static String userLogin;
+    static String mensaje = null;
 
     public Login() {
         initComponents();
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
         this.setLocationRelativeTo(null);
+    }
+
+    public void ventanasMsjs() {
+
+        switch (mensaje) {
+
+            case "no existe":
+                JOptionPane.showMessageDialog(null, "Usuario no existe en la base de datos", "No existe", 1);
+                break;
+
+            case "error base":
+                JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 1);
+                break;
+        }
+    }
+
+    public static void mensajes(String msg) {
+        mensaje = msg;
+
+    }
+
+    public void validarLogin(String userSelec, String passSelec) {
+
+        if ((userTxt.equals("")) || (userTxt.getText().equals("Ingrese su nombre de usuario")) || (passTxt.getText().equals("")) || (passTxt.getText().equals("contrasena"))) {
+
+            JOptionPane.showMessageDialog(null, "Hay campos vacios intente nuevamente .", "Campos vacios", 1);
+
+        } else {
+            try {
+
+                UserAdmin usu = new UserAdmin();
+
+                usu.setUser(userTxt.getText());
+                ClienteHilo.objetoaJsonUSER(usu);
+
+                String task = "validarUsuario";
+
+                usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getUser());
+                usu = ClienteHilo.archivoJsonAObjetoUSER();
+
+                usu = ClienteHilo.archivoJsonAObjetoUSER();///error null
+
+                if ("correcto".equals(mensaje)) {
+                    
+                    if (userSelec.equals(usu.getUser()) && passSelec.equals(usu.getPass())) {
+
+                        userLogin = usu.getUser();
+                        //this.dispose();
+                        Dashboard form = new Dashboard();
+                        form.setVisible(true);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Contraseña incorrecta.", "Error", 1);
+                }
+
+            } catch (HeadlessException e) {
+                JOptionPane.showMessageDialog(null, "Error " + e + "", "Error", 0);
+
+            }
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -158,7 +222,7 @@ public class Login extends javax.swing.JFrame {
         passTxt.setBackground(new java.awt.Color(255, 255, 255));
         passTxt.setFont(new java.awt.Font("Roboto Light", 0, 18)); // NOI18N
         passTxt.setForeground(new java.awt.Color(204, 204, 204));
-        passTxt.setText("********");
+        passTxt.setText("contrasena");
         passTxt.setBorder(null);
         passTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -252,8 +316,9 @@ public class Login extends javax.swing.JFrame {
         String userSelec, passSelec;
         userSelec = userTxt.getText();
         passSelec = passTxt.getText();
-        
-        //ClientSocket.validarLogin(userSelec, passSelec);
+
+        validarLogin(userSelec, passSelec);
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

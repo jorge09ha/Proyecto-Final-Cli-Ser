@@ -273,6 +273,20 @@ public class ServidorHilo extends Thread {
 
                         break;
 
+                    case "validarUsuario":
+
+                        strToClient = validarUsuario(id); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
+                        out.flush();
+
+                        strFromServer = in.readUTF(); // lee msg stop del cliente
+
+                        strToClient = "stop";
+                        out.writeUTF(strToClient);
+                        out.flush();
+
+                        break;
+
 
                     /*----------------------Autos----------------------*/
                     case "registrarAuto":
@@ -356,10 +370,10 @@ public class ServidorHilo extends Thread {
 
                         if ("correcto".equals(strToClient)) {
                             strFromServer = in.readUTF();
-         
+
                             System.out.println("Server envio json: ");
                             envioArchivoJson();
-                  
+
                             strToClient = "objetodeJasonAUTO()"; // client                    
                             out.writeUTF(strToClient); // cliente
                             out.flush();
@@ -903,6 +917,50 @@ public class ServidorHilo extends Thread {
 
     }
 
+    public static String validarUsuario(String id) {
+
+        UserAdmin usu = new UserAdmin();
+        Connection conn = getConnection();
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
+                String sql = "SELECT * FROM usuarios WHERE usuario = '" + id + "'";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+                    usu.setCedula(rs.getString("idusuario"));
+                    usu.setNombre(rs.getString("nombre"));
+                    usu.setApellido1(rs.getString("apellido1"));
+                    usu.setApellido2(rs.getString("apellido2"));
+                    usu.setUser(rs.getString("usuario"));
+                    usu.setPass(rs.getString("contrasena"));
+
+                    objetoaJsonUSER(usu);
+
+                    msg = "correcto";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+        return "error base";
+
+    }
+
     /*
     *
     *                   CRUD Autos
@@ -1044,6 +1102,7 @@ public class ServidorHilo extends Thread {
         return "error base";
 
     }//listo
+
     /*
     *
     *                   CRUD Rentar
