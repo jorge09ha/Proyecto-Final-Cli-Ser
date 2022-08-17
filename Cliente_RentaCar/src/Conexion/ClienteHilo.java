@@ -273,8 +273,8 @@ public class ClienteHilo extends Thread {
                         strFromClient = in.readUTF();
 
                         break;
-                        
-                        case "validarUsuario":
+
+                    case "validarUsuario":
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -312,6 +312,7 @@ public class ClienteHilo extends Thread {
                             strFromClient = in.readUTF();
                         }
                         break;
+
 
                     /*----------------------Autos----------------------*/
                     case "registrarAuto":
@@ -437,7 +438,6 @@ public class ClienteHilo extends Thread {
                 }
 
                 /*----------------------Errores y notificaciones----------------------*/
-                
                 Client.mensajes(msg);
                 Users.mensajes(msg);
                 Autos.mensajes(msg);

@@ -61,17 +61,21 @@ public class Login extends javax.swing.JFrame {
                 usu = ClienteHilo.archivoJsonAObjetoUSER();///error null
 
                 if ("correcto".equals(mensaje)) {
-                    
+
                     if (userSelec.equals(usu.getUser()) && passSelec.equals(usu.getPass())) {
 
+                        JOptionPane.showMessageDialog(null, "Login correcto.\nUsuario: " + usu.getUser()
+                                + "\nCedula: " + usu.getCedula() + "\nNombre: " + usu.getNombre() + " " + usu.getApellido1()
+                                + " " + usu.getApellido2(), "CORRECTO", 1);
+
                         userLogin = usu.getUser();
-                        //this.dispose();
+                        this.dispose();
                         Dashboard form = new Dashboard();
                         form.setVisible(true);
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(null, "Contraseña incorrecta.", "Error", 1);
+                    JOptionPane.showMessageDialog(null, "Contraseña usuario o contraseña incorrecto.", "Error", 1);
                 }
 
             } catch (HeadlessException e) {
@@ -98,9 +102,9 @@ public class Login extends javax.swing.JFrame {
         userTxt = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         passLabel = new javax.swing.JLabel();
-        passTxt = new javax.swing.JPasswordField();
         jSeparator2 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
+        passTxt = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
@@ -219,18 +223,6 @@ public class Login extends javax.swing.JFrame {
         passLabel.setText("CONTRASEÑA");
         bg.add(passLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 280, 320, -1));
 
-        passTxt.setBackground(new java.awt.Color(255, 255, 255));
-        passTxt.setFont(new java.awt.Font("Roboto Light", 0, 18)); // NOI18N
-        passTxt.setForeground(new java.awt.Color(204, 204, 204));
-        passTxt.setText("contrasena");
-        passTxt.setBorder(null);
-        passTxt.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                passTxtMousePressed(evt);
-            }
-        });
-        bg.add(passTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 330, 410, 30));
-
         jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
         bg.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 370, 410, 20));
 
@@ -245,6 +237,23 @@ public class Login extends javax.swing.JFrame {
             }
         });
         bg.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 410, 100, 40));
+
+        passTxt.setBackground(new java.awt.Color(255, 255, 255));
+        passTxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        passTxt.setForeground(new java.awt.Color(0, 0, 0));
+        passTxt.setText("contraseña");
+        passTxt.setBorder(null);
+        passTxt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                passTxtMousePressed(evt);
+            }
+        });
+        passTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passTxtActionPerformed(evt);
+            }
+        });
+        bg.add(passTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 320, 260, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -290,22 +299,7 @@ public class Login extends javax.swing.JFrame {
             userTxt.setText("");
             userTxt.setForeground(Color.black);
         }
-        if (String.valueOf(passTxt.getPassword()).isEmpty()) {
-            passTxt.setText("********");
-            passTxt.setForeground(Color.gray);
-        }
     }//GEN-LAST:event_userTxtMousePressed
-
-    private void passTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passTxtMousePressed
-        if (String.valueOf(passTxt.getPassword()).equals("********")) {
-            passTxt.setText("");
-            passTxt.setForeground(Color.black);
-        }
-        if (userTxt.getText().isEmpty()) {
-            userTxt.setText("Ingrese su nombre de usuario");
-            userTxt.setForeground(Color.gray);
-        }
-    }//GEN-LAST:event_passTxtMousePressed
 
     private void userTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTxtActionPerformed
         // TODO add your handling code here:
@@ -320,6 +314,17 @@ public class Login extends javax.swing.JFrame {
         validarLogin(userSelec, passSelec);
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void passTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passTxtMousePressed
+        // TODO add your handling code here:
+        if ("contraseña".equals(passTxt.getText())) {
+            passTxt.setText("");
+        }
+    }//GEN-LAST:event_passTxtMousePressed
+
+    private void passTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passTxtActionPerformed
 
     /**
      * @param args the command line arguments

@@ -1,5 +1,7 @@
 package GUI;
 
+import Conexion.ClienteHilo;
+import Conexion.ClienteSocket;
 import rentACar.Cliente;
 import rentACar.Auto;
 import java.util.*;
@@ -8,63 +10,82 @@ import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import static Conexion.ClienteSocket.clientToServer;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 
 public class Rentar extends javax.swing.JPanel {
+
+    static String URL = "jdbc:mysql://localhost:3306/rentacar";
+    static String USERNAME = "root";
+    static String PASS = "admin01";
 
     public Rentar() {
         initComponents();
         presentarTableAuto();
     }
 
-    private void presentarTableCliente() {
+    private void presentarTableCliente(Cliente cli) {
         DefaultTableModel modelo = (DefaultTableModel) TableCliente.getModel();
         modelo.setRowCount(0);
-
-        Cliente cli = new Cliente();
-        //cli = ClientSocket.buscarcliente(txtid.getText());
 
         int numFila = 0;
         modelo.insertRow(numFila, new Object[]{cli.getNombre(), cli.getApellido1(), cli.getApellido2(), cli.getEmail(), cli.getTelefono()});
     }
 
+    public static Connection getConnection() {
+
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = (Connection) DriverManager.getConnection(URL, USERNAME, PASS);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return conn;
+    }
+
     private void presentarTableAuto() {
-//        DefaultTableModel modelo = (DefaultTableModel) TableAuto.getModel();
-//
-//        TableAuto.setModel(modelo);
-//
-//        TableModel modeloDatos = TableAuto.getModel();
-//
-//        try {
-//            //ResultSet rs = ClientSocket.listEstados("D");
-//
-//            ResultSetMetaData metaData = rs.getMetaData();
-//
-//            // Names of columns
-//            Vector<String> columnNames = new Vector<String>();
-//            int columnCount = (metaData.getColumnCount()) - 1;
-//
-//            columnNames.add("Placa");
-//            columnNames.add("Marca");
-//            columnNames.add("Modelo");
-//            columnNames.add("Año");
-//            columnNames.add("Transmision");
-//
-//            // Data of the table
-//            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-//            while (rs.next()) {
-//                Vector<Object> vector = new Vector<Object>();
-//                for (int i = 1; i <= columnCount; i++) {
-//                    vector.add(rs.getObject(i));
-//                }
-//                data.add(vector);
-//            }
-//
-//            modelo.setDataVector(data, columnNames);
-//            //TableAuto.setEnabled(false);
-//
-//        } catch (Exception e) {
-//
-//        }
+        DefaultTableModel modelo = (DefaultTableModel) TableAuto.getModel();
+        Connection conn = getConnection();
+        TableAuto.setModel(modelo);
+
+        TableModel modeloDatos = TableAuto.getModel();
+
+        try {
+            String sql = "SELECT * FROM autos WHERE rentar = \"D\";";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            // Names of columns
+            Vector<String> columnNames = new Vector<String>();
+            int columnCount = (metaData.getColumnCount()) - 1;
+
+            columnNames.add("Placa");
+            columnNames.add("Marca");
+            columnNames.add("Modelo");
+            columnNames.add("Año");
+            columnNames.add("Transmision");
+
+            // Data of the table
+            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+            while (rs.next()) {
+                Vector<Object> vector = new Vector<Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    vector.add(rs.getObject(i));
+                }
+                data.add(vector);
+            }
+
+            modelo.setDataVector(data, columnNames);
+            //TableAuto.setEnabled(false);
+
+        } catch (Exception e) {
+
+        }
     }
 
     private void showAuto() {
@@ -292,16 +313,17 @@ public class Rentar extends javax.swing.JPanel {
             Cliente cli = new Cliente();
 
             cli.setCedula(txtid.getText());
-            //objetoaJson(cli);
+            ClienteHilo.objetoaJsonCLIENTE(cli);
 
-            String task = "buscarcliente";
+            String task = "buscarCliente";
 
-            cli = (Cliente) clientToServer(task, cli.getCedula());
+            cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
+            cli = ClienteHilo.archivoJsonAObjetoCLIENTE();
 
             if (cli.getCedula() == null) {
                 JOptionPane.showMessageDialog(null, "El usuario no existe.\n" + "Puede agregarlos desde la sección clientes", "Info", 1);
             } else {
-                presentarTableCliente();
+                presentarTableCliente(cli);
             }
         } catch (Exception e) {
 
@@ -361,7 +383,6 @@ public class Rentar extends javax.swing.JPanel {
         } catch (Exception e) {
 
         }
-
 
     }//GEN-LAST:event_btmRentarActionPerformed
 

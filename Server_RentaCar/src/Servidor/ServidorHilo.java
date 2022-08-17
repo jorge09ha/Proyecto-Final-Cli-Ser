@@ -275,14 +275,38 @@ public class ServidorHilo extends Thread {
 
                     case "validarUsuario":
 
-                        strToClient = validarUsuario(id); // el metodo hace un return tipo String con el resultado de lo que hiso
-                        out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
+                        out.writeUTF("id"); // preguta por id 
                         out.flush();
 
-                        strFromServer = in.readUTF(); // lee msg stop del cliente
+                        id = in.readUTF(); //recibe el ID
 
-                        strToClient = "stop";
-                        out.writeUTF(strToClient);
+                        strToClient = validarUsuario(id); // client                    
+                        id = strToClient;
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
+
+                        if (id == "correcto") {
+
+                            strFromServer = in.readUTF();
+
+                            if ("servidorA".equals(strFromServer)) {
+                                envioArchivoJson();
+                            }
+                            strToClient = "objetodeJasonUSER()"; // client                    
+                            out.writeUTF(strToClient); // cliente
+                            out.flush();
+
+                            strFromServer = in.readUTF(); // lee msg stop
+
+                            strFromServer = "stop";
+                            out.writeUTF(strFromServer); //se envia un stop al cliente
+                            out.flush();
+                        }
+
+                        strFromServer = in.readUTF(); // lee msg stop
+
+                        strFromServer = "stop";
+                        out.writeUTF(strFromServer); //se envia un stop al cliente
                         out.flush();
 
                         break;
@@ -447,7 +471,7 @@ public class ServidorHilo extends Thread {
 
     /*--------Conexion puerto 5007 salida de archivos---------*/
     public static void envioArchivoJson() {
-        try ( Socket socket = new Socket("localhost", 5007)) {
+        try ( Socket socket = new Socket("127.0.0.1", 5007)) {
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
@@ -925,7 +949,7 @@ public class ServidorHilo extends Thread {
         String msg;
 
         try {
-            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese su nombre de usuario")) {
                 String sql = "SELECT * FROM usuarios WHERE usuario = '" + id + "'";
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(sql);
