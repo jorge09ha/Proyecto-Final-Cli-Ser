@@ -414,9 +414,9 @@ public class ServidorHilo extends Thread {
     /*--------Conexion puerto 5000 entrada de archivos---------*/
     public static void entradaArchivoJson() {
         try ( ServerSocket serverSocket = new ServerSocket(5000)) {// server archives
-            System.out.println("listening to port:5000");
+            System.out.println("Escuchando pueto: 5000 para archivos");
             Socket clientSocket = serverSocket.accept();
-            System.out.println(clientSocket + " connected.");
+            System.out.println(clientSocket + " CONECTADO.");
             dataInputStream = new DataInputStream(clientSocket.getInputStream());
             dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
 
@@ -425,7 +425,7 @@ public class ServidorHilo extends Thread {
             dataInputStream.close();
             dataOutputStream.close();
             clientSocket.close();
-            System.out.println("Archive reiceved ");
+            System.out.println("#### Archivo Resivido ####");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -784,7 +784,7 @@ public class ServidorHilo extends Thread {
                 }
 
                 while (rs.next()) {
-                    usu.setCedula(rs.getString("idcliente"));
+                    usu.setCedula(rs.getString("idusuario"));
                     usu.setNombre(rs.getString("nombre"));
                     usu.setApellido1(rs.getString("apellido1"));
                     usu.setApellido2(rs.getString("apellido2"));
@@ -817,7 +817,7 @@ public class ServidorHilo extends Thread {
 
         try {
             if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la identificacion")) {
-                String sql = "DELETE FROM clientes WHERE idcliente = '" + id + "'";
+                String sql = "DELETE FROM usuarios WHERE idusuario = '" + id + "'";
                 Statement st = conn.createStatement();
                 resultado = st.executeUpdate(sql);
 
@@ -881,7 +881,7 @@ public class ServidorHilo extends Thread {
                 msg = buscarUsuario(id);
                 if ("correcto".equals(msg)) {
                     usu = archivoJsonAObjetoUSER("default");
-                    String sql = "UPDATE usuarios SET idusuario = '" + usu.getCedula() + "',nombre = '" + usu.getNombre() + "',apellido1 = '" + usu.getApellido1() + "',apellido2 = '" + usu.getApellido2() + "',correoElectronico = '" + usu.getUser() + "',telefono = '" + usu.getPass() + "' WHERE idusuario = '" + id + "'";
+                    String sql = "UPDATE usuarios SET idusuario = '" + usu.getCedula() + "',nombre = '" + usu.getNombre() + "',apellido1 = '" + usu.getApellido1() + "',apellido2 = '" + usu.getApellido2() + "',usuario = '" + usu.getUser() + "',contrasena = '" + usu.getPass() + "' WHERE idusuario = '" + id + "'";
                     Statement st = conn.createStatement();
                     resultado = st.executeUpdate(sql);
 
@@ -1023,7 +1023,7 @@ public class ServidorHilo extends Thread {
                 msg = buscarAuto(id);
                 if ("correcto".equals(msg)) {
                     aut = archivoJsonAObjetoAUTO("default");
-                    String sql = "UPDATE autos SET idauto = '" + aut.getPlaca() + "',marca = '" + aut.getMarca() + "',modelo = '" + aut.getModelo() + "',annio = '" + aut.getAnnio() + "',transmision = '" + aut.getTransmision() + "',rentar = '" + aut.getRentar() + "' WHERE idplaca = '" + id + "'";
+                    String sql = "UPDATE autos SET idauto = '" + aut.getPlaca() + "',marca = '" + aut.getMarca() + "',modelo = '" + aut.getModelo() + "',annio = '" + aut.getAnnio() + "',transmision = '" + aut.getTransmision() + "' WHERE idauto = '" + id + "'";
                     Statement st = conn.createStatement();
                     resultado = st.executeUpdate(sql);
 

@@ -44,7 +44,7 @@ public class Client extends javax.swing.JPanel {
                 break;
 
             case "duplicado":
-                JOptionPane.showMessageDialog(null, "La Cédula ya existe.", "Error", 0);
+                JOptionPane.showMessageDialog(null, "La cédula ya existe.", "Error", 0);
                 break;
 
             case "no existe":
@@ -309,10 +309,15 @@ public class Client extends javax.swing.JPanel {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
         try {
+           
             if (camposVacios() == false) {
+               
                 int response = JOptionPane.showConfirmDialog(null, "Desea Registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
+               
                 if (response == JOptionPane.YES_OPTION) {
+                    
                     Cliente cli = new Cliente();
+                    
                     cli.setCedula(txtid.getText());
                     cli.setNombre(txtnombre.getText());
                     cli.setApellido1(txtapellido1.getText());
@@ -324,6 +329,8 @@ public class Client extends javax.swing.JPanel {
                     String task = "registrarCliente";
                     cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
                     // sobreescrivo el cli con el return de servidor protocolo, se usa el campo de nombre como propiedad de msg
+
+                    cli = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
 
                     if ("correcto".equals(cli.getNombre())) { // se evalua si la propiedad nombre tiene como msg "correcto"
 
@@ -337,6 +344,19 @@ public class Client extends javax.swing.JPanel {
                         btnmodificar.setVisible(false);
                         btnborrar.setVisible(false);
                         btnRegistrar.setVisible(true);
+                        ventanasMsjs(); /////ventanas
+                    } else {
+                        txtnombre.setText("Ingrese el nombre");
+                        txtapellido1.setText("Ingrese el apellido 1");
+                        txtapellido2.setText("Ingrese el apellido 2");
+                        txtid.setText("Ingrese la identificacion");
+                        txtemail.setText("Ingrese el correo electronico");
+                        txttelefono.setText("Ingrese el telefono");
+
+                        btnmodificar.setVisible(false);
+                        btnborrar.setVisible(false);
+                        btnRegistrar.setVisible(true);
+                        ventanasMsjs(); /////ventanas
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
@@ -406,7 +426,9 @@ public class Client extends javax.swing.JPanel {
             cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
             cli = ClienteHilo.archivoJsonAObjetoCLIENTE();
 
-            if (cli != null) {
+            cli = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
+
+            if ("correcto".equals(mensaje)) {
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());
@@ -418,16 +440,18 @@ public class Client extends javax.swing.JPanel {
                 btnmodificar.setVisible(true);
                 btnborrar.setVisible(true);
                 ventanasMsjs();
-            }
-
-            if (cli == null) {
-
+            } else {
+                btnmodificar.setVisible(false);
+                btnborrar.setVisible(false);
+                btnRegistrar.setVisible(true);
+                
                 txtnombre.setText("Ingrese el nombre");
                 txtapellido1.setText("Ingrese el apellido 1");
                 txtapellido2.setText("Ingrese el apellido 2");
                 txtid.setText("Ingrese la identificacion");
                 txtemail.setText("Ingrese el correo electronico");
                 txttelefono.setText("Ingrese el telefono");
+                ventanasMsjs();
             }
 
         } catch (Exception e) {
@@ -456,19 +480,18 @@ public class Client extends javax.swing.JPanel {
                 cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
 
                 cli = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
-                //ventanasMsjs();
 
                 if ("correcto".equals(mensaje)) {
-//                    txtid.setText(cli.getCedula());
-//                    txtnombre.setText(cli.getNombre());
-//                    txtapellido1.setText(cli.getApellido1());
-//                    txtapellido2.setText(cli.getApellido2());
-//                    txtemail.setText(cli.getEmail());
-//                    txttelefono.setText(cli.getTelefono());
-                   ventanasMsjs(); /////ventanas
-                }
-
-                if (cli == null) {
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtemail.setText("Ingrese el correo electronico");
+                    txttelefono.setText("Ingrese el telefono");
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    ventanasMsjs(); /////ventanas
+                } else {
 
                     txtnombre.setText("Ingrese el nombre");
                     txtapellido1.setText("Ingrese el apellido 1");
@@ -476,6 +499,7 @@ public class Client extends javax.swing.JPanel {
                     txtid.setText("Ingrese la identificacion");
                     txtemail.setText("Ingrese el correo electronico");
                     txttelefono.setText("Ingrese el telefono");
+                    ventanasMsjs(); /////ventanas
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
@@ -503,6 +527,8 @@ public class Client extends javax.swing.JPanel {
 
                 cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
 
+                cli = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
+
                 if ("correcto".equals(cli.getNombre())) {
 
                     txtnombre.setText("Ingrese el nombre");
@@ -515,6 +541,20 @@ public class Client extends javax.swing.JPanel {
                     btnmodificar.setVisible(false);
                     btnborrar.setVisible(false);
                     btnRegistrar.setVisible(true);
+                    ventanasMsjs(); /////ventanas
+                } else {
+
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtemail.setText("Ingrese el correo electronico");
+                    txttelefono.setText("Ingrese el telefono");
+
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btnRegistrar.setVisible(true);
+                    ventanasMsjs(); /////ventanas
                 }
 
             } else {

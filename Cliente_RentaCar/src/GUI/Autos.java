@@ -9,6 +9,8 @@ import rentACar.Cliente;
 
 public class Autos extends javax.swing.JPanel {
 
+    static String mensaje = null;
+
     public Autos() {
         initComponents();
         iniciar();
@@ -31,6 +33,38 @@ public class Autos extends javax.swing.JPanel {
         } else {
             return false;
         }
+    }
+
+    public void ventanasMsjs() {
+
+        switch (mensaje) {
+
+            case "correcto":
+                JOptionPane.showMessageDialog(null, "Accion ejecutada de forma correcta.", "Info", 1);
+
+                break;
+
+            case "duplicado":
+                JOptionPane.showMessageDialog(null, "La placa ya existe.", "Error", 0);
+                break;
+
+            case "no existe":
+                JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
+                break;
+
+            case "id vacio":
+                JOptionPane.showMessageDialog(null, "El campo de placa no puede estar vacio", "Campo vacio", 2);
+                break;
+
+            case "error base":
+                JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 1);
+                break;
+        }
+    }
+
+    public static void mensajes(String msg) {
+        mensaje = msg;
+
     }
 
     /**
@@ -259,6 +293,8 @@ public class Autos extends javax.swing.JPanel {
 
                 aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
 
+                aut = ClienteHilo.archivoJsonAObjetoAUTO();///error null
+
                 if ("correcto".equals(aut.getPlaca())) {
 
                     txtid.setText("Ingrese la placa");
@@ -270,6 +306,18 @@ public class Autos extends javax.swing.JPanel {
                     btnmodificar.setVisible(false);
                     btnborrar.setVisible(false);
                     btmAgregar.setVisible(true);
+                    ventanasMsjs(); /////ventanas
+                } else {
+                    txtid.setText("Ingrese la placa");
+                    txtMarca.setText("Ingrese la marca");
+                    txtModelo.setText("Ingrese el modelo");
+                    cbAnnio.setSelectedItem(null);
+                    cbTransm.setSelectedItem(null);
+
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btmAgregar.setVisible(true);
+                    ventanasMsjs(); /////ventanas
                 }
 
             } else {
@@ -283,12 +331,15 @@ public class Autos extends javax.swing.JPanel {
     private void btmAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmAgregarActionPerformed
         // TODO add your handling code here:
         try {
+
             if (camposVacios() == false) {
+
                 int response = JOptionPane.showConfirmDialog(null, "Desea Registrar el auto?", "Agregar Auto", JOptionPane.YES_NO_OPTION);
+
                 if (response == JOptionPane.YES_OPTION) {
 
                     Auto aut = new Auto();
-                    
+
                     aut.setPlaca(txtid.getText());
                     aut.setMarca(txtMarca.getText());
                     aut.setModelo(txtModelo.getText());
@@ -301,6 +352,8 @@ public class Autos extends javax.swing.JPanel {
                     aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
                     // sobreescrivo el cli con el return de servidor protocolo, se usa el campo de nombre como propiedad de msg
 
+                    aut = ClienteHilo.archivoJsonAObjetoAUTO();///error nul
+
                     if ("correcto".equals(aut.getPlaca())) {
 
                         txtid.setText("Ingrese la placa");
@@ -312,6 +365,19 @@ public class Autos extends javax.swing.JPanel {
                         btnmodificar.setVisible(false);
                         btnborrar.setVisible(false);
                         btmAgregar.setVisible(true);
+                        ventanasMsjs(); /////ventanas
+                    } else {
+                        
+                        txtid.setText("Ingrese la placa");
+                        txtMarca.setText("Ingrese la marca");
+                        txtModelo.setText("Ingrese el modelo");
+                        cbAnnio.setSelectedItem(null);
+                        cbTransm.setSelectedItem(null);
+
+                        btnmodificar.setVisible(false);
+                        btnborrar.setVisible(false);
+                        btmAgregar.setVisible(true);
+                        ventanasMsjs(); /////ventanas
                     }
 
                 } else {
@@ -342,20 +408,9 @@ public class Autos extends javax.swing.JPanel {
                 String task = "modificarAuto";
                 aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
 
-                if (aut.getPlaca() == "correcto") {
+                aut = ClienteHilo.archivoJsonAObjetoAUTO();///error null
 
-                    txtid.setText("Ingrese la placa");
-                    txtMarca.setText("Ingrese la marca");
-                    txtModelo.setText("Ingrese el modelo");
-                    cbAnnio.setSelectedItem(null);
-                    cbTransm.setSelectedItem(null);
-
-                    btnmodificar.setVisible(false);
-                    btnborrar.setVisible(false);
-                    btmAgregar.setVisible(true);
-                }
-                if (aut == null) {
-
+                if ("correcto".equals(mensaje)) {
                     btnmodificar.setVisible(false);
                     btnborrar.setVisible(false);
                     btmAgregar.setVisible(true);
@@ -365,6 +420,18 @@ public class Autos extends javax.swing.JPanel {
                     txtModelo.setText("Ingrese el modelo");
                     cbAnnio.setSelectedItem(null);
                     cbTransm.setSelectedItem(null);
+                    ventanasMsjs(); /////ventanas
+                } else {
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btmAgregar.setVisible(true);
+
+                    txtid.setText("Ingrese la placa");
+                    txtMarca.setText("Ingrese la marca");
+                    txtModelo.setText("Ingrese el modelo");
+                    cbAnnio.setSelectedItem(null);
+                    cbTransm.setSelectedItem(null);
+                    ventanasMsjs(); /////ventanas
                 }
 
             } else {
@@ -412,17 +479,20 @@ public class Autos extends javax.swing.JPanel {
             aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
             aut = ClienteHilo.archivoJsonAObjetoAUTO();
 
-            txtid.setText(aut.getPlaca());
-            txtMarca.setText(aut.getMarca());
-            txtModelo.setText(aut.getModelo());
-            txtMarca.setText(aut.getMarca());
-            cbAnnio.setSelectedItem(aut.getAnnio());
-            cbTransm.setSelectedItem(aut.getTransmision());
+            aut = ClienteHilo.archivoJsonAObjetoAUTO();///error null
 
-            btnmodificar.setVisible(true);
-            btnborrar.setVisible(true);
+            if ("correcto".equals(mensaje)) {
+                txtid.setText(aut.getPlaca());
+                txtMarca.setText(aut.getMarca());
+                txtModelo.setText(aut.getModelo());
+                txtMarca.setText(aut.getMarca());
+                cbAnnio.setSelectedItem(aut.getAnnio());
+                cbTransm.setSelectedItem(aut.getTransmision());
 
-            if (aut == null) {
+                btnmodificar.setVisible(true);
+                btnborrar.setVisible(true);
+                ventanasMsjs();
+            } else {
                 btnmodificar.setVisible(false);
                 btnborrar.setVisible(false);
                 btmAgregar.setVisible(true);
@@ -432,6 +502,7 @@ public class Autos extends javax.swing.JPanel {
                 txtModelo.setText("Ingrese el modelo");
                 cbAnnio.setSelectedItem(null);
                 cbTransm.setSelectedItem(null);
+                ventanasMsjs();
             }
 
         } catch (Exception e) {

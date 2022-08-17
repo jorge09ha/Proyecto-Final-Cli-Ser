@@ -19,7 +19,7 @@ public class Home extends javax.swing.JPanel {
 //        ArrayList<Cliente> lCli = ClientSocket.listClientes();
 //        ArrayList<UserAdmin> usAdm = ClientSocket.listUsuarios();
 //        
-//        initComponents();
+        initComponents();
 //        aDisponibles.setText(Integer.toString(aD.size()));
 //        aRentados.setText(Integer.toString(aR.size()));
 //        lClientes.setText(Integer.toString(lCli.size()));

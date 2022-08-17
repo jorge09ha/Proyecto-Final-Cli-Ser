@@ -8,6 +8,8 @@ import rentACar.Cliente;
 
 public class Users extends javax.swing.JPanel {
 
+    static String mensaje = null;
+
     public Users() {
         initComponents();
         iniciar();
@@ -32,6 +34,38 @@ public class Users extends javax.swing.JPanel {
         } else {
             return false;
         }
+    }
+
+    public void ventanasMsjs() {
+
+        switch (mensaje) {
+
+            case "correcto":
+                JOptionPane.showMessageDialog(null, "Accion ejecutada de forma correcta.", "Info", 1);
+
+                break;
+
+            case "duplicado":
+                JOptionPane.showMessageDialog(null, "La cédula ya existe.", "Error", 0);
+                break;
+
+            case "no existe":
+                JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
+                break;
+
+            case "id vacio":
+                JOptionPane.showMessageDialog(null, "El campo de identificación no puede estar vacio", "Campo vacio", 2);
+                break;
+
+            case "error base":
+                JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 1);
+                break;
+        }
+    }
+
+    public static void mensajes(String msg) {
+        mensaje = msg;
+
     }
 
     /**
@@ -337,6 +371,8 @@ public class Users extends javax.swing.JPanel {
 
                 usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getCedula());
 
+                usu = ClienteHilo.archivoJsonAObjetoUSER();///error null
+
                 if ("correcto".equals(usu.getNombre())) {
 
                     txtnombre.setText("Ingrese el nombre");
@@ -346,6 +382,25 @@ public class Users extends javax.swing.JPanel {
                     txtUserName.setText("Ingrese el nombre de usuario");
                     txtPass1.setText("contrasena");
                     txtPass2.setText("contrasena");
+
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btnAgregar.setVisible(true);
+                    ventanasMsjs(); /////ventanas
+
+                } else {
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtUserName.setText("Ingrese el nombre de usuario");
+                    txtPass1.setText("contrasena");
+                    txtPass2.setText("contrasena");
+
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btnAgregar.setVisible(true);
+                    ventanasMsjs(); /////ventanas
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Datos no Borrados", "Info", 1);
@@ -361,10 +416,15 @@ public class Users extends javax.swing.JPanel {
         // TODO add your handling code here:
         UserAdmin usu = new UserAdmin();
         try {
+
             if (camposVacios() == false) {
+
                 int response = JOptionPane.showConfirmDialog(null, "Desea registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
+
                 if (response == JOptionPane.YES_OPTION) {
+
                     if (txtPass1.getText().equals(txtPass2.getText())) {
+
                         usu.setCedula(txtid.getText());
                         usu.setNombre(txtnombre.getText());
                         usu.setApellido1(txtapellido1.getText());
@@ -376,6 +436,8 @@ public class Users extends javax.swing.JPanel {
                         String task = "registrarUsuario";
                         usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getCedula());
 
+                        usu = ClienteHilo.archivoJsonAObjetoUSER();///error null
+
                         if ("correcto".equals(usu.getNombre())) { // se evalua si la propiedad nombre tiene como msg "correcto"
 
                             txtnombre.setText("Ingrese el nombre");
@@ -385,6 +447,24 @@ public class Users extends javax.swing.JPanel {
                             txtUserName.setText("Ingrese el nombre de usuario");
                             txtPass1.setText("contrasena");
                             txtPass2.setText("contrasena");
+
+                            btnmodificar.setVisible(false);
+                            btnborrar.setVisible(false);
+                            btnAgregar.setVisible(true);
+                            ventanasMsjs(); /////ventanas
+                        } else {
+                            txtnombre.setText("Ingrese el nombre");
+                            txtapellido1.setText("Ingrese el apellido 1");
+                            txtapellido2.setText("Ingrese el apellido 2");
+                            txtid.setText("Ingrese la identificacion");
+                            txtUserName.setText("Ingrese el nombre de usuario");
+                            txtPass1.setText("contrasena");
+                            txtPass2.setText("contrasena");
+
+                            btnmodificar.setVisible(false);
+                            btnborrar.setVisible(false);
+                            btnAgregar.setVisible(true);
+                            ventanasMsjs(); /////ventanas
                         }
                     } else {
                         JOptionPane.showMessageDialog(null, "Las contraseñas no son iguales", "Info", 1);
@@ -414,18 +494,22 @@ public class Users extends javax.swing.JPanel {
             usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getCedula());
             usu = ClienteHilo.archivoJsonAObjetoUSER();
 
-            txtid.setText(usu.getCedula());
-            txtnombre.setText(usu.getNombre());
-            txtapellido1.setText(usu.getApellido1());
-            txtapellido2.setText(usu.getApellido2());
-            txtUserName.setText(usu.getUser());
-            txtPass1.setText(usu.getPass());
-            txtPass2.setText(usu.getPass());
+            usu = ClienteHilo.archivoJsonAObjetoUSER();///error null
 
-            btnmodificar.setVisible(true);
-            btnborrar.setVisible(true);
+            if ("correcto".equals(mensaje)) {
 
-            if (usu == null) {
+                txtid.setText(usu.getCedula());
+                txtnombre.setText(usu.getNombre());
+                txtapellido1.setText(usu.getApellido1());
+                txtapellido2.setText(usu.getApellido2());
+                txtUserName.setText(usu.getUser());
+                txtPass1.setText(usu.getPass());
+                txtPass2.setText(usu.getPass());
+
+                btnmodificar.setVisible(true);
+                btnborrar.setVisible(true);
+                ventanasMsjs();
+            } else {
 
                 txtnombre.setText("Ingrese el nombre");
                 txtapellido1.setText("Ingrese el apellido 1");
@@ -434,6 +518,7 @@ public class Users extends javax.swing.JPanel {
                 txtUserName.setText("Ingrese el nombre de usuario");
                 txtPass2.setText("contraseña");
                 txtPass1.setText("contraseña");
+                ventanasMsjs();
             }
 
         } catch (Exception e) {
@@ -445,10 +530,13 @@ public class Users extends javax.swing.JPanel {
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
         // TODO add your handling code here:
 
-        UserAdmin usu = new UserAdmin();
         int response = JOptionPane.showConfirmDialog(null, "Desea modificar al usuario?", "Modificar Usuario", JOptionPane.YES_NO_OPTION);
+
         if (response == JOptionPane.YES_OPTION) {
+
             if (txtPass1.getText().equals(txtPass2.getText())) {
+
+                UserAdmin usu = new UserAdmin();
 
                 usu.setCedula(txtid.getText());
                 usu.setNombre(txtnombre.getText());
@@ -461,7 +549,21 @@ public class Users extends javax.swing.JPanel {
                 String task = "modificarUsuario";
                 usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getCedula());
 
-                if (usu == null) {
+                usu = ClienteHilo.archivoJsonAObjetoUSER();///error null
+
+                if ("correcto".equals(mensaje)) {
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtUserName.setText("Ingrese el nombre de usuario");
+                    txtPass2.setText("contraseña");
+                    txtPass1.setText("contraseña");
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btnAgregar.setVisible(true);
+                    ventanasMsjs(); /////ventanas
+                } else {
 
                     txtnombre.setText("Ingrese el nombre");
                     txtapellido1.setText("Ingrese el apellido 1");
@@ -470,6 +572,10 @@ public class Users extends javax.swing.JPanel {
                     txtUserName.setText("Ingrese el nombre de usuario");
                     txtPass2.setText("contraseña");
                     txtPass1.setText("contraseña");
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btnAgregar.setVisible(true);
+                    ventanasMsjs(); /////ventanas
                 }
 
             } else {

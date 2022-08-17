@@ -1,6 +1,8 @@
 package Conexion;
 
+import GUI.Autos;
 import GUI.Client;
+import GUI.Users;
 import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -55,32 +57,13 @@ public class ClienteHilo extends Thread {
                 switch (strToClient) {
 
                     /*----------------------Clientes----------------------*/
-                    case "modificarCliente":
-                        out.writeUTF(strToClient); //Task
+                    case "registrarCliente":
+                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
                         out.flush();
 
                         strFromClient = in.readUTF();
-
-                        out.writeUTF(id); //send id
-                        out.flush();
-
-                        strFromClient = in.readUTF(); //doit
                         msg = strFromClient;
-
-                        if ("correcto".equals(strFromClient)) {
-                            strToClient = "servidorA";
-                            out.writeUTF(strToClient);
-                            out.flush();
-                            entradaArchivoJson();
-
-                            strFromClient = in.readUTF();
-
-                            cli = archivoJsonAObjetoCLIENTE();
-
-                            out.writeUTF("stop");
-                            out.flush();
-
-                        }
+                        cli.setNombre(msg);
 
                         out.writeUTF("stop");
                         out.flush();
@@ -148,13 +131,32 @@ public class ClienteHilo extends Thread {
                         }
                         break;
 
-                    case "registrarCliente":
-                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
+                    case "modificarCliente":
+                        out.writeUTF(strToClient); //Task
                         out.flush();
 
                         strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); //doit
                         msg = strFromClient;
-                        cli.setNombre(msg);
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            cli = archivoJsonAObjetoCLIENTE();
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                        }
 
                         out.writeUTF("stop");
                         out.flush();
@@ -164,30 +166,221 @@ public class ClienteHilo extends Thread {
                         break;
 
                     /*----------------------Usuarios----------------------*/
-                    case "modificarUsuario":
-                        break;
-
                     case "registrarUsuario":
+                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+                        msg = strFromClient;
+                        usu.setNombre(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
 
                         break;
 
                     case "eliminarUsuario":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); //correcto
+                        msg = strFromClient;
+                        usu.setNombre(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
                         break;
 
                     case "buscarUsuario":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); // msg correcto
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            if ("objetodeJasonUSER()".equals(strFromClient)) {
+                                usu = archivoJsonAObjetoUSER();
+                            }
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+
+                        } else {
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+                        }
+                        break;
+
+                    case "modificarUsuario":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); //doit
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            usu = archivoJsonAObjetoUSER();
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                        }
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
                         break;
 
                     /*----------------------Autos----------------------*/
-                    case "agregarAuto":
+                    case "registrarAuto":
+                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+                        msg = strFromClient;
+                        aut.setPlaca(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
                         break;
 
-                    case "editarAuto":
+                    case "eliminarAuto":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); //correcto
+                        msg = strFromClient;
+                        aut.setPlaca(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
                         break;
 
                     case "buscarAuto":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); // msg correcto
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            if ("objetodeJasonAUTO()".equals(strFromClient)) {
+                                aut = archivoJsonAObjetoAUTO();
+                            }
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+
+                        } else {
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+                        }
                         break;
 
-                    case "borrarAuto":
+                    case "modificarAuto":
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); //doit
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            aut = archivoJsonAObjetoAUTO();
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                        }
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
                         break;
 
                     /*----------------------Rentar----------------------*/
@@ -206,6 +399,9 @@ public class ClienteHilo extends Thread {
 
                 /*----------------------Errores y notificaciones----------------------*/
                 Client.mensajes(msg);
+                Users.mensajes(msg);
+                Autos.mensajes(msg);
+                
 
             }
         } catch (IOException ex) {
@@ -247,9 +443,9 @@ public class ClienteHilo extends Thread {
     /*--------Conexion puerto 5007 entrada de archivos---------*/
     public static void entradaArchivoJson() {
         try ( ServerSocket serverSocket = new ServerSocket(5007)) {
-            System.out.println("listening to port:5000");
+            System.out.println("Escuchando pueto: 5000 para archivos");
             Socket clientSocket = serverSocket.accept();
-            System.out.println(clientSocket + " connected.");
+            System.out.println(clientSocket + " CONECTADO.");
             dataInputStream = new DataInputStream(clientSocket.getInputStream());
             dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
 
