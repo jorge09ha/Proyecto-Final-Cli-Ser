@@ -1,8 +1,11 @@
 package GUI;
 
+import Conexion.ClienteHilo;
+import Conexion.ClienteSocket;
 import rentACar.Auto;
 import javax.swing.*;
 import static Conexion.ClienteSocket.clientToServer;
+import rentACar.Cliente;
 
 public class Autos extends javax.swing.JPanel {
 
@@ -244,19 +247,30 @@ public class Autos extends javax.swing.JPanel {
     private void btnborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnborrarActionPerformed
         // TODO add your handling code here:
         try {
+
             int response = JOptionPane.showConfirmDialog(null, "Desea borrar el auto?", "Borrar Auto", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
+                Auto aut = new Auto();
 
-                //ClientSocket.borrarAuto(txtid.getText());
-                txtid.setText("Ingrese la placa");
-                txtMarca.setText("Ingrese la marca");
-                txtModelo.setText("Ingrese el modelo");
-                cbAnnio.setSelectedItem(null);
-                cbTransm.setSelectedItem(null);
+                aut.setPlaca(txtid.getText());
+                ClienteHilo.objetoaJsonAUTO(aut);
 
-                btnmodificar.setVisible(false);
-                btnborrar.setVisible(false);
-                btmAgregar.setVisible(true);
+                String task = "eliminarAuto";
+
+                aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
+
+                if ("correcto".equals(aut.getPlaca())) {
+
+                    txtid.setText("Ingrese la placa");
+                    txtMarca.setText("Ingrese la marca");
+                    txtModelo.setText("Ingrese el modelo");
+                    cbAnnio.setSelectedItem(null);
+                    cbTransm.setSelectedItem(null);
+
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btmAgregar.setVisible(true);
+                }
 
             } else {
                 JOptionPane.showMessageDialog(null, "Datos no borrados", "Info", 1);
@@ -272,14 +286,33 @@ public class Autos extends javax.swing.JPanel {
             if (camposVacios() == false) {
                 int response = JOptionPane.showConfirmDialog(null, "Desea Registrar el auto?", "Agregar Auto", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
+
                     Auto aut = new Auto();
+                    
                     aut.setPlaca(txtid.getText());
                     aut.setMarca(txtMarca.getText());
                     aut.setModelo(txtModelo.getText());
                     aut.setAnnio(cbAnnio.getSelectedItem().toString());
                     aut.setTransmision(cbTransm.getSelectedItem().toString());
                     aut.setRentar("D");
-                   // ClientSocket.registrarAuto(aut);
+
+                    ClienteHilo.objetoaJsonAUTO(aut);
+                    String task = "registrarAuto";
+                    aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
+                    // sobreescrivo el cli con el return de servidor protocolo, se usa el campo de nombre como propiedad de msg
+
+                    if ("correcto".equals(aut.getPlaca())) {
+
+                        txtid.setText("Ingrese la placa");
+                        txtMarca.setText("Ingrese la marca");
+                        txtModelo.setText("Ingrese el modelo");
+                        cbAnnio.setSelectedItem(null);
+                        cbTransm.setSelectedItem(null);
+
+                        btnmodificar.setVisible(false);
+                        btnborrar.setVisible(false);
+                        btmAgregar.setVisible(true);
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
@@ -298,14 +331,42 @@ public class Autos extends javax.swing.JPanel {
             int response = JOptionPane.showConfirmDialog(null, "Desea modificar el auto?", "Modificar Cliente", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
                 Auto aut = new Auto();
+
                 aut.setPlaca(txtid.getText());
                 aut.setMarca(txtMarca.getText());
                 aut.setModelo(txtModelo.getText());
                 aut.setAnnio(cbAnnio.getSelectedItem().toString());
                 aut.setTransmision(cbTransm.getSelectedItem().toString());
-                aut.setRentar("D");
 
-               // ClientSocket.modificarAuto(aut);
+                ClienteHilo.objetoaJsonAUTO(aut);
+                String task = "modificarAuto";
+                aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
+
+                if (aut.getPlaca() == "correcto") {
+
+                    txtid.setText("Ingrese la placa");
+                    txtMarca.setText("Ingrese la marca");
+                    txtModelo.setText("Ingrese el modelo");
+                    cbAnnio.setSelectedItem(null);
+                    cbTransm.setSelectedItem(null);
+
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btmAgregar.setVisible(true);
+                }
+                if (aut == null) {
+
+                    btnmodificar.setVisible(false);
+                    btnborrar.setVisible(false);
+                    btmAgregar.setVisible(true);
+
+                    txtid.setText("Ingrese la placa");
+                    txtMarca.setText("Ingrese la marca");
+                    txtModelo.setText("Ingrese el modelo");
+                    cbAnnio.setSelectedItem(null);
+                    cbTransm.setSelectedItem(null);
+                }
+
             } else {
                 JOptionPane.showMessageDialog(null, "Datos no modificados", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -341,41 +402,36 @@ public class Autos extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
 
-            int response = JOptionPane.showConfirmDialog(null, "Desea Buscar al cliente?\nCedula: " + txtid.getText(), "Buscar Cliente", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
+            Auto aut = new Auto();
 
-                Auto aut = new Auto();
+            aut.setPlaca(txtid.getText());
+            ClienteHilo.objetoaJsonAUTO(aut);
 
-                aut.setPlaca(txtid.getText());
-                //objetoaJson(aut);
+            String task = "buscarAuto";
 
-                String task = "buscarcliente";
+            aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
+            aut = ClienteHilo.archivoJsonAObjetoAUTO();
 
-                aut = (Auto) clientToServer(task, aut.getPlaca());
+            txtid.setText(aut.getPlaca());
+            txtMarca.setText(aut.getMarca());
+            txtModelo.setText(aut.getModelo());
+            txtMarca.setText(aut.getMarca());
+            cbAnnio.setSelectedItem(aut.getAnnio());
+            cbTransm.setSelectedItem(aut.getTransmision());
 
-                txtid.setText(aut.getPlaca());
-                txtMarca.setText(aut.getMarca());
-                txtModelo.setText(aut.getModelo());
-                txtMarca.setText(aut.getMarca());
-                cbAnnio.setSelectedItem(aut.getAnnio());
-                cbTransm.setSelectedItem(aut.getTransmision());
+            btnmodificar.setVisible(true);
+            btnborrar.setVisible(true);
 
-                if (aut == null) {
-                    btnmodificar.setVisible(false);
-                    btnborrar.setVisible(false);
-                    btmAgregar.setVisible(true);
+            if (aut == null) {
+                btnmodificar.setVisible(false);
+                btnborrar.setVisible(false);
+                btmAgregar.setVisible(true);
 
-                    txtid.setText("Ingrese la placa");
-                    txtMarca.setText("Ingrese la marca");
-                    txtModelo.setText("Ingrese el modelo");
-                    cbAnnio.setSelectedItem(null);
-                    cbTransm.setSelectedItem(null);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
-                btnmodificar.setVisible(true);
-                btnborrar.setVisible(true);
-                btmAgregar.setVisible(false);
+                txtid.setText("Ingrese la placa");
+                txtMarca.setText("Ingrese la marca");
+                txtModelo.setText("Ingrese el modelo");
+                cbAnnio.setSelectedItem(null);
+                cbTransm.setSelectedItem(null);
             }
 
         } catch (Exception e) {

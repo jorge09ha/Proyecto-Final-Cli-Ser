@@ -1,8 +1,10 @@
 package GUI;
 
+import Conexion.ClienteHilo;
+import Conexion.ClienteSocket;
 import rentACar.UserAdmin;
 import javax.swing.*;
-
+import rentACar.Cliente;
 
 public class Users extends javax.swing.JPanel {
 
@@ -322,7 +324,37 @@ public class Users extends javax.swing.JPanel {
 
     private void btnborrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnborrarActionPerformed
         // TODO add your handling code here:
+        try {
 
+            int response = JOptionPane.showConfirmDialog(null, "Desea eliminar el usuario?", "Eliminar Usuario", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                UserAdmin usu = new UserAdmin();
+
+                usu.setCedula(txtid.getText());
+                ClienteHilo.objetoaJsonUSER(usu);
+
+                String task = "eliminarUsuario";
+
+                usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getCedula());
+
+                if ("correcto".equals(usu.getNombre())) {
+
+                    txtnombre.setText("Ingrese el nombre");
+                    txtapellido1.setText("Ingrese el apellido 1");
+                    txtapellido2.setText("Ingrese el apellido 2");
+                    txtid.setText("Ingrese la identificacion");
+                    txtUserName.setText("Ingrese el nombre de usuario");
+                    txtPass1.setText("contrasena");
+                    txtPass2.setText("contrasena");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Datos no Borrados", "Info", 1);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al Eliminar. " + e + "", "Error", 0);
+
+        }
     }//GEN-LAST:event_btnborrarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
@@ -339,20 +371,21 @@ public class Users extends javax.swing.JPanel {
                         usu.setApellido2(txtapellido2.getText());
                         usu.setUser(txtUserName.getText());
                         usu.setPass(txtPass1.getText());
-                        //boolean resultado = objetoaJson(usu);
-                        String task = "agregarUsuario";
 
-                        //clientToServer(task, usu.getCedula());
+                        ClienteHilo.objetoaJsonUSER(usu);
+                        String task = "registrarUsuario";
+                        usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getCedula());
 
-//                        if (resultado == false) {
-//                            txtnombre.setText("Ingrese el nombre");
-//                            txtapellido1.setText("Ingrese el apellido 1");
-//                            txtapellido2.setText("Ingrese el apellido 2");
-//                            txtid.setText("Ingrese la identificacion");
-//                            txtUserName.setText("Ingrese el nombre de usuario");
-//                            txtPass1.setText("contraseña");
-//                            txtPass2.setText("contraseña");
-//                        }
+                        if ("correcto".equals(usu.getNombre())) { // se evalua si la propiedad nombre tiene como msg "correcto"
+
+                            txtnombre.setText("Ingrese el nombre");
+                            txtapellido1.setText("Ingrese el apellido 1");
+                            txtapellido2.setText("Ingrese el apellido 2");
+                            txtid.setText("Ingrese la identificacion");
+                            txtUserName.setText("Ingrese el nombre de usuario");
+                            txtPass1.setText("contrasena");
+                            txtPass2.setText("contrasena");
+                        }
                     } else {
                         JOptionPane.showMessageDialog(null, "Las contraseñas no son iguales", "Info", 1);
                     }
@@ -371,24 +404,62 @@ public class Users extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
 
-            int response = JOptionPane.showConfirmDialog(null, "Desea buscar al usuario?\nCedula: " + txtid.getText(), "Buscar Usuario", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
+            UserAdmin usu = new UserAdmin();
 
-                UserAdmin usu = new UserAdmin();
+            usu.setCedula(txtid.getText());
+            ClienteHilo.objetoaJsonUSER(usu);
+
+            String task = "buscarUsuario";
+
+            usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getCedula());
+            usu = ClienteHilo.archivoJsonAObjetoUSER();
+
+            txtid.setText(usu.getCedula());
+            txtnombre.setText(usu.getNombre());
+            txtapellido1.setText(usu.getApellido1());
+            txtapellido2.setText(usu.getApellido2());
+            txtUserName.setText(usu.getUser());
+            txtPass1.setText(usu.getPass());
+            txtPass2.setText(usu.getPass());
+
+            btnmodificar.setVisible(true);
+            btnborrar.setVisible(true);
+
+            if (usu == null) {
+
+                txtnombre.setText("Ingrese el nombre");
+                txtapellido1.setText("Ingrese el apellido 1");
+                txtapellido2.setText("Ingrese el apellido 2");
+                txtid.setText("Ingrese la identificacion");
+                txtUserName.setText("Ingrese el nombre de usuario");
+                txtPass2.setText("contraseña");
+                txtPass1.setText("contraseña");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar. " + e + "", "Error", 0);
+
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
+        // TODO add your handling code here:
+
+        UserAdmin usu = new UserAdmin();
+        int response = JOptionPane.showConfirmDialog(null, "Desea modificar al usuario?", "Modificar Usuario", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION) {
+            if (txtPass1.getText().equals(txtPass2.getText())) {
+
                 usu.setCedula(txtid.getText());
-                //objetoaJson(usu);
+                usu.setNombre(txtnombre.getText());
+                usu.setApellido1(txtapellido1.getText());
+                usu.setApellido2(txtapellido2.getText());
+                usu.setUser(txtUserName.getText());
+                usu.setPass(txtPass1.getText());
 
-                String task = "buscarUsuario";
-
-               //usu = (UserAdmin) clientToServer(task, usu.getCedula());
-
-                txtid.setText(usu.getCedula());
-                txtnombre.setText(usu.getNombre());
-                txtapellido1.setText(usu.getApellido1());
-                txtapellido2.setText(usu.getApellido2());
-                txtUserName.setText(usu.getUser());
-                txtPass1.setText(usu.getPass());
-                txtPass2.setText(usu.getPass());
+                ClienteHilo.objetoaJsonUSER(usu);
+                String task = "modificarUsuario";
+                usu = (UserAdmin) ClienteSocket.clientToServer(task, usu.getCedula());
 
                 if (usu == null) {
 
@@ -400,18 +471,13 @@ public class Users extends javax.swing.JPanel {
                     txtPass2.setText("contraseña");
                     txtPass1.setText("contraseña");
                 }
+
             } else {
-                JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
+                JOptionPane.showMessageDialog(null, "Las contraseñas no coinsiden.\n" + "Revise he intente nuevamente", "Error", 0);
             }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
-
+        } else {
+            JOptionPane.showMessageDialog(null, "Datos no modificados", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
-        // TODO add your handling code here:
 
     }//GEN-LAST:event_btnmodificarActionPerformed
 

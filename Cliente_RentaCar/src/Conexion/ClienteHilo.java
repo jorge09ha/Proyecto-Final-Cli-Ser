@@ -1,5 +1,6 @@
 package Conexion;
 
+import GUI.Client;
 import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -74,13 +75,11 @@ public class ClienteHilo extends Thread {
 
                             strFromClient = in.readUTF();
 
-                            //if("objetodeJason()".equals(strFromClient))
                             cli = archivoJsonAObjetoCLIENTE();
 
                             out.writeUTF("stop");
                             out.flush();
 
-                            //return cli;
                         }
 
                         out.writeUTF("stop");
@@ -165,17 +164,17 @@ public class ClienteHilo extends Thread {
                         break;
 
                     /*----------------------Usuarios----------------------*/
-                    case "agregarUsuario":
+                    case "modificarUsuario":
                         break;
 
-                    case "editarUsuario":
+                    case "registrarUsuario":
 
+                        break;
+
+                    case "eliminarUsuario":
                         break;
 
                     case "buscarUsuario":
-                        break;
-
-                    case "borrarUsuario":
                         break;
 
                     /*----------------------Autos----------------------*/
@@ -206,29 +205,7 @@ public class ClienteHilo extends Thread {
                 }
 
                 /*----------------------Errores y notificaciones----------------------*/
-                switch (msg) {
-
-                    case "correcto":
-                        JOptionPane.showMessageDialog(null, "Accion ejecutada de forma correcta.", "Info", 1);
-
-                        break;
-
-                    case "duplicado":
-                        JOptionPane.showMessageDialog(null, "La Cédula ya existe.", "Error", 0);
-                        break;
-
-                    case "no existe":
-                        JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
-                        break;
-
-                    case "id vacio":
-                        JOptionPane.showMessageDialog(null, "El campo de identificación no puede estar vacio", "Campo vacio", 2);
-                        break;
-
-                    case "error base":
-                        JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 1);
-                        break;
-                }
+                Client.mensajes(msg);
 
             }
         } catch (IOException ex) {
