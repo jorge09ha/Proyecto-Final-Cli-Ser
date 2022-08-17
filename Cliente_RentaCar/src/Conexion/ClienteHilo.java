@@ -140,13 +140,13 @@ public class ClienteHilo extends Thread {
 
                             strFromClient = in.readUTF();
 
+                        } else {
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
                         }
-
-                        out.writeUTF("stop");
-                        out.flush();
-
-                        strFromClient = in.readUTF();
-
                         break;
 
                     case "registrarCliente":
@@ -176,7 +176,6 @@ public class ClienteHilo extends Thread {
                         break;
 
                     case "borrarUsuario":
-
                         break;
 
                     /*----------------------Autos----------------------*/
@@ -184,14 +183,12 @@ public class ClienteHilo extends Thread {
                         break;
 
                     case "editarAuto":
-
                         break;
 
                     case "buscarAuto":
                         break;
 
                     case "borrarAuto":
-
                         break;
 
                     /*----------------------Rentar----------------------*/
@@ -210,35 +207,27 @@ public class ClienteHilo extends Thread {
 
                 /*----------------------Errores y notificaciones----------------------*/
                 switch (msg) {
+
                     case "correcto":
                         JOptionPane.showMessageDialog(null, "Accion ejecutada de forma correcta.", "Info", 1);
 
                         break;
 
                     case "duplicado":
-                        JOptionPane.showMessageDialog(null, "El ID ya existe.", "Error", 0);
-                        out.writeUTF("stop");
-                        out.flush();
+                        JOptionPane.showMessageDialog(null, "La Cédula ya existe.", "Error", 0);
                         break;
 
                     case "no existe":
                         JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
-                        out.writeUTF("stop");
-                        out.flush();
                         break;
 
                     case "id vacio":
-                        JOptionPane.showMessageDialog(null, "El campo de ID no puede estar vacio", "Campo vacio", 2);
-                        out.writeUTF("stop");
-                        out.flush();
+                        JOptionPane.showMessageDialog(null, "El campo de identificación no puede estar vacio", "Campo vacio", 2);
                         break;
 
                     case "error base":
                         JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 1);
-                        out.writeUTF("stop");
-                        out.flush();
                         break;
-
                 }
 
             }
@@ -330,13 +319,15 @@ public class ClienteHilo extends Thread {
     }
 
     /*------------------------JSON to Object---------------------*/
-    public static Cliente archivoJsonAObjetoCLIENTE() {
+    public static Cliente archivoJsonAObjetoCLIENTE() {//objetodeJason
         try {
             Gson gson = new Gson();
 
             Reader reader = Files.newBufferedReader(Paths.get("NewFileFromServer.json"));
-            Cliente cli = gson.fromJson(reader, Cliente.class
-            );
+
+            Cliente cli = gson.fromJson(reader, Cliente.class);
+
+            //System.out.println("Lectura del archivo: Cedula: "+cli.getCedula()+" Nombre: "+cli.getNombre()+" Apellido1: "+cli.getApellido1()+" Apellido2: "+cli.getApellido2()+" Correo: "+cli.getEmail()+" Telefono: "+cli.getTelefono());
             reader.close();
 
             return cli;
@@ -344,6 +335,7 @@ public class ClienteHilo extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return null;
     }
 

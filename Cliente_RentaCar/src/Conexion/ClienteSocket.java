@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import rentACar.*;
 
 public class ClienteSocket {
 
@@ -21,7 +22,7 @@ public class ClienteSocket {
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
             // Ejecutamos el hilo.
-            System.out.println("Se inicia el Hilo."+tarea+id);//print--------------->
+            System.out.println("Se inicia el Hilo." + tarea + id);//print--------------->
             ClienteHilo hilo = new ClienteHilo(in, out, tarea, id);
             hilo.start();
             hilo.join();
@@ -30,7 +31,9 @@ public class ClienteSocket {
             Logger.getLogger(ClienteSocket.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
+//        Cliente cli = new Cliente();
+//        cli = ClienteHilo.archivoJsonAObjetoCLIENTE();
+        
         return null;
     }
 

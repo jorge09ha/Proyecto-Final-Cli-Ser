@@ -372,6 +372,7 @@ public class Client extends javax.swing.JPanel {
                 String task = "buscarCliente";
 
                 cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
+                cli = ClienteHilo.archivoJsonAObjetoCLIENTE();
 
                 txtid.setText(cli.getCedula());
                 txtnombre.setText(cli.getNombre());

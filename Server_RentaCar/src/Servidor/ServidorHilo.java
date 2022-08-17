@@ -49,6 +49,7 @@ public class ServidorHilo extends Thread {
     public void run() {
 
         try {
+            
             String strFromServer = "", strToClient = "", id = "";
 
             strFromServer = in.readUTF();// Recibe la tarea
@@ -112,7 +113,7 @@ public class ServidorHilo extends Thread {
                             if ("servidorA".equals(strFromServer)) {
                                 envioArchivoJson();
                             }
-                            strToClient = "objetodeJason()"; // client                    
+                            strToClient = "objetodeJasonCLIENTE()"; // client                    
                             out.writeUTF(strToClient); // cliente
                             out.flush();
 

@@ -1,5 +1,6 @@
 package Servidor;
 
+import static Servidor.ServidorHilo.entradaArchivoJson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class Servidor {
             while (true) {
 
                 // Espero la conexion del cliente
+                entradaArchivoJson();
                 sc = server.accept();
 
                 String tarea = null;
