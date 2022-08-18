@@ -1406,6 +1406,8 @@ public class ServidorHilo extends Thread {
             resultado = st.executeUpdate(sql);
 
             if (resultado > 0) {
+                sql = "UPDATE autos SET rentar= 'R' WHERE idauto = '" + re.getPlaca() + "'";
+                resultado = st.executeUpdate(sql);
                 msg = "correcto";
                 return msg;
             } else {

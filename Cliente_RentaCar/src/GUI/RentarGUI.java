@@ -113,8 +113,8 @@ public class RentarGUI extends javax.swing.JPanel {
 
     public boolean camposVacios() {
 
-        if ((txtid.equals("")) || (txtid.getText().equals("Ingrese la identificacion"))
-                || (txtPlaca.getText().equals("")) || (txtPlaca.getText().equals("Ingrese la placa"))) {
+        if ((cliSELECT.getCedula().equals("")) || (cliSELECT.getCedula().equals("Ingrese la identificacion")) || (cliSELECT.getCedula().equals(null))
+                || (autSELECT.getPlaca().equals("")) || (autSELECT.getPlaca().equals("Ingrese la placa")) || (autSELECT.getPlaca().equals(null))) {
             return true;
         } else {
             return false;
@@ -422,7 +422,7 @@ public class RentarGUI extends javax.swing.JPanel {
 
             if (camposVacios() == false) {
 
-                int response = JOptionPane.showConfirmDialog(null, "Desea rentar el auto "+autSELECT.getPlaca()+"?", "Rentar auto", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Desea rentar el auto " + autSELECT.getPlaca() + "?", "Rentar auto", JOptionPane.YES_NO_OPTION);
 
                 if (response == JOptionPane.YES_OPTION) {
 
@@ -461,9 +461,11 @@ public class RentarGUI extends javax.swing.JPanel {
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
                 }
+
             } else {
-                JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Revise he intente nuevamente", "Campos en Blanco", 1);
+               JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Debe de seleccionar un Auto y un Cliente", "Campos en Blanco", 1);
             }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
 
@@ -518,7 +520,9 @@ public class RentarGUI extends javax.swing.JPanel {
 
         txtid.setText("Ingrese la identificacion");
         txtPlaca.setText("Ingrese la placa");
-        presentarTableCliente(null);
+        autSELECT = null;
+        cliSELECT = null;
+
 
     }//GEN-LAST:event_btncancelarActionPerformed
 
