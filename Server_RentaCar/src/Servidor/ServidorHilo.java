@@ -472,7 +472,25 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "retornar":
+                    case "retornar"://------------------------------------> Rentornar
+
+                        out.writeUTF("id"); // preguta por id
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
+
+                        strToClient = retornar(id); // client    
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
+
+                        strFromServer = in.readUTF(); // lee msg stop
+
+                        strToClient = "stop";
+                        out.writeUTF(strToClient);
+                        out.flush();
+
                         break;
 
                     case "verRentados":
@@ -1420,5 +1438,38 @@ public class ServidorHilo extends Thread {
             return msg;
         }
     }
+
+    public static String retornar(String id) {
+        Auto aut = new Auto();
+        Connection conn = getConnection();
+        int resultado = 0;
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
+                String sql = "DELETE FROM rentados WHERE idauto = '" + id + "'";
+                Statement st = conn.createStatement();
+                resultado = st.executeUpdate(sql);
+
+                if (resultado > 0) {
+                    sql = "UPDATE autos SET rentar= 'D' WHERE idauto = '" + id + "'";
+                    resultado = st.executeUpdate(sql);
+                    msg = "correcto";
+                    return msg;
+                } else {
+                    msg = "no existe";
+                    return msg;
+                }
+
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+    }//listo
 
 }

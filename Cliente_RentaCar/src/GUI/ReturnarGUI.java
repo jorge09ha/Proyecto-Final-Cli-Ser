@@ -1,61 +1,135 @@
 package GUI;
 
+import ClasesRentaCar.Auto;
+import ClasesRentaCar.Cliente;
+import ClasesRentaCar.Rentar;
+import Conexion.ClienteHilo;
+import Conexion.ClienteSocket;
+import static GUI.RentarGUI.PASS;
+import static GUI.RentarGUI.URL;
+import static GUI.RentarGUI.USERNAME;
+import static GUI.RentarGUI.getConnection;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 
 /**
  * @author Jorge Hernandez Araya
  */
 public class ReturnarGUI extends javax.swing.JPanel {
 
+    static String URL = "jdbc:mysql://localhost:3306/rentacar";
+    static String USERNAME = "root";
+    static String PASS = "admin01";
+    static String mensaje = null;
+
+    public static Connection getConnection() {
+
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = (Connection) DriverManager.getConnection(URL, USERNAME, PASS);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return conn;
+    }
+
     public ReturnarGUI() {
         initComponents();
         presentarTableAuto();
     }
 
+    public boolean camposVacios() {
+
+        if ((txtId.equals("")) || (txtId.getText().equals("Ingrese el dato")) || (txtId.getText().equals(null))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void presentarTableAuto() {
-//        DefaultTableModel modelo = (DefaultTableModel) TableRentados.getModel();
-//        TableRentados.setModel(modelo);
-//        //TableModel modeloDatos = TableRentados.getModel();
-//
-//        try {
-//            ResultSet rs = ClientSocket.listRentados();
-//
-//            ResultSetMetaData metaData = rs.getMetaData();
-//
-//            // Names of columns
-//            Vector<String> columnNames = new Vector<String>();
-//            int columnCount = (metaData.getColumnCount()) - 1;
-//
-//            columnNames.add("Placa");
-//            columnNames.add("Marca");
-//            columnNames.add("Modelo");
-//            columnNames.add("Cedula");
-//            columnNames.add("Nombre");
-//            columnNames.add("Apellido1");
-//            columnNames.add("Apellido2");
-//            columnNames.add("Correo");
-//            columnNames.add("Telefono");
-//
-//            // Data of the table
-//            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-//            while (rs.next()) {
-//                Vector<Object> vector = new Vector<Object>();
-//                for (int i = 1; i <= columnCount; i++) {
-//                    vector.add(rs.getObject(i));
-//                }
-//                data.add(vector);
-//            }
-//
-//            modelo.setDataVector(data, columnNames);
-//            //TableAuto.setEnabled(false);
-//
-//        } catch (Exception e) {
-//
-//        }
+        DefaultTableModel modelo = (DefaultTableModel) TableRentados.getModel();
+        TableRentados.setModel(modelo);
+        Connection conn = getConnection();
+        TableModel modeloDatos = TableRentados.getModel();
+
+        try {
+            String sql = "SELECT * FROM autos WHERE rentar = \"R\";";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            // Names of columns
+            Vector<String> columnNames = new Vector<String>();
+            int columnCount = (metaData.getColumnCount()) - 1;
+
+            columnNames.add("Placa");
+            columnNames.add("Marca");
+            columnNames.add("Modelo");
+            columnNames.add("Cedula");
+            columnNames.add("Nombre");
+            columnNames.add("Apellido1");
+            columnNames.add("Apellido2");
+            columnNames.add("Correo");
+            columnNames.add("Telefono");
+
+            // Data of the table
+            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+            while (rs.next()) {
+                Vector<Object> vector = new Vector<Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    vector.add(rs.getObject(i));
+                }
+                data.add(vector);
+            }
+
+            modelo.setDataVector(data, columnNames);
+            //TableAuto.setEnabled(false);
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void ventanasMsjs() {
+
+        switch (mensaje) {
+
+            case "correcto":
+                JOptionPane.showMessageDialog(null, "Accion ejecutada de forma correcta.", "Info", 1);
+
+                break;
+
+            case "duplicado":
+                JOptionPane.showMessageDialog(null, "El auto ya esta rentado.", "Error", 0);
+                break;
+
+            case "no existe":
+                JOptionPane.showMessageDialog(null, "El dato ingresado no existe", "Info", 1);
+                break;
+
+            case "id vacio":
+                JOptionPane.showMessageDialog(null, "El campo de id no puede estar vacio", "Campo vacio", 2);
+                break;
+
+            case "error base":
+                JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 1);
+                break;
+        }
+    }
+//distintos mensajes que envías el peor según la consulta
+
+    public static void mensajes(String msg) {
+        mensaje = msg;
     }
 
     /**
@@ -69,19 +143,15 @@ public class ReturnarGUI extends javax.swing.JPanel {
 
         body = new javax.swing.JPanel();
         Title = new javax.swing.JLabel();
-        txt1 = new javax.swing.JLabel();
-        Separator1 = new javax.swing.JSeparator();
-        btmBPlaca = new javax.swing.JButton();
         btmRetornar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TableRentados = new javax.swing.JTable();
-        txtPlaca = new javax.swing.JTextField();
-        txt2 = new javax.swing.JLabel();
-        txtid = new javax.swing.JTextField();
-        Separator2 = new javax.swing.JSeparator();
-        btmBCedula = new javax.swing.JButton();
         btncancelar = new javax.swing.JButton();
         btmActualizar = new javax.swing.JButton();
+        txt1 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        Separator1 = new javax.swing.JSeparator();
+        btmBuscar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setAlignmentX(0.0F);
@@ -99,28 +169,6 @@ public class ReturnarGUI extends javax.swing.JPanel {
         Title.setForeground(new java.awt.Color(0, 0, 0));
         Title.setText("RETORNAR AUTO");
         add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
-
-        txt1.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
-        txt1.setForeground(new java.awt.Color(0, 0, 0));
-        txt1.setText("Placa");
-        add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
-
-        Separator1.setForeground(new java.awt.Color(0, 0, 0));
-        Separator1.setPreferredSize(new java.awt.Dimension(200, 10));
-        add(Separator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 260, -1));
-
-        btmBPlaca.setBackground(new java.awt.Color(18, 90, 173));
-        btmBPlaca.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        btmBPlaca.setForeground(new java.awt.Color(255, 255, 255));
-        btmBPlaca.setText("BUSCAR");
-        btmBPlaca.setBorder(null);
-        btmBPlaca.setBorderPainted(false);
-        btmBPlaca.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btmBPlacaActionPerformed(evt);
-            }
-        });
-        add(btmBPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 110, 30));
 
         btmRetornar.setBackground(new java.awt.Color(18, 90, 173));
         btmRetornar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -171,63 +219,7 @@ public class ReturnarGUI extends javax.swing.JPanel {
             TableRentados.getColumnModel().getColumn(8).setResizable(false);
         }
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 730, 130));
-
-        txtPlaca.setBackground(new java.awt.Color(255, 255, 255));
-        txtPlaca.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
-        txtPlaca.setForeground(new java.awt.Color(102, 102, 102));
-        txtPlaca.setText("Ingrese la placa");
-        txtPlaca.setBorder(null);
-        txtPlaca.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtPlacaMousePressed(evt);
-            }
-        });
-        txtPlaca.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPlacaActionPerformed(evt);
-            }
-        });
-        add(txtPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 260, 30));
-
-        txt2.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
-        txt2.setForeground(new java.awt.Color(0, 0, 0));
-        txt2.setText("Cedula");
-        add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
-
-        txtid.setBackground(new java.awt.Color(255, 255, 255));
-        txtid.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
-        txtid.setForeground(new java.awt.Color(102, 102, 102));
-        txtid.setText("Ingrese la identificacion");
-        txtid.setBorder(null);
-        txtid.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtidMousePressed(evt);
-            }
-        });
-        txtid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtidActionPerformed(evt);
-            }
-        });
-        add(txtid, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 260, 30));
-
-        Separator2.setForeground(new java.awt.Color(0, 0, 0));
-        Separator2.setPreferredSize(new java.awt.Dimension(200, 10));
-        add(Separator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 260, -1));
-
-        btmBCedula.setBackground(new java.awt.Color(18, 90, 173));
-        btmBCedula.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        btmBCedula.setForeground(new java.awt.Color(255, 255, 255));
-        btmBCedula.setText("BUSCAR");
-        btmBCedula.setBorder(null);
-        btmBCedula.setBorderPainted(false);
-        btmBCedula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btmBCedulaActionPerformed(evt);
-            }
-        });
-        add(btmBCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 110, 30));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 730, 150));
 
         btncancelar.setBackground(new java.awt.Color(255, 102, 102));
         btncancelar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -253,47 +245,54 @@ public class ReturnarGUI extends javax.swing.JPanel {
             }
         });
         add(btmActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 110, 30));
-    }// </editor-fold>//GEN-END:initComponents
 
-    private void btmBPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmBPlacaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btmBPlacaActionPerformed
+        txt1.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
+        txt1.setForeground(new java.awt.Color(0, 0, 0));
+        txt1.setText("Buscar por placa");
+        add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+
+        txtId.setBackground(new java.awt.Color(255, 255, 255));
+        txtId.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
+        txtId.setForeground(new java.awt.Color(102, 102, 102));
+        txtId.setText("Ingrese la placa");
+        txtId.setBorder(null);
+        txtId.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtIdMousePressed(evt);
+            }
+        });
+        txtId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdActionPerformed(evt);
+            }
+        });
+        add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 260, 30));
+
+        Separator1.setForeground(new java.awt.Color(0, 0, 0));
+        Separator1.setPreferredSize(new java.awt.Dimension(200, 10));
+        add(Separator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 260, -1));
+
+        btmBuscar.setBackground(new java.awt.Color(18, 90, 173));
+        btmBuscar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        btmBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btmBuscar.setText("BUSCAR");
+        btmBuscar.setBorder(null);
+        btmBuscar.setBorderPainted(false);
+        btmBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btmBuscarActionPerformed(evt);
+            }
+        });
+        add(btmBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 130, 110, 30));
+    }// </editor-fold>//GEN-END:initComponents
 
     private void btmRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmRetornarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btmRetornarActionPerformed
 
-    private void txtPlacaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPlacaMousePressed
-        // TODO add your handling code here:
-        if ("Ingrese la identificacion".equals(txtPlaca.getText())) {
-            txtPlaca.setText("");
-        }
-    }//GEN-LAST:event_txtPlacaMousePressed
-
-    private void txtPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPlacaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPlacaActionPerformed
-
-    private void txtidMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtidMousePressed
-        // TODO add your handling code here:
-        if ("Ingrese la placa".equals(txtPlaca.getText())) {
-            txtPlaca.setText("");
-        }
-    }//GEN-LAST:event_txtidMousePressed
-
-    private void txtidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtidActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtidActionPerformed
-
-    private void btmBCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmBCedulaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btmBCedulaActionPerformed
-
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
         // TODO add your handling code here:
-
-        txtid.setText("Ingrese la identificacion");
-        txtPlaca.setText("Ingrese la placa");
+        txtId.setText("Ingrese el dato a buscar");
     }//GEN-LAST:event_btncancelarActionPerformed
 
     private void btmActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmActualizarActionPerformed
@@ -306,22 +305,68 @@ public class ReturnarGUI extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btmActualizarActionPerformed
 
+    private void txtIdMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIdMousePressed
+        // TODO add your handling code here:
+        if ("Ingrese la identificacion".equals(txtId.getText())) {
+            txtId.setText("");
+        }
+    }//GEN-LAST:event_txtIdMousePressed
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdActionPerformed
+
+    private void btmBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmBuscarActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            if (camposVacios() == false) {
+
+                Rentar rentar = new Rentar();
+
+                rentar.setPlaca(rentar.getPlaca());
+                ClienteHilo.objetoaJsonRENTAR(rentar);
+
+                String task = "verRentados";
+
+                rentar = (Rentar) ClienteSocket.clientToServer(task, rentar.getPlaca());
+                rentar = ClienteHilo.archivoJsonAObjetoRENTAR();
+
+                rentar = ClienteHilo.archivoJsonAObjetoRENTAR();///error null
+
+                if ("correcto".equals(mensaje)) {
+
+                    txtId.setText(rentar.getPlaca());
+                    presentarTableAuto();
+                    ventanasMsjs();
+
+                } else {
+                    txtId.setText("Ingrese el dato");
+                    ventanasMsjs();
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "El campo de busqueda esta en blanco.\n" + "Debe de seleccionar la placa del auto.", "Campos en Blanco", 1);
+            }
+
+        } catch (Exception e) {
+
+        }
+
+    }//GEN-LAST:event_btmBuscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSeparator Separator1;
-    private javax.swing.JSeparator Separator2;
     private javax.swing.JTable TableRentados;
     private javax.swing.JLabel Title;
     private javax.swing.JPanel body;
     private javax.swing.JButton btmActualizar;
-    private javax.swing.JButton btmBCedula;
-    private javax.swing.JButton btmBPlaca;
+    private javax.swing.JButton btmBuscar;
     private javax.swing.JButton btmRetornar;
     private javax.swing.JButton btncancelar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel txt1;
-    private javax.swing.JLabel txt2;
-    private javax.swing.JTextField txtPlaca;
-    private javax.swing.JTextField txtid;
+    private javax.swing.JTextField txtId;
     // End of variables declaration//GEN-END:variables
 }

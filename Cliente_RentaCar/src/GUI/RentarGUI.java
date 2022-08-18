@@ -369,7 +369,6 @@ public class RentarGUI extends javax.swing.JPanel {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         try {
-            //Cliente cli = new Cliente();
 
             cliSELECT.setCedula(txtid.getText());
             ClienteHilo.objetoaJsonCLIENTE(cliSELECT);
@@ -463,7 +462,7 @@ public class RentarGUI extends javax.swing.JPanel {
                 }
 
             } else {
-               JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Debe de seleccionar un Auto y un Cliente", "Campos en Blanco", 1);
+                JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Debe de seleccionar un Auto y un Cliente", "Campos en Blanco", 1);
             }
 
         } catch (Exception e) {
@@ -495,9 +494,6 @@ public class RentarGUI extends javax.swing.JPanel {
             autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();
 
             autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();///error null
-
-            autSELECT = autSELECT;
-            System.out.println(autSELECT.getPlaca());
 
             if ("correcto".equals(mensaje)) {
                 txtPlaca.setText(autSELECT.getPlaca());

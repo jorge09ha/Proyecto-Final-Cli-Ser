@@ -16,15 +16,14 @@ public class HomeSocket {
         try {
             //Creo el socket.
             Socket sc = new Socket("127.0.0.1", 7777);
-            System.out.println("\n***Solicitud de conexion al server: 10.90.1.10:7777***");//print--------------->
+            System.out.println("*CONECTADO al server: " + sc.getInetAddress().getHostAddress() + ":" + sc.getPort());
 
             //Defino la entrada y la salida.
             DataInputStream in = new DataInputStream(sc.getInputStream());
             DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
             // Ejecutamos el hilo.
-            
-             System.out.println("-Se inicia el Hilo" + "\n-Tarea= " + tarea + "\n-ID=" + id);//print--------------->
+            System.out.println("-Se inicia el Hilo" + "\n-Tarea= " + tarea + "\n-ID=" + id);//print--------------->
             HomeHilo hilo = new HomeHilo(in, out, tarea);
             hilo.start();
             hilo.join();
