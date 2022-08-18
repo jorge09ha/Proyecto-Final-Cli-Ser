@@ -1,14 +1,8 @@
 package GUI;
 
-import ClasesRentaCar.Auto;
-import ClasesRentaCar.Cliente;
 import ClasesRentaCar.Rentar;
 import Conexion.ClienteHilo;
 import Conexion.ClienteSocket;
-import static GUI.RentarGUI.PASS;
-import static GUI.RentarGUI.URL;
-import static GUI.RentarGUI.USERNAME;
-import static GUI.RentarGUI.getConnection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.*;
@@ -307,7 +301,7 @@ public class ReturnarGUI extends javax.swing.JPanel {
 
     private void txtIdMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIdMousePressed
         // TODO add your handling code here:
-        if ("Ingrese la identificacion".equals(txtId.getText())) {
+        if ("Ingrese la placa".equals(txtId.getText())) {
             txtId.setText("");
         }
     }//GEN-LAST:event_txtIdMousePressed
@@ -324,10 +318,10 @@ public class ReturnarGUI extends javax.swing.JPanel {
 
                 Rentar rentar = new Rentar();
 
-                rentar.setPlaca(rentar.getPlaca());
+                rentar.setPlaca(txtId.getText());
                 ClienteHilo.objetoaJsonRENTAR(rentar);
 
-                String task = "verRentados";
+                String task = "buscarRentados";
 
                 rentar = (Rentar) ClienteSocket.clientToServer(task, rentar.getPlaca());
                 rentar = ClienteHilo.archivoJsonAObjetoRENTAR();

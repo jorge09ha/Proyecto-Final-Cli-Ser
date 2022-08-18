@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import static Conexion.ClienteSocket.clientToServer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -488,7 +487,7 @@ public class RentarGUI extends javax.swing.JPanel {
             autSELECT.setPlaca(txtPlaca.getText());
             ClienteHilo.objetoaJsonAUTO(autSELECT);
 
-            String task = "buscarAuto";
+            String task = "buscarDisponibles";
 
             autSELECT = (Auto) ClienteSocket.clientToServer(task, autSELECT.getPlaca());
             autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();

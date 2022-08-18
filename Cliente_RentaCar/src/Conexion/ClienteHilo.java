@@ -434,7 +434,7 @@ public class ClienteHilo extends Thread {
 
                     /*----------------------Rentar----------------------*/
                     case "rentar"://------------------------------------> Rentar
-                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
+                        out.writeUTF(strToClient); //Task
                         out.flush();
 
                         strFromClient = in.readUTF();
@@ -468,10 +468,82 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "verRentados":
+                    case "buscarRentados"://------------------------------------> Buscar rentados
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); // msg correcto
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            if ("objetodeJasonRENTAR()".equals(strFromClient)) {
+                                ren = archivoJsonAObjetoRENTAR();
+                            }
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+
+                        } else {
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+                        }
                         break;
 
-                    case "verDisponibles":
+                    case "buscarDisponibles"://------------------------------------> Buscar disponibles
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); // msg correcto
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            if ("objetodeJasonRENTAR()".equals(strFromClient)) {
+                                ren = archivoJsonAObjetoRENTAR();
+                            }
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+
+                        } else {
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+                        }
                         break;
 
                     case "listaHome":

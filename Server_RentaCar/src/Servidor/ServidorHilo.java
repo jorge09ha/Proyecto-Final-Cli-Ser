@@ -493,36 +493,110 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "verRentados":
+                    case "buscarRentados"://------------------------------------> Buscar Rentados
+                        out.writeUTF("id"); // preguta por id 
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
+
+                        strToClient = buscarAuto(id); // client      
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        id = strToClient;
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
+
+                        if (id == "correcto") {
+
+                            strFromServer = in.readUTF();
+
+                            if ("servidorA".equals(strFromServer)) {
+                                envioArchivoJson();
+                                System.out.println("-Server envio json");//print----------------------#
+                            }
+                            strToClient = "objetodeJasonAUTO()"; // client                    
+                            out.writeUTF(strToClient); // cliente
+                            out.flush();
+
+                            strFromServer = in.readUTF(); // lee msg stop
+
+                            strFromServer = "stop";
+                            out.writeUTF(strFromServer); //se envia un stop al cliente
+                            out.flush();
+                        }
+
+                        strFromServer = in.readUTF(); // lee msg stop
+
+                        strFromServer = "stop";
+                        out.writeUTF(strFromServer); //se envia un stop al cliente
+                        out.flush();
+
                         break;
 
-                    case "verDisponibles":
+                    case "buscarDisponibles"://------------------------------------> Buscar Disponibles
+                        out.writeUTF("id"); // preguta por id 
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
+
+                        strToClient = buscarDisponibles(id); // client      
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        id = strToClient;
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
+
+                        if (id == "correcto") {
+
+                            strFromServer = in.readUTF();
+
+                            if ("servidorA".equals(strFromServer)) {
+                                envioArchivoJson();
+                                System.out.println("-Server envio json");//print----------------------#
+                            }
+                            strToClient = "objetodeJasonRENTAR()"; // client                    
+                            out.writeUTF(strToClient); // cliente
+                            out.flush();
+
+                            strFromServer = in.readUTF(); // lee msg stop
+
+                            strFromServer = "stop";
+                            out.writeUTF(strFromServer); //se envia un stop al cliente
+                            out.flush();
+                        }
+
+                        strFromServer = in.readUTF(); // lee msg stop
+
+                        strFromServer = "stop";
+                        out.writeUTF(strFromServer); //se envia un stop al cliente
+                        out.flush();
+                        
                         break;
 
                     case "home": //------------------------------------> Datos de la ventana HOME
 
-                        strToClient = autosDisponibles(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        strToClient = contarDisponibles(); // el metodo hace un return tipo String con el resultado de lo que hiso
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
                         strFromServer = in.readUTF(); //ok
 
-                        strToClient = autosRentados();
+                        strToClient = contarRentados();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
                         strFromServer = in.readUTF(); //ok
 
-                        strToClient = adminUser();
+                        strToClient = contarUsuarios();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
                         strFromServer = in.readUTF();//ok
 
-                        strToClient = clientUser();
+                        strToClient = contarClientes();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
@@ -850,7 +924,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
         return "error base";
-    }//listo
+    }
 
     public static String eliminarCliente(String id) {
         Cliente cli = new Cliente();
@@ -881,7 +955,7 @@ public class ServidorHilo extends Thread {
             msg = "error base";
             return msg;
         }
-    }//listo
+    }
 
     public static String registrarCliente() {
         int resultado = 0;
@@ -909,7 +983,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
 
-    }//liso
+    }
 
     public static String modificarCliente(String id) {
 
@@ -945,7 +1019,7 @@ public class ServidorHilo extends Thread {
         }
         return "error base";
 
-    }//listo
+    }
 
     /*
     *
@@ -992,7 +1066,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
         return "error base";
-    }//listo
+    }
 
     public static String eliminarUsuario(String id) {
         Cliente cli = new Cliente();
@@ -1051,7 +1125,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
 
-    }//listo
+    }
 
     public static String modificarUsuario(String id) {
 
@@ -1178,7 +1252,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
         return "error base";
-    }//listo
+    }
 
     public static String eliminarAuto(String id) {
         Auto aut = new Auto();
@@ -1209,7 +1283,7 @@ public class ServidorHilo extends Thread {
             msg = "error base";
             return msg;
         }
-    }//listo
+    }
 
     public static String registrarAuto() {
         int resultado = 0;
@@ -1237,7 +1311,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
 
-    }//liso
+    }
 
     public static String modificarAuto(String id) {
 
@@ -1273,14 +1347,14 @@ public class ServidorHilo extends Thread {
         }
         return "error base";
 
-    }//listo
+    }
 
     /*
     *
-    *                   CRUD Rentar
+    *                    Cuenta de listas
     *
      */
-    public static String autosDisponibles() {
+    public static String contarDisponibles() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1307,7 +1381,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String clientUser() {
+    public static String contarClientes() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1334,7 +1408,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String autosRentados() {
+    public static String contarRentados() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1361,7 +1435,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String adminUser() {
+    public static String contarUsuarios() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1406,6 +1480,11 @@ public class ServidorHilo extends Thread {
         return msg;
     }
 
+    /*
+    *
+    *                    Cuenta de listas
+    *
+     */
     public static String rentar() {
         int resultado = 0;
         String msg = "";
@@ -1470,6 +1549,93 @@ public class ServidorHilo extends Thread {
             msg = "error base";
             return msg;
         }
-    }//listo
+    }
+
+    public static String buscarRentados(String id) {
+        Rentar ren = new Rentar();
+        Connection conn = getConnection();
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
+                String sql = "SELECT * FROM rentados WHERE idauto = '" + id + "'";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+                    ren.setPlaca(rs.getString("idauto"));
+                    ren.setMarca(rs.getString("marca"));
+                    ren.setModelo(rs.getString("modelo"));
+                    ren.setCedula(rs.getString("idcliente"));
+                    ren.setNombre(rs.getString("nombre"));
+                    ren.setApellido1(rs.getString("apellido1"));
+                    ren.setApellido2(rs.getString("apellido2"));
+                    ren.setEmail(rs.getString("correoElectronico"));
+                    ren.setTelefono(rs.getString("telefono"));
+
+                    objetoaJsonRENTAR(ren);
+
+                    msg = "correcto";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+        return "error base";
+    }
+
+    public static String buscarDisponibles(String id) {
+        Auto auto = new Auto();
+        Connection conn = getConnection();
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
+                String sql = "SELECT * FROM autos WHERE rentar='D' AND idauto= '" + id + "'";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+                    auto.setPlaca(rs.getString("idauto"));
+                    auto.setMarca(rs.getString("marca"));
+                    auto.setModelo(rs.getString("modelo"));
+                    auto.setAnnio(rs.getString("annio"));
+                    auto.setTransmision(rs.getString("transmision"));
+                    auto.setRentar(rs.getString("rentar"));
+
+                    objetoaJsonAUTO(auto);
+
+                    msg = "correcto";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+        return "error base";
+    }
 
 }
