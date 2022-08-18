@@ -8,10 +8,13 @@ public class Rentar extends Cliente {
     /*
     Esta clase hereda de Cliente e incorpora las variables de vehiculo.
      */
-    protected String placa, marca, modelo, annio, transmision;
+    protected String placa, marca, modelo;
 
-    public Rentar(String cedula, String nombre, String apellido1, String apellido2, String email, String telefono) {
+    public Rentar(String placa, String marca, String modelo, String cedula, String nombre, String apellido1, String apellido2, String email, String telefono) {
         super(cedula, nombre, apellido1, apellido2, email, telefono);
+        this.placa = placa;
+        this.marca = marca;
+        this.modelo = modelo;
     }
 
     @Override
@@ -106,22 +109,6 @@ public class Rentar extends Cliente {
 
     public void setModelo(String modelo) {
         this.modelo = modelo;
-    }
-
-    public String getAnnio() {
-        return annio;
-    }
-
-    public void setAnnio(String annio) {
-        this.annio = annio;
-    }
-
-    public String getTransmision() {
-        return transmision;
-    }
-
-    public void setTransmision(String transmision) {
-        this.transmision = transmision;
     }
 
 }

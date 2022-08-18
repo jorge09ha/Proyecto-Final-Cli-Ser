@@ -4,6 +4,7 @@ import Conexion.ClienteHilo;
 import Conexion.ClienteSocket;
 import ClasesRentaCar.Cliente;
 import ClasesRentaCar.Auto;
+import ClasesRentaCar.Rentar;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.*;
@@ -215,7 +216,7 @@ public class RentarGUI extends javax.swing.JPanel {
                 btnBuscarActionPerformed(evt);
             }
         });
-        add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 60, 110, 30));
+        add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 110, 30));
 
         btmRentar.setBackground(new java.awt.Color(18, 90, 173));
         btmRentar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -230,7 +231,7 @@ public class RentarGUI extends javax.swing.JPanel {
         });
         add(btmRentar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, 110, 30));
 
-        TableAuto.setBackground(new java.awt.Color(255, 255, 255));
+        TableAuto.setBackground(new java.awt.Color(204, 204, 204));
         TableAuto.setForeground(new java.awt.Color(0, 0, 0));
         TableAuto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -263,7 +264,7 @@ public class RentarGUI extends javax.swing.JPanel {
 
         jScrollPane3.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
-        TableCliente.setBackground(new java.awt.Color(255, 255, 255));
+        TableCliente.setBackground(new java.awt.Color(204, 204, 204));
         TableCliente.setForeground(new java.awt.Color(0, 0, 0));
         TableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -350,7 +351,7 @@ public class RentarGUI extends javax.swing.JPanel {
                 btnBucarPlacaActionPerformed(evt);
             }
         });
-        add(btnBucarPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, 110, 30));
+        add(btnBucarPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, 110, 30));
 
         btncancelar.setBackground(new java.awt.Color(255, 102, 102));
         btncancelar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -381,6 +382,7 @@ public class RentarGUI extends javax.swing.JPanel {
             cli = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
 
             cli = cliSELECT;
+            System.out.println(cliSELECT);
 
             if ("correcto".equals(mensaje)) {
                 presentarTableCliente(cli);
@@ -418,25 +420,44 @@ public class RentarGUI extends javax.swing.JPanel {
     private void btmRentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmRentarActionPerformed
         // TODO add your handling code here:
         try {
+
             if (camposVacios() == false) {
-                int response = JOptionPane.showConfirmDialog(null, "El cliente cedula: " + txtid.getText()
-                        + " rentara el auto placa: " + txtPlaca.getText() + "\n" + "¿Desea continuar?",
-                        "Agregar Auto", JOptionPane.YES_NO_OPTION);
+
+                int response = JOptionPane.showConfirmDialog(null, "Desea Registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
 
                 if (response == JOptionPane.YES_OPTION) {
 
-                    Cliente cli = new Cliente();
-                    //cli = ClientSocket.buscarcliente(txtid.getText());
+                    Rentar rentar = new Rentar();
 
-                    Auto aut = new Auto();
-                    //aut = ClientSocket.verEstados(txtPlaca.getText(), "D");
+                    rentar.setCedula(cliSELECT.getCedula());
+                    rentar.setNombre(cliSELECT.getNombre());
+                    rentar.setApellido1(cliSELECT.getApellido1());
+                    rentar.setApellido2(cliSELECT.getApellido2());
+                    rentar.setEmail(cliSELECT.getEmail());
+                    rentar.setTelefono(cliSELECT.getTelefono());
+                    rentar.setPlaca(autSELECT.getPlaca());
+                    rentar.setMarca(autSELECT.getMarca());
+                    rentar.setModelo(autSELECT.getModelo());
 
-                    if (aut != null && cli != null) {
-                        //ClientSocket.addRentados(aut, cli);
+                    ClienteHilo.objetoaJsonRENTAR(rentar);
+                    String task = "rentar";
+                    rentar = (Rentar) ClienteSocket.clientToServer(task, rentar.getPlaca());
+                    // sobreescrivo el cli con el return de servidor protocolo, se usa el campo de nombre como propiedad de msg
+
+                    rentar = ClienteHilo.archivoJsonAObjetoRENTAR();///error null
+
+                    if ("correcto".equals(rentar.getNombre())) { // se evalua si la propiedad nombre tiene como msg "correcto"
+
+                        txtid.setText("Ingrese la identificacion");
+                        txtPlaca.setText("");
+                        presentarTableCliente(null);
+                        ventanasMsjs(); /////ventanas
                     } else {
-                        JOptionPane.showMessageDialog(null, "HAY UN ERROR", "ERROR", 0);
+                        txtid.setText("Ingrese la identificacion");
+                        txtPlaca.setText("");
+                        presentarTableCliente(null);
+                        ventanasMsjs(); /////ventanas
                     }
-
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
                 }
@@ -444,9 +465,9 @@ public class RentarGUI extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Revise he intente nuevamente", "Campos en Blanco", 1);
             }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
 
         }
-
     }//GEN-LAST:event_btmRentarActionPerformed
 
     private void txtPlacaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPlacaMousePressed
@@ -462,27 +483,32 @@ public class RentarGUI extends javax.swing.JPanel {
     private void btnBucarPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBucarPlacaActionPerformed
         // TODO add your handling code here:
         try {
+
             Auto aut = new Auto();
 
-            aut.setPlaca(txtid.getText());
+            aut.setPlaca(txtPlaca.getText());
             ClienteHilo.objetoaJsonAUTO(aut);
 
-            String task = "verRentados";
+            String task = "buscarAuto";
 
             aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
             aut = ClienteHilo.archivoJsonAObjetoAUTO();
 
             aut = ClienteHilo.archivoJsonAObjetoAUTO();///error null
-
+            
             aut = autSELECT;
+            System.out.println(autSELECT.getPlaca());
 
             if ("correcto".equals(mensaje)) {
-                presentarTableAuto();
+                txtPlaca.setText(aut.getPlaca());
                 ventanasMsjs();
             } else {
+                txtPlaca.setText("Ingrese la placa");
                 ventanasMsjs();
             }
+
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
 
         }
 

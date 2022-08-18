@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import ClasesRentaCar.Auto;
 import ClasesRentaCar.Cliente;
+import ClasesRentaCar.Rentar;
 import ClasesRentaCar.UserAdmin;
 
 /**
@@ -432,6 +433,18 @@ public class ClienteHilo extends Thread {
 
                     /*----------------------Rentar----------------------*/
                     case "rentar":
+                        out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+                        msg = strFromClient;
+                        cli.setNombre(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
                         break;
 
                     case "retornar":
@@ -607,16 +620,15 @@ public class ClienteHilo extends Thread {
         return null;
     }
 
-    public static Object archivoJsonAObjetoRENTAR() {
+    public static Rentar archivoJsonAObjetoRENTAR() {
         try {
             Gson gson = new Gson();
 
             Reader reader = Files.newBufferedReader(Paths.get("NewFileFromServer.json"));
-            Auto auto = gson.fromJson(reader, Auto.class);
-            Cliente cliente = gson.fromJson(reader, Cliente.class);
+            Rentar rentar = gson.fromJson(reader, Rentar.class);
             reader.close();
 
-            return auto;
+            return rentar;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -683,14 +695,14 @@ public class ClienteHilo extends Thread {
         }
     }
 
-    public static boolean objetoaJsonRENTAR(Auto aut, Cliente cli) {
+    public static boolean objetoaJsonRENTAR(Rentar rentar) {
         boolean done;
         try {
             Gson gson = new Gson();
             Writer writer = Files.newBufferedWriter(Paths.get("ClientSide.json"));
 
-            gson.toJson(aut, writer);
-            gson.toJson(cli, writer);
+            gson.toJson(rentar, writer);
+            gson.toJson(rentar, writer);
             writer.close();
 
             envioArchivoJson();

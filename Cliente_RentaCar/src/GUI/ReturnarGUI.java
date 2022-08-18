@@ -135,7 +135,7 @@ public class ReturnarGUI extends javax.swing.JPanel {
         });
         add(btmRetornar, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 110, 30));
 
-        TableRentados.setBackground(new java.awt.Color(255, 255, 255));
+        TableRentados.setBackground(new java.awt.Color(204, 204, 204));
         TableRentados.setForeground(new java.awt.Color(0, 0, 0));
         TableRentados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

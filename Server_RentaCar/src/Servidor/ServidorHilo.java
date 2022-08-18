@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import ClasesRentaCar.Cliente;
+import ClasesRentaCar.Rentar;
 
 /**
  * @author Jorge Hernandez Araya
@@ -455,7 +456,20 @@ public class ServidorHilo extends Thread {
 
                         break;
                     /*----------------------Rentar---------------------*/
-                    case "rentar":
+                    case "rentar"://------------------------------------> Rentar
+
+                        strToClient = rentar(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+
+                        out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
+                        out.flush();
+
+                        strFromServer = in.readUTF(); // lee msg stop del cliente
+
+                        strToClient = "stop";
+                        out.writeUTF(strToClient);
+                        out.flush();
+
                         break;
 
                     case "retornar":
@@ -640,6 +654,23 @@ public class ServidorHilo extends Thread {
         }
     }
 
+    public static boolean objetoaJsonRENTAR(Rentar rentar) {
+        boolean done;
+        try {
+            Gson gson = new Gson();
+            Writer writer = Files.newBufferedWriter(Paths.get("ServerSide.json"));
+
+            gson.toJson(rentar, writer);
+            writer.close();
+
+            return done = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return done = false;
+        }
+    }
+
     /*-----------------Objecto a JSON-----------------*/
     public static Cliente archivoJsonAObjetoCLIENTE(String seleccion) {
         try {
@@ -708,6 +739,31 @@ public class ServidorHilo extends Thread {
             reader.close();
 
             return aut;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static Rentar archivoJsonAObjetoRENTAR(String seleccion) {
+        try {
+            Gson gson = new Gson();
+
+            Reader reader = null;
+
+            if ("default".equals(seleccion)) {
+
+                reader = Files.newBufferedReader(Paths.get("NewFileFromClient.json"));
+            } else {
+                reader = Files.newBufferedReader(Paths.get("ServerSide.json"));
+            }
+            Rentar rentar = gson.fromJson(reader, Rentar.class);
+
+            reader.close();
+
+            return rentar;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1330,6 +1386,37 @@ public class ServidorHilo extends Thread {
             return msg;
         }
         return msg;
+    }
+
+    public static String rentar() {
+        int resultado = 0;
+        String msg = "";
+        Connection conn = getConnection();
+
+        Rentar re = archivoJsonAObjetoRENTAR("default");
+
+        try {
+
+            String sql = "INSERT INTO rentados  Values ('" + re.getPlaca() + "','" + re.getMarca() + "','"
+                    + re.getModelo() + "','" + re.getCedula() + "','" + re.getNombre() + "','"
+                    + re.getApellido1() + "','" + re.getApellido2() + "','" + re.getEmail() + "','"
+                    + re.getTelefono() + "')";
+
+            Statement st = conn.createStatement();
+            resultado = st.executeUpdate(sql);
+
+            if (resultado > 0) {
+                msg = "correcto";
+                return msg;
+            } else {
+                msg = "error almacenar";
+                return msg;
+            }
+
+        } catch (Exception e) {
+            msg = "duplicado";
+            return msg;
+        }
     }
 
 }
