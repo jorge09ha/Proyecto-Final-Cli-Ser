@@ -44,6 +44,18 @@ public class RentarGUI extends javax.swing.JPanel {
         }
     }
 
+    private void presentarTableAutoSelect(Auto aut) {
+        try {
+            DefaultTableModel modelo = (DefaultTableModel) TableAuto.getModel();
+            modelo.setRowCount(0);
+
+            int numFila = 0;
+            modelo.insertRow(numFila, new Object[]{aut.getPlaca(), aut.getMarca(), aut.getModelo(), aut.getAnnio(), aut.getTransmision()});
+        } catch (Exception e) {
+
+        }
+    }
+
     public static Connection getConnection() {
 
         Connection conn = null;
@@ -99,18 +111,6 @@ public class RentarGUI extends javax.swing.JPanel {
         }
     }
 
-    private void showAuto() {
-        DefaultTableModel modelo = (DefaultTableModel) TableAuto.getModel();
-        modelo.setRowCount(0);
-
-        Auto aut = new Auto();
-        //aut = ClientSocket.buscarAuto(txtPlaca.getText());
-
-        int numFila = 0;
-        modelo.insertRow(numFila, new Object[]{aut.getPlaca(), aut.getMarca(), aut.getModelo(), aut.getAnnio(), aut.getTransmision(), aut.getRentar()});
-
-    }
-
     public boolean camposVacios() {
 
         if ((txtid.equals("")) || (txtid.getText().equals("Ingrese la identificacion"))
@@ -132,15 +132,15 @@ public class RentarGUI extends javax.swing.JPanel {
                 break;
 
             case "duplicado":
-                JOptionPane.showMessageDialog(null, "La cédula ya existe.", "Error", 0);
+                JOptionPane.showMessageDialog(null, "El auto ya esta rentado.", "Error", 0);
                 break;
 
             case "no existe":
-                JOptionPane.showMessageDialog(null, "El usuario no existe.\n" + "Puede agregarlos desde la sección clientes", "Info", 1);
+                JOptionPane.showMessageDialog(null, "El dato ingresado no existe", "Info", 1);
                 break;
 
             case "id vacio":
-                JOptionPane.showMessageDialog(null, "El campo de identificación no puede estar vacio", "Campo vacio", 2);
+                JOptionPane.showMessageDialog(null, "El campo de id no puede estar vacio", "Campo vacio", 2);
                 break;
 
             case "error base":
@@ -369,23 +369,22 @@ public class RentarGUI extends javax.swing.JPanel {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         try {
-            Cliente cli = new Cliente();
+            //Cliente cli = new Cliente();
 
-            cli.setCedula(txtid.getText());
-            ClienteHilo.objetoaJsonCLIENTE(cli);
+            cliSELECT.setCedula(txtid.getText());
+            ClienteHilo.objetoaJsonCLIENTE(cliSELECT);
 
             String task = "buscarCliente";
 
-            cli = (Cliente) ClienteSocket.clientToServer(task, cli.getCedula());
-            cli = ClienteHilo.archivoJsonAObjetoCLIENTE();
+            cliSELECT = (Cliente) ClienteSocket.clientToServer(task, cliSELECT.getCedula());
+            cliSELECT = ClienteHilo.archivoJsonAObjetoCLIENTE();
 
-            cli = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
+            cliSELECT = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
 
-            cli = cliSELECT;
-            System.out.println(cliSELECT);
+            System.out.println(cliSELECT.getCedula());
 
             if ("correcto".equals(mensaje)) {
-                presentarTableCliente(cli);
+                presentarTableCliente(cliSELECT);
                 ventanasMsjs();
             } else {
                 ventanasMsjs();
@@ -423,7 +422,7 @@ public class RentarGUI extends javax.swing.JPanel {
 
             if (camposVacios() == false) {
 
-                int response = JOptionPane.showConfirmDialog(null, "Desea Registrar al usuario?", "Agregar Cliente", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Desea rentar el auto "+autSELECT.getPlaca()+"?", "Rentar auto", JOptionPane.YES_NO_OPTION);
 
                 if (response == JOptionPane.YES_OPTION) {
 
@@ -451,6 +450,7 @@ public class RentarGUI extends javax.swing.JPanel {
                         txtid.setText("Ingrese la identificacion");
                         txtPlaca.setText("");
                         presentarTableCliente(null);
+                        presentarTableAuto();
                         ventanasMsjs(); /////ventanas
                     } else {
                         txtid.setText("Ingrese la identificacion");
@@ -484,23 +484,22 @@ public class RentarGUI extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
 
-            Auto aut = new Auto();
-
-            aut.setPlaca(txtPlaca.getText());
-            ClienteHilo.objetoaJsonAUTO(aut);
+            autSELECT.setPlaca(txtPlaca.getText());
+            ClienteHilo.objetoaJsonAUTO(autSELECT);
 
             String task = "buscarAuto";
 
-            aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
-            aut = ClienteHilo.archivoJsonAObjetoAUTO();
+            autSELECT = (Auto) ClienteSocket.clientToServer(task, autSELECT.getPlaca());
+            autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();
 
-            aut = ClienteHilo.archivoJsonAObjetoAUTO();///error null
-            
-            aut = autSELECT;
+            autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();///error null
+
+            autSELECT = autSELECT;
             System.out.println(autSELECT.getPlaca());
 
             if ("correcto".equals(mensaje)) {
-                txtPlaca.setText(aut.getPlaca());
+                txtPlaca.setText(autSELECT.getPlaca());
+                presentarTableAutoSelect(autSELECT);
                 ventanasMsjs();
             } else {
                 txtPlaca.setText("Ingrese la placa");

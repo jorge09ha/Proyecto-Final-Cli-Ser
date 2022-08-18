@@ -702,7 +702,6 @@ public class ClienteHilo extends Thread {
             Writer writer = Files.newBufferedWriter(Paths.get("ClientSide.json"));
 
             gson.toJson(rentar, writer);
-            gson.toJson(rentar, writer);
             writer.close();
 
             envioArchivoJson();
