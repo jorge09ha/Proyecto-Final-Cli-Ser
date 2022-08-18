@@ -6,7 +6,7 @@ package ClasesRentaCar;
 public class Auto extends Vehiculo {
 
     /*
-    Esta clase hereda de auto e incorpora una nueva variable rentar.
+    Esta clase hereda de Vehiculo e incorpora una nueva variable rentar.
     indica con una R si el vehículo está rentado o una D si el vehículo está disponible.
      */
     protected String rentar;
