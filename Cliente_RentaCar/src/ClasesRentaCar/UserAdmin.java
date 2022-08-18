@@ -1,9 +1,16 @@
 package ClasesRentaCar;
 
+import static Conexion.ClienteHilo.envioArchivoJson;
+import com.google.gson.Gson;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * @author Jorge Hernandez Araya
  */
-public class UserAdmin extends Persona {
+public class UserAdmin extends Persona implements IntJsonObj<UserAdmin> {
 
     /*
     Esta clase hereda de persona e incorpora dos nuevas variables user y pass.
@@ -74,6 +81,46 @@ public class UserAdmin extends Persona {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    /*------------------------JSON to Object---------------------*/
+    @Override
+    public UserAdmin archivoJsonAObjeto() {
+        try {
+            Gson gson = new Gson();
+
+            Reader reader = Files.newBufferedReader(Paths.get("NewFileFromServer.json"));
+            UserAdmin usu = gson.fromJson(reader, UserAdmin.class
+            );
+            reader.close();
+
+            return usu;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*------------------------Object a JSON---------------------*/
+    @Override
+    public boolean objetoAJson(UserAdmin usu) {
+        boolean done;
+        try {
+            Gson gson = new Gson();
+            Writer writer = Files.newBufferedWriter(Paths.get("ClientSide.json"));
+
+            gson.toJson(usu, writer);
+            writer.close();
+
+            envioArchivoJson();
+
+            return done = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return done = false;
+        }
     }
 
 }

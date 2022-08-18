@@ -1,15 +1,20 @@
 package ClasesRentaCar;
 
+import com.google.gson.Gson;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * @author Jorge Hernandez Araya
  */
-public class UserAdmin extends Persona {
+public class UserAdmin extends Persona implements IntJsonObj<UserAdmin> {
 
     /*
     Esta clase hereda de persona e incorpora dos nuevas variables user y pass.
     Indica el usuario y la contraseña de inicio de sesión del aplicativo
      */
-
     protected String user, pass;
 
     public UserAdmin(String user, String pass, String cedula, String nombre, String apellido1, String apellido2) {
@@ -75,6 +80,52 @@ public class UserAdmin extends Persona {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    /*----------------------JSON a Objecto----------------------*/
+    @Override
+    public UserAdmin archivoJsonAObjeto(String seleccion) {
+        try {
+            Gson gson = new Gson();
+
+            Reader reader = null;
+
+            if ("default".equals(seleccion)) {
+
+                reader = Files.newBufferedReader(Paths.get("NewFileFromClient.json"));
+            } else {
+                reader = Files.newBufferedReader(Paths.get("ServerSide.json"));
+            }
+            UserAdmin usu = gson.fromJson(reader, UserAdmin.class);
+
+            reader.close();
+
+            return usu;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /*-----------------Objecto a JSON-----------------*/
+    @Override
+    public boolean objetoAJson(UserAdmin usu) {
+        boolean done;
+        try {
+            Gson gson = new Gson();
+            Writer writer = Files.newBufferedWriter(Paths.get("ServerSide.json"));
+
+            gson.toJson(usu, writer);
+            writer.close();
+
+            return done = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return done = false;
+        }
     }
 
 }

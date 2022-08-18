@@ -1,9 +1,16 @@
 package ClasesRentaCar;
 
+import static Conexion.ClienteHilo.envioArchivoJson;
+import com.google.gson.Gson;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * @author Jorge Hernandez Araya
  */
-public class Auto extends Vehiculo {
+public class Auto extends Vehiculo implements IntJsonObj<Auto> {
 
     /*
     Esta clase hereda de Vehiculo e incorpora una nueva variable rentar.
@@ -75,6 +82,46 @@ public class Auto extends Vehiculo {
     @Override
     public void setTransmision(String transmision) {
         this.transmision = transmision;
+    }
+
+    /*------------------------JSON to Object---------------------*/
+    @Override
+    public Auto archivoJsonAObjeto() {
+        try {
+            Gson gson = new Gson();
+
+            Reader reader = Files.newBufferedReader(Paths.get("NewFileFromServer.json"));
+            Auto auto = gson.fromJson(reader, Auto.class
+            );
+            reader.close();
+
+            return auto;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*------------------------Object to JSON---------------------*/
+    @Override
+    public boolean objetoAJson(Auto aut) {
+        boolean done;
+        try {
+            Gson gson = new Gson();
+            Writer writer = Files.newBufferedWriter(Paths.get("ClientSide.json"));
+
+            gson.toJson(aut, writer);
+            writer.close();
+
+            envioArchivoJson();
+
+            return done = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return done = false;
+        }
     }
 
 }

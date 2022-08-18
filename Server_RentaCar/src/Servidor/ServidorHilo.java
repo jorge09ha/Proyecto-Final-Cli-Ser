@@ -22,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import ClasesRentaCar.Cliente;
 
 /**
  * @author Jorge Hernandez Araya
@@ -44,11 +45,10 @@ public class ServidorHilo extends Thread {
         this.in = in;
         this.out = out;
     }
-    
+
     /*
     Clase donde se inicia la comunicación con el cliente y el servidor para hacer la ejecución según la tarea
-    */
-
+     */
     @Override
     public void run() {
 
@@ -72,7 +72,7 @@ public class ServidorHilo extends Thread {
 
                         strToClient = registrarCliente(); // el metodo hace un return tipo String con el resultado de lo que hiso
                         System.out.println("-Resultado: " + strToClient);//print---------------#
-                        
+
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
@@ -187,7 +187,7 @@ public class ServidorHilo extends Thread {
 
                         strToClient = registrarUsuario(); // el metodo hace un return tipo String con el resultado de lo que hiso
                         System.out.println("-Resultado: " + strToClient);//print---------------#
-                        
+
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
@@ -343,7 +343,7 @@ public class ServidorHilo extends Thread {
 
                         strToClient = registrarAuto(); // el metodo hace un return tipo String con el resultado de lo que hiso
                         System.out.println("-Resultado: " + strToClient);//print---------------#
-                        
+
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
@@ -519,7 +519,7 @@ public class ServidorHilo extends Thread {
             } catch (IOException e) {
             }
         }
-        System.out.println("*Cliente DESCONECTADO: " + sc.getInetAddress().getHostAddress()+":"+sc.getPort()+"\n");
+        System.out.println("*Cliente DESCONECTADO: " + sc.getInetAddress().getHostAddress() + ":" + sc.getPort() + "\n");
     }
 
     /*--------Conexion puerto 5000 entrada de archivos---------*/

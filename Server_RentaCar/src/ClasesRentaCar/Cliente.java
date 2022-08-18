@@ -1,14 +1,19 @@
 package ClasesRentaCar;
 
+import com.google.gson.Gson;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * @author Jorge Hernandez Araya
  */
-public class Cliente extends Persona {
+public class Cliente extends Persona implements IntJsonObj<Cliente> {
 
     /*
     Esta clase hereda de persona e incorpora dos nuevas variables email y teléfono.
      */
-
     protected String email, telefono;
 
     public Cliente(String email, String telefono, String cedula, String nombre, String apellido1, String apellido2) {
@@ -74,6 +79,52 @@ public class Cliente extends Persona {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    /*------------------------JSON a Object---------------------*/
+    @Override
+    public Cliente archivoJsonAObjeto(String seleccion) {
+        try {
+            Gson gson = new Gson();
+
+            Reader reader = null;
+
+            if ("default".equals(seleccion)) {
+
+                reader = Files.newBufferedReader(Paths.get("NewFileFromClient.json"));
+            } else {
+                reader = Files.newBufferedReader(Paths.get("ServerSide.json"));
+            }
+            Cliente cli = gson.fromJson(reader, Cliente.class);
+
+            reader.close();
+
+            return cli;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /*------------------------Object a JSON---------------------*/
+    @Override
+    public boolean objetoAJson(Cliente cli) {
+        boolean done;
+        try {
+            Gson gson = new Gson();
+            Writer writer = Files.newBufferedWriter(Paths.get("ServerSide.json"));
+
+            gson.toJson(cli, writer);
+            writer.close();
+
+            return done = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return done = false;
+        }
     }
 
 }

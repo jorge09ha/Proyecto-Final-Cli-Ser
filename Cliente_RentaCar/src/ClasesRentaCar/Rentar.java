@@ -6,7 +6,7 @@ package ClasesRentaCar;
 public class Rentar extends Cliente {
 
     /*
-    Esta clase hereda de Vehiculo e incorpora las variables de cliente.
+    Esta clase hereda de Cliente e incorpora las variables de vehiculo.
      */
     protected String placa, marca, modelo, annio, transmision;
 
