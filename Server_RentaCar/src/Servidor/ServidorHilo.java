@@ -473,6 +473,23 @@ public class ServidorHilo extends Thread {
                         break;
 
                     case "retornar":
+                        out.writeUTF("id"); // preguta por id
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
+
+                        strToClient = eliminarAuto(id); // client    
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
+
+                        strFromServer = in.readUTF(); // lee msg stop
+
+                        strToClient = "stop";
+                        out.writeUTF(strToClient);
+                        out.flush();
+
                         break;
 
                     case "verRentados":
@@ -483,28 +500,28 @@ public class ServidorHilo extends Thread {
 
                     case "home": //------------------------------------> Datos de la ventana HOME
 
-                        strToClient = autosDisponibles(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        strToClient = contarDisponibles(); // el metodo hace un return tipo String con el resultado de lo que hiso
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
                         strFromServer = in.readUTF(); //ok
 
-                        strToClient = autosRentados();
+                        strToClient = contarRentados();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
                         strFromServer = in.readUTF(); //ok
 
-                        strToClient = adminUser();
+                        strToClient = contarUser();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
                         strFromServer = in.readUTF();//ok
 
-                        strToClient = clientUser();
+                        strToClient = contarClientes();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
@@ -1259,10 +1276,10 @@ public class ServidorHilo extends Thread {
 
     /*
     *
-    *                   CRUD Rentar
+    *                   Cuenta datos tablas
     *
      */
-    public static String autosDisponibles() {
+    public static String contarDisponibles() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1289,7 +1306,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String clientUser() {
+    public static String contarClientes() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1316,7 +1333,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String autosRentados() {
+    public static String contarRentados() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1343,7 +1360,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String adminUser() {
+    public static String contarUser() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1370,6 +1387,11 @@ public class ServidorHilo extends Thread {
         }
     }
 
+    /*
+    *
+    *                   Cuenta datos tablas
+    *
+     */
     public static String tablaAutos() {
         Connection conn = getConnection();
 
@@ -1391,21 +1413,33 @@ public class ServidorHilo extends Thread {
     public static String rentar() {
         int resultado = 0;
         String msg = "";
+
         Connection conn = getConnection();
 
         Rentar re = archivoJsonAObjetoRENTAR("default");
 
+        String nom = re.getNombre();
+        String ape1 = re.getApellido1();
+        String ape2 = re.getApellido2();
+        String ema = re.getEmail();
+        String tel = re.getTelefono();
+        String pla = re.getPlaca();
+        String mar = re.getMarca();
+        String model = re.getModelo();
+
+        String query = "INSERT INTO rentados (nombre, apellido1, apellido2, correoElectronico, telefono, idauto, marca, modelo) VALUES ('"
+                + nom + "','" + ape1 + "','" + ape2 + "','" + ema + "','" + tel + "','" + pla + "','" + mar + "','" + model + "')";
+
         try {
 
-            String sql = "INSERT INTO rentados  Values ('" + re.getPlaca() + "','" + re.getMarca() + "','"
-                    + re.getModelo() + "','" + re.getCedula() + "','" + re.getNombre() + "','"
-                    + re.getApellido1() + "','" + re.getApellido2() + "','" + re.getEmail() + "','"
-                    + re.getTelefono() + "')";
+            String sql = query;
 
             Statement st = conn.createStatement();
             resultado = st.executeUpdate(sql);
 
             if (resultado > 0) {
+                sql = "UPDATE autos SET rentar= 'R' WHERE idauto = '" + re.getPlaca() + "'";
+                resultado = st.executeUpdate(sql);
                 msg = "correcto";
                 return msg;
             } else {
@@ -1414,6 +1448,7 @@ public class ServidorHilo extends Thread {
             }
 
         } catch (Exception e) {
+            System.out.println(e);
             msg = "duplicado";
             return msg;
         }
