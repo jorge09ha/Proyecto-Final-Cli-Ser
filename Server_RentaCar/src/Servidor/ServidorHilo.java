@@ -492,10 +492,85 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "verRentados":
+                    case "buscarRentar"://------------------------------------> Buscar rentados
+
+                        out.writeUTF("id"); // preguta por id 
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
+
+                        strToClient = buscarRentar(id); // client      
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        id = strToClient;
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
+
+                        if (id == "correcto") {
+
+                            strFromServer = in.readUTF();
+
+                            if ("servidorA".equals(strFromServer)) {
+                                envioArchivoJson();
+                                System.out.println("-Server envio json");//print----------------------#
+                            }
+                            strToClient = "objetodeJasonRENTAR()"; // client                    
+                            out.writeUTF(strToClient); // cliente
+                            out.flush();
+
+                            strFromServer = in.readUTF(); // lee msg stop
+
+                            strFromServer = "stop";
+                            out.writeUTF(strFromServer); //se envia un stop al cliente
+                            out.flush();
+                        }
+
+                        strFromServer = in.readUTF(); // lee msg stop
+
+                        strFromServer = "stop";
+                        out.writeUTF(strFromServer); //se envia un stop al cliente
+                        out.flush();
+
                         break;
 
-                    case "verDisponibles":
+                    case "buscarDisponibles"://------------------------------------> Buscar autos disponibles
+                        out.writeUTF("id"); // preguta por id 
+                        out.flush();
+
+                        id = in.readUTF(); //recibe el ID
+                        System.out.println("-ID: " + id);//print-------------------------------------#
+
+                        strToClient = buscarDisponibles(id); // client      
+                        System.out.println("-Resultado: " + strToClient);//print---------------#
+                        id = strToClient;
+                        out.writeUTF(strToClient); // cliente
+                        out.flush();
+
+                        if (id == "correcto") {
+
+                            strFromServer = in.readUTF();
+
+                            if ("servidorA".equals(strFromServer)) {
+                                envioArchivoJson();
+                                System.out.println("-Server envio json");//print----------------------#
+                            }
+                            strToClient = "objetodeJasonAUTO()"; // client                    
+                            out.writeUTF(strToClient); // cliente
+                            out.flush();
+
+                            strFromServer = in.readUTF(); // lee msg stop
+
+                            strFromServer = "stop";
+                            out.writeUTF(strFromServer); //se envia un stop al cliente
+                            out.flush();
+                        }
+
+                        strFromServer = in.readUTF(); // lee msg stop
+
+                        strFromServer = "stop";
+                        out.writeUTF(strFromServer); //se envia un stop al cliente
+                        out.flush();
+
                         break;
 
                     case "home": //------------------------------------> Datos de la ventana HOME
@@ -1416,29 +1491,35 @@ public class ServidorHilo extends Thread {
 
         Connection conn = getConnection();
 
-        Rentar re = archivoJsonAObjetoRENTAR("default");
+        Rentar rent = archivoJsonAObjetoRENTAR("default");
 
-        String nom = re.getNombre();
-        String ape1 = re.getApellido1();
-        String ape2 = re.getApellido2();
-        String ema = re.getEmail();
-        String tel = re.getTelefono();
-        String pla = re.getPlaca();
-        String mar = re.getMarca();
-        String model = re.getModelo();
+        String placa = rent.getPlaca();
+        String marca = rent.getMarca();
+        String modelo = rent.getModelo();
+        String annio = rent.getAnnio();
+        String transmision = rent.getTransmision();
+        String cedula = rent.getCedula();
+        String nombre = rent.getNombre();
+        String apellido1 = rent.getApellido1();
+        String apellido2 = rent.getApellido2();
+        String correoElectronico = rent.getEmail();
+        String telefono = rent.getTelefono();
+//
+//        String query = "INSERT INTO rentados (nombre, apellido1, apellido2, correoElectronico, telefono, idauto, marca, modelo) VALUES ('"
+//                + nom + "','" + ape1 + "','" + ape2 + "','" + ema + "','" + tel + "','" + pla + "','" + mar + "','" + model + "')";
 
-        String query = "INSERT INTO rentados (nombre, apellido1, apellido2, correoElectronico, telefono, idauto, marca, modelo) VALUES ('"
-                + nom + "','" + ape1 + "','" + ape2 + "','" + ema + "','" + tel + "','" + pla + "','" + mar + "','" + model + "')";
+        String sql = "INSERT INTO rentados  Values ('" + placa + "','" + marca + "','" + modelo + "','" + annio
+                + "','" + transmision + "','" + cedula + "','" + nombre + "','" + apellido1 + "','" + apellido2
+                + "','" + correoElectronico + "','" + telefono + "')";
 
         try {
-
-            String sql = query;
 
             Statement st = conn.createStatement();
             resultado = st.executeUpdate(sql);
 
             if (resultado > 0) {
-                sql = "UPDATE autos SET rentar= 'R' WHERE idauto = '" + re.getPlaca() + "'";
+                sql = "UPDATE autos SET rentar= 'R' WHERE idauto = '" + rent.getPlaca() + "'";
+                conn.createStatement();
                 resultado = st.executeUpdate(sql);
                 msg = "correcto";
                 return msg;
@@ -1452,6 +1533,98 @@ public class ServidorHilo extends Thread {
             msg = "duplicado";
             return msg;
         }
+    }
+
+    public static String buscarRentar(String id) {
+        System.out.println("Metodo ID es " + id);
+        Rentar rent = new Rentar();
+        Connection conn = getConnection();
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
+                String sql = "SELECT * FROM rentados WHERE idauto = '" + id + "'";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+                    rent.setPlaca(rs.getString("idauto"));
+                    rent.setMarca(rs.getString("marca"));
+                    rent.setModelo(rs.getString("modelo"));
+                    rent.setAnnio(rs.getString("annio"));
+                    rent.setTransmision(rs.getString("transmision"));
+                    rent.setCedula(rs.getString("idcliente"));
+                    rent.setNombre(rs.getString("nombre"));
+                    rent.setApellido1(rs.getString("apellido1"));
+                    rent.setApellido2(rs.getString("apellido2"));
+                    rent.setEmail(rs.getString("correoElectronico"));
+                    rent.setTelefono(rs.getString("telefono"));
+
+                    objetoaJsonRENTAR(rent);
+
+                    msg = "correcto";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+        return "error base";
+
+    }
+
+    public static String buscarDisponibles(String id) {
+        Auto aut = new Auto();
+        Connection conn = getConnection();
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
+                String sql = "SELECT * FROM autos where idauto='"+id+"' AND rentar='D'";
+
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+                    aut.setPlaca(rs.getString("idauto"));
+                    aut.setMarca(rs.getString("marca"));
+                    aut.setModelo(rs.getString("modelo"));
+                    aut.setAnnio(rs.getString("annio"));
+                    aut.setTransmision(rs.getString("transmision"));
+                    aut.setRentar(rs.getString("rentar"));
+
+                    objetoaJsonAUTO(aut);
+
+                    msg = "correcto";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+        return "error base";
     }
 
 }

@@ -60,6 +60,7 @@ public class ClienteHilo extends Thread {
             Cliente cli = new Cliente();
             Auto aut = new Auto();
             UserAdmin usu = new UserAdmin();
+            Rentar rent = new Rentar();
 
             while (!strFromClient.equals("stop")) {
                 switch (strToClient) {
@@ -467,10 +468,83 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "buscarRentados"://------------------------------------> Buscar Autos Rentados
+                    case "buscarRentar"://------------------------------------> Buscar Autos Rentados
+
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); // msg correcto
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            if ("objetodeJasonCLIENTE()".equals(strFromClient)) {
+                                cli = archivoJsonAObjetoCLIENTE();
+                            }
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+
+                        } else {
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+                        }
                         break;
 
                     case "buscarDisponibles"://------------------------------------> Buscar Autos Disponibles
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); // msg correcto
+                        msg = strFromClient;
+
+                        if ("correcto".equals(strFromClient)) {
+                            strToClient = "servidorA";
+                            out.writeUTF(strToClient);
+                            out.flush();
+
+                            entradaArchivoJson();
+
+                            strFromClient = in.readUTF();
+
+                            if ("objetodeJasonAUTO()".equals(strFromClient)) {
+                                aut = archivoJsonAObjetoAUTO();
+                            }
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+
+                        } else {
+
+                            out.writeUTF("stop");
+                            out.flush();
+
+                            strFromClient = in.readUTF();
+                        }
                         break;
 
                     case "listaHome"://------------------------------------> Numeros pantalla HOME
@@ -627,8 +701,7 @@ public class ClienteHilo extends Thread {
             Gson gson = new Gson();
 
             Reader reader = Files.newBufferedReader(Paths.get("NewFileFromServer.json"));
-            Auto auto = gson.fromJson(reader, Auto.class
-            );
+            Auto auto = gson.fromJson(reader, Auto.class);
             reader.close();
 
             return auto;

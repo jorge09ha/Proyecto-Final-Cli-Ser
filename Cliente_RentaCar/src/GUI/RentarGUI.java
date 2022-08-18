@@ -11,6 +11,8 @@ import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import static Conexion.ClienteSocket.clientToServer;
+import static Conexion.HomeSocket.homeToServer;
+import static GUI.Home.autosdisponibles;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -30,6 +32,36 @@ public class RentarGUI extends javax.swing.JPanel {
     public RentarGUI() {
         initComponents();
         presentarTableAuto();
+        iniciar();
+
+    }
+
+    private void iniciar() {
+        homeToServer("home", "");
+        if (autosdisponibles.equals("0") || autosdisponibles == null) {
+            estadoAUTOS.setText("NO HAY AUTOS DISPONIBLES");
+            btmRentar.setVisible(false);
+            btnBucarPlaca.setVisible(false);
+            btnBuscar.setVisible(false);
+            btncancelar.setVisible(false);
+            txtPlaca.setVisible(false);
+            txtid.setVisible(false);
+            btmActualizar.setVisible(true);
+        } else {
+            estadoAUTOS.setText("AUTOS: " + autosdisponibles);
+            btmRentar.setVisible(true);
+            btnBucarPlaca.setVisible(true);
+            btnBuscar.setVisible(true);
+            btncancelar.setVisible(true);
+            txtPlaca.setVisible(true);
+            txtid.setVisible(true);
+            btmActualizar.setVisible(true);
+        }
+
+    }
+
+    public static void autosDisponibles(String aut) {
+        autosdisponibles = aut;
     }
 
     private void presentarTableCliente(Cliente cli) {
@@ -113,7 +145,7 @@ public class RentarGUI extends javax.swing.JPanel {
 
     public boolean camposVacios() {
 
-        if ((txtid.equals("")) || (txtid.getText().equals("Ingrese la identificacion"))
+        if ((txtid.equals("")) || (txtid.getText().equals("Ingrese la identificacion") || cliSELECT == null || autSELECT == null)
                 || (txtPlaca.getText().equals("")) || (txtPlaca.getText().equals("Ingrese la placa"))) {
             return true;
         } else {
@@ -178,6 +210,7 @@ public class RentarGUI extends javax.swing.JPanel {
         txtPlaca = new javax.swing.JTextField();
         btnBucarPlaca = new javax.swing.JButton();
         btncancelar = new javax.swing.JButton();
+        estadoAUTOS = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setAlignmentX(0.0F);
@@ -364,6 +397,11 @@ public class RentarGUI extends javax.swing.JPanel {
             }
         });
         add(btncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 110, 30));
+
+        estadoAUTOS.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
+        estadoAUTOS.setForeground(new java.awt.Color(255, 0, 51));
+        estadoAUTOS.setText("NO HAY AUTOS DISPONIBLES");
+        add(estadoAUTOS, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -422,21 +460,23 @@ public class RentarGUI extends javax.swing.JPanel {
 
             if (camposVacios() == false) {
 
-                int response = JOptionPane.showConfirmDialog(null, "Desea rentar el auto "+autSELECT.getPlaca()+"?", "Rentar auto", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Desea rentar el auto " + autSELECT.getPlaca() + "?", "Rentar auto", JOptionPane.YES_NO_OPTION);
 
                 if (response == JOptionPane.YES_OPTION) {
 
                     Rentar rentar = new Rentar();
 
+                    rentar.setPlaca(autSELECT.getPlaca());
+                    rentar.setMarca(autSELECT.getMarca());
+                    rentar.setModelo(autSELECT.getModelo());
+                    rentar.setAnnio(autSELECT.getAnnio());
+                    rentar.setTransmision(autSELECT.getTransmision());
                     rentar.setCedula(cliSELECT.getCedula());
                     rentar.setNombre(cliSELECT.getNombre());
                     rentar.setApellido1(cliSELECT.getApellido1());
                     rentar.setApellido2(cliSELECT.getApellido2());
                     rentar.setEmail(cliSELECT.getEmail());
                     rentar.setTelefono(cliSELECT.getTelefono());
-                    rentar.setPlaca(autSELECT.getPlaca());
-                    rentar.setMarca(autSELECT.getMarca());
-                    rentar.setModelo(autSELECT.getModelo());
 
                     ClienteHilo.objetoaJsonRENTAR(rentar);
                     String task = "rentar";
@@ -451,11 +491,15 @@ public class RentarGUI extends javax.swing.JPanel {
                         txtPlaca.setText("");
                         presentarTableCliente(null);
                         presentarTableAuto();
+                        autSELECT = null;
+                        cliSELECT = null;
                         ventanasMsjs(); /////ventanas
                     } else {
                         txtid.setText("Ingrese la identificacion");
                         txtPlaca.setText("");
                         presentarTableCliente(null);
+                        autSELECT = null;
+                        cliSELECT = null;
                         ventanasMsjs(); /////ventanas
                     }
                 } else {
@@ -487,7 +531,7 @@ public class RentarGUI extends javax.swing.JPanel {
             autSELECT.setPlaca(txtPlaca.getText());
             ClienteHilo.objetoaJsonAUTO(autSELECT);
 
-            String task = "buscarAuto";
+            String task = "buscarDisponibles";
 
             autSELECT = (Auto) ClienteSocket.clientToServer(task, autSELECT.getPlaca());
             autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();
@@ -533,6 +577,7 @@ public class RentarGUI extends javax.swing.JPanel {
     private javax.swing.JButton btnBucarPlaca;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btncancelar;
+    private javax.swing.JLabel estadoAUTOS;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel txt1;
