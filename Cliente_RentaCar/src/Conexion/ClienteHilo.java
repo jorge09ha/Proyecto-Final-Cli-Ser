@@ -459,7 +459,7 @@ public class ClienteHilo extends Thread {
 
                         strFromClient = in.readUTF(); //correcto
                         msg = strFromClient;
-                        ren.setPlaca(msg);
+                        usu.setNombre(msg);
 
                         out.writeUTF("stop");
                         out.flush();

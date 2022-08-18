@@ -480,7 +480,7 @@ public class ServidorHilo extends Thread {
                         id = in.readUTF(); //recibe el ID
                         System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = retornar(id); // client    
+                        strToClient = retornar(id); // client            
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
@@ -570,7 +570,7 @@ public class ServidorHilo extends Thread {
                         strFromServer = "stop";
                         out.writeUTF(strFromServer); //se envia un stop al cliente
                         out.flush();
-                        
+
                         break;
 
                     case "home": //------------------------------------> Datos de la ventana HOME
@@ -1124,7 +1124,6 @@ public class ServidorHilo extends Thread {
             msg = "duplicado";
             return msg;
         }
-
     }
 
     public static String modificarUsuario(String id) {
@@ -1488,16 +1487,27 @@ public class ServidorHilo extends Thread {
     public static String rentar() {
         int resultado = 0;
         String msg = "";
+
         Connection conn = getConnection();
 
         Rentar re = archivoJsonAObjetoRENTAR("default");
 
+        String nom = re.getNombre();
+        String ape1 = re.getApellido1();
+        String ape2 = re.getApellido2();
+        String ema = re.getEmail();
+        String tel = re.getTelefono();
+        String pla = re.getPlaca();
+        String mar = re.getMarca();
+        String model = re.getModelo();
+        String an = re.getAnnio();
+        String tra = re.getTransmision();
+
+        String query = "INSERT INTO rentados (nombre, apellido1, apellido2, correoElectronico, telefono, idauto, marca, modelo, annio, transmision) VALUES ('" + nom + "','" + ape1 + "','" + ape2 + "','" + ema + "','" + tel + "','" + pla + "','" + mar + "','" + model + "','" + an + "','" + tra + "')";
+
         try {
 
-            String sql = "INSERT INTO rentados  Values ('" + re.getPlaca() + "','" + re.getMarca() + "','"
-                    + re.getModelo() + "','" + re.getCedula() + "','" + re.getNombre() + "','"
-                    + re.getApellido1() + "','" + re.getApellido2() + "','" + re.getEmail() + "','"
-                    + re.getTelefono() + "')";
+            String sql = query;
 
             Statement st = conn.createStatement();
             resultado = st.executeUpdate(sql);
@@ -1513,13 +1523,14 @@ public class ServidorHilo extends Thread {
             }
 
         } catch (Exception e) {
+            System.out.println(e);
             msg = "duplicado";
             return msg;
         }
     }
 
     public static String retornar(String id) {
-        Auto aut = new Auto();
+        Rentar rent = new Rentar();
         Connection conn = getConnection();
         int resultado = 0;
         String buscar = id;
@@ -1527,7 +1538,10 @@ public class ServidorHilo extends Thread {
 
         try {
             if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
-                String sql = "DELETE FROM rentados WHERE idauto = '" + id + "'";
+
+                buscar = buscarRentarEliminar(id);
+
+                String sql = "DELETE FROM rentados WHERE idrenta = '" + buscar + "'";
                 Statement st = conn.createStatement();
                 resultado = st.executeUpdate(sql);
 
@@ -1546,6 +1560,7 @@ public class ServidorHilo extends Thread {
                 return msg;
             }
         } catch (Exception e) {
+            System.out.println(e);
             msg = "error base";
             return msg;
         }
@@ -1624,6 +1639,44 @@ public class ServidorHilo extends Thread {
                     objetoaJsonAUTO(auto);
 
                     msg = "correcto";
+                    return msg;
+
+                }
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+        return "error base";
+    }
+    
+        public static String buscarRentarEliminar(String id) {
+        Rentar rent = new Rentar();
+        Connection conn = getConnection();
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
+                String sql = "SELECT * FROM rentados WHERE idauto = '" + id + "'";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+
+                if (!rs.isBeforeFirst()) {
+                    msg = "no existe";
+                    return msg;
+                }
+
+                while (rs.next()) {
+
+                    rent.setPlaca(rs.getString("idrenta"));
+
+                    objetoaJsonRENTAR(rent);
+
+                    msg = rent.getPlaca();
                     return msg;
 
                 }

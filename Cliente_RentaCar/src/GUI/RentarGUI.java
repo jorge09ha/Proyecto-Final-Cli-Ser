@@ -435,6 +435,8 @@ public class RentarGUI extends javax.swing.JPanel {
                     rentar.setPlaca(autSELECT.getPlaca());
                     rentar.setMarca(autSELECT.getMarca());
                     rentar.setModelo(autSELECT.getModelo());
+                    rentar.setAnnio(autSELECT.getAnnio());
+                    rentar.setTransmision(autSELECT.getTransmision());
 
                     ClienteHilo.objetoaJsonRENTAR(rentar);
                     String task = "rentar";

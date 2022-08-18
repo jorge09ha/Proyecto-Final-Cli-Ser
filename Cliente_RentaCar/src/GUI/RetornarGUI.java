@@ -1,8 +1,10 @@
 package GUI;
 
+import ClasesRentaCar.Auto;
 import ClasesRentaCar.Rentar;
 import Conexion.ClienteHilo;
 import Conexion.ClienteSocket;
+import static GUI.RentarGUI.mensaje;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.*;
@@ -15,12 +17,14 @@ import java.sql.Statement;
 /**
  * @author Jorge Hernandez Araya
  */
-public class ReturnarGUI extends javax.swing.JPanel {
+public class RetornarGUI extends javax.swing.JPanel {
 
     static String URL = "jdbc:mysql://localhost:3306/rentacar";
     static String USERNAME = "root";
     static String PASS = "admin01";
     static String mensaje = null;
+    public Auto autSELECT = new Auto();
+    public Rentar rent = new Rentar();
 
     public static Connection getConnection() {
 
@@ -36,7 +40,7 @@ public class ReturnarGUI extends javax.swing.JPanel {
         return conn;
     }
 
-    public ReturnarGUI() {
+    public RetornarGUI() {
         initComponents();
         presentarTableAuto();
     }
@@ -282,6 +286,36 @@ public class ReturnarGUI extends javax.swing.JPanel {
 
     private void btmRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmRetornarActionPerformed
         // TODO add your handling code here:
+        try {
+
+            int response = JOptionPane.showConfirmDialog(null, "Decea retornar el auto?", "Retornar Auto", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+
+                rent.setPlaca(txtId.getText());
+                ClienteHilo.objetoaJsonRENTAR(rent);
+
+                String task = "retornar";
+
+                rent = (Rentar) ClienteSocket.clientToServer(task, rent.getPlaca());
+                rent = ClienteHilo.archivoJsonAObjetoRENTAR();
+
+                System.out.println(rent.getPlaca());
+
+                if ("correcto".equals(mensaje)) {
+                    txtId.setText(rent.getPlaca());
+                    presentarTableAuto();
+                    ventanasMsjs();
+                } else {
+                    txtId.setText("Ingrese la placa");
+                    ventanasMsjs();
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Datos no borrados", "Info", 1);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al borrar. " + e + "", "Error", 0);
+        }
     }//GEN-LAST:event_btmRetornarActionPerformed
 
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
