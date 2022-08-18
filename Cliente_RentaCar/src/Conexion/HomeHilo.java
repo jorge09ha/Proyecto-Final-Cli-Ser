@@ -38,7 +38,6 @@ public class HomeHilo extends Thread {
     /*
     Y lo creado para realizar las distintas tareas de consulta y modificación de datos
      */
-
     @Override
     public void run() {
 
@@ -101,6 +100,7 @@ public class HomeHilo extends Thread {
 
                 }
             }
+            System.out.println("***Cliente DESCONECTADO***\n");
         } catch (IOException ex) {
             Logger.getLogger(HomeHilo.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

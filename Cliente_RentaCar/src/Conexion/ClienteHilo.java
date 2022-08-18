@@ -65,7 +65,7 @@ public class ClienteHilo extends Thread {
                 switch (strToClient) {
 
                     /*----------------------Clientes----------------------*/
-                    case "registrarCliente":
+                    case "registrarCliente"://------------------------------------> Reguistra Clientes
                         out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
                         out.flush();
 
@@ -80,7 +80,7 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "eliminarCliente":
+                    case "eliminarCliente"://------------------------------------> Eliminar Clientes
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -100,7 +100,7 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "buscarCliente":
+                    case "buscarCliente"://------------------------------------> Buscar Clientes
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -139,7 +139,7 @@ public class ClienteHilo extends Thread {
                         }
                         break;
 
-                    case "modificarCliente":
+                    case "modificarCliente"://------------------------------------> Modificar Clientes
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -174,7 +174,7 @@ public class ClienteHilo extends Thread {
                         break;
 
                     /*----------------------Usuarios----------------------*/
-                    case "registrarUsuario":
+                    case "registrarUsuario"://------------------------------------> Reguistra Usuario
                         out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
                         out.flush();
 
@@ -189,7 +189,7 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "eliminarUsuario":
+                    case "eliminarUsuario"://------------------------------------> Eliminar Usuario
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -209,7 +209,7 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "buscarUsuario":
+                    case "buscarUsuario"://------------------------------------> Buscar Usuario
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -248,7 +248,7 @@ public class ClienteHilo extends Thread {
                         }
                         break;
 
-                    case "modificarUsuario":
+                    case "modificarUsuario"://------------------------------------> Modificar Usuario
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -282,7 +282,7 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "validarUsuario":
+                    case "validarUsuario"://------------------------------------> Validar Usuario login
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -323,7 +323,7 @@ public class ClienteHilo extends Thread {
 
 
                     /*----------------------AutosGUI----------------------*/
-                    case "registrarAuto":
+                    case "registrarAuto"://------------------------------------> Reguistra Auto
                         out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
                         out.flush();
 
@@ -338,7 +338,7 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "eliminarAuto":
+                    case "eliminarAuto"://------------------------------------> Eliminar Auto
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -358,7 +358,7 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "buscarAuto":
+                    case "buscarAuto"://------------------------------------> Buscar Auto
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -397,7 +397,7 @@ public class ClienteHilo extends Thread {
                         }
                         break;
 
-                    case "modificarAuto":
+                    case "modificarAuto"://------------------------------------> Modificar Auto
                         out.writeUTF(strToClient); //Task
                         out.flush();
 
@@ -432,7 +432,7 @@ public class ClienteHilo extends Thread {
                         break;
 
                     /*----------------------Rentar----------------------*/
-                    case "rentar":
+                    case "rentar"://------------------------------------> Rentar
                         out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
                         out.flush();
 
@@ -447,16 +447,33 @@ public class ClienteHilo extends Thread {
 
                         break;
 
-                    case "retornar":
+                    case "retornar"://------------------------------------> Retornar
+                        out.writeUTF(strToClient); //Task
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
+                        out.writeUTF(id); //send id
+                        out.flush();
+
+                        strFromClient = in.readUTF(); //correcto
+                        msg = strFromClient;
+                        aut.setPlaca(msg);
+
+                        out.writeUTF("stop");
+                        out.flush();
+
+                        strFromClient = in.readUTF();
+
                         break;
 
-                    case "verRentados":
+                    case "buscarRentados"://------------------------------------> Buscar Autos Rentados
                         break;
 
-                    case "verDisponibles":
+                    case "buscarDisponibles"://------------------------------------> Buscar Autos Disponibles
                         break;
 
-                    case "listaHome":
+                    case "listaHome"://------------------------------------> Numeros pantalla HOME
                         out.writeUTF(strToClient); //se envia el tipo de tarea al servidor. 
                         out.flush();
 
@@ -470,8 +487,9 @@ public class ClienteHilo extends Thread {
                         strFromClient = in.readUTF();
 
                         break;
+
                 }
-
+                System.out.println("***Cliente DESCONECTADO***\n");
                 /*----------------------Errores y notificaciones----------------------*/
                 ClienteGUI.mensajes(msg);
                 UsuariosGUI.mensajes(msg);
@@ -480,6 +498,7 @@ public class ClienteHilo extends Thread {
                 GUI.RentarGUI.mensajes(msg);
 
             }
+
         } catch (IOException ex) {
             Logger.getLogger(ClienteHilo.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -519,9 +538,9 @@ public class ClienteHilo extends Thread {
     /*--------Conexion puerto 5007 entrada de archivos---------*/
     public static void entradaArchivoJson() {
         try ( ServerSocket serverSocket = new ServerSocket(5007)) {
-            System.out.println("Escuchando pueto: 5000 para archivos");
+
             Socket clientSocket = serverSocket.accept();
-            System.out.println(clientSocket + " CONECTADO.");
+
             dataInputStream = new DataInputStream(clientSocket.getInputStream());
             dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
 

@@ -76,10 +76,6 @@ public class ReturnarGUI extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         TableRentados = new javax.swing.JTable();
         txtPlaca = new javax.swing.JTextField();
-        txt2 = new javax.swing.JLabel();
-        txtid = new javax.swing.JTextField();
-        Separator2 = new javax.swing.JSeparator();
-        btmBCedula = new javax.swing.JButton();
         btncancelar = new javax.swing.JButton();
         btmActualizar = new javax.swing.JButton();
 
@@ -103,11 +99,11 @@ public class ReturnarGUI extends javax.swing.JPanel {
         txt1.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
         txt1.setForeground(new java.awt.Color(0, 0, 0));
         txt1.setText("Placa");
-        add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
+        add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, -1, -1));
 
         Separator1.setForeground(new java.awt.Color(0, 0, 0));
         Separator1.setPreferredSize(new java.awt.Dimension(200, 10));
-        add(Separator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 260, -1));
+        add(Separator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, 260, -1));
 
         btmBPlaca.setBackground(new java.awt.Color(18, 90, 173));
         btmBPlaca.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -120,7 +116,7 @@ public class ReturnarGUI extends javax.swing.JPanel {
                 btmBPlacaActionPerformed(evt);
             }
         });
-        add(btmBPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 110, 30));
+        add(btmBPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 150, 110, 30));
 
         btmRetornar.setBackground(new java.awt.Color(18, 90, 173));
         btmRetornar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -188,46 +184,7 @@ public class ReturnarGUI extends javax.swing.JPanel {
                 txtPlacaActionPerformed(evt);
             }
         });
-        add(txtPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 260, 30));
-
-        txt2.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
-        txt2.setForeground(new java.awt.Color(0, 0, 0));
-        txt2.setText("Cedula");
-        add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
-
-        txtid.setBackground(new java.awt.Color(255, 255, 255));
-        txtid.setFont(new java.awt.Font("Roboto Light", 0, 14)); // NOI18N
-        txtid.setForeground(new java.awt.Color(102, 102, 102));
-        txtid.setText("Ingrese la identificacion");
-        txtid.setBorder(null);
-        txtid.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                txtidMousePressed(evt);
-            }
-        });
-        txtid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtidActionPerformed(evt);
-            }
-        });
-        add(txtid, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 260, 30));
-
-        Separator2.setForeground(new java.awt.Color(0, 0, 0));
-        Separator2.setPreferredSize(new java.awt.Dimension(200, 10));
-        add(Separator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 260, -1));
-
-        btmBCedula.setBackground(new java.awt.Color(18, 90, 173));
-        btmBCedula.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
-        btmBCedula.setForeground(new java.awt.Color(255, 255, 255));
-        btmBCedula.setText("BUSCAR");
-        btmBCedula.setBorder(null);
-        btmBCedula.setBorderPainted(false);
-        btmBCedula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btmBCedulaActionPerformed(evt);
-            }
-        });
-        add(btmBCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 110, 30));
+        add(txtPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 260, 30));
 
         btncancelar.setBackground(new java.awt.Color(255, 102, 102));
         btncancelar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -274,25 +231,9 @@ public class ReturnarGUI extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPlacaActionPerformed
 
-    private void txtidMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtidMousePressed
-        // TODO add your handling code here:
-        if ("Ingrese la placa".equals(txtPlaca.getText())) {
-            txtPlaca.setText("");
-        }
-    }//GEN-LAST:event_txtidMousePressed
-
-    private void txtidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtidActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtidActionPerformed
-
-    private void btmBCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmBCedulaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btmBCedulaActionPerformed
-
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
         // TODO add your handling code here:
 
-        txtid.setText("Ingrese la identificacion");
         txtPlaca.setText("Ingrese la placa");
     }//GEN-LAST:event_btncancelarActionPerformed
 
@@ -309,19 +250,15 @@ public class ReturnarGUI extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSeparator Separator1;
-    private javax.swing.JSeparator Separator2;
     private javax.swing.JTable TableRentados;
     private javax.swing.JLabel Title;
     private javax.swing.JPanel body;
     private javax.swing.JButton btmActualizar;
-    private javax.swing.JButton btmBCedula;
     private javax.swing.JButton btmBPlaca;
     private javax.swing.JButton btmRetornar;
     private javax.swing.JButton btncancelar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel txt1;
-    private javax.swing.JLabel txt2;
     private javax.swing.JTextField txtPlaca;
-    private javax.swing.JTextField txtid;
     // End of variables declaration//GEN-END:variables
 }
