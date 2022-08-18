@@ -481,7 +481,7 @@ public class Dashboard extends javax.swing.JFrame {
         resetColor(btn_autos);
         resetColor(btn_admUsers);
         // Abrir sección
-        RetornarGUI p1 = new RetornarGUI();
+        ReturnarGUI p1 = new ReturnarGUI();
         p1.setSize(750, 430);
         p1.setLocation(0, 0);
 

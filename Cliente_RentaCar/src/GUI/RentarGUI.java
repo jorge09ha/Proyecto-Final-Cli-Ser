@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import static Conexion.ClienteSocket.clientToServer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -112,8 +113,8 @@ public class RentarGUI extends javax.swing.JPanel {
 
     public boolean camposVacios() {
 
-        if ((cliSELECT.getCedula().equals("")) || (cliSELECT.getCedula().equals("Ingrese la identificacion")) || (cliSELECT.getCedula().equals(null))
-                || (autSELECT.getPlaca().equals("")) || (autSELECT.getPlaca().equals("Ingrese la placa")) || (autSELECT.getPlaca().equals(null))) {
+        if ((txtid.equals("")) || (txtid.getText().equals("Ingrese la identificacion"))
+                || (txtPlaca.getText().equals("")) || (txtPlaca.getText().equals("Ingrese la placa"))) {
             return true;
         } else {
             return false;
@@ -368,6 +369,7 @@ public class RentarGUI extends javax.swing.JPanel {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         try {
+            //Cliente cli = new Cliente();
 
             cliSELECT.setCedula(txtid.getText());
             ClienteHilo.objetoaJsonCLIENTE(cliSELECT);
@@ -420,7 +422,7 @@ public class RentarGUI extends javax.swing.JPanel {
 
             if (camposVacios() == false) {
 
-                int response = JOptionPane.showConfirmDialog(null, "Desea rentar el auto " + autSELECT.getPlaca() + "?", "Rentar auto", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Desea rentar el auto "+autSELECT.getPlaca()+"?", "Rentar auto", JOptionPane.YES_NO_OPTION);
 
                 if (response == JOptionPane.YES_OPTION) {
 
@@ -435,8 +437,6 @@ public class RentarGUI extends javax.swing.JPanel {
                     rentar.setPlaca(autSELECT.getPlaca());
                     rentar.setMarca(autSELECT.getMarca());
                     rentar.setModelo(autSELECT.getModelo());
-                    rentar.setAnnio(autSELECT.getAnnio());
-                    rentar.setTransmision(autSELECT.getTransmision());
 
                     ClienteHilo.objetoaJsonRENTAR(rentar);
                     String task = "rentar";
@@ -461,11 +461,9 @@ public class RentarGUI extends javax.swing.JPanel {
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
                 }
-
             } else {
-                JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Debe de seleccionar un Auto y un Cliente", "Campos en Blanco", 1);
+                JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Revise he intente nuevamente", "Campos en Blanco", 1);
             }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
 
@@ -489,12 +487,15 @@ public class RentarGUI extends javax.swing.JPanel {
             autSELECT.setPlaca(txtPlaca.getText());
             ClienteHilo.objetoaJsonAUTO(autSELECT);
 
-            String task = "buscarDisponibles";
+            String task = "buscarAuto";
 
             autSELECT = (Auto) ClienteSocket.clientToServer(task, autSELECT.getPlaca());
             autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();
 
             autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();///error null
+
+            autSELECT = autSELECT;
+            System.out.println(autSELECT.getPlaca());
 
             if ("correcto".equals(mensaje)) {
                 txtPlaca.setText(autSELECT.getPlaca());
@@ -517,9 +518,7 @@ public class RentarGUI extends javax.swing.JPanel {
 
         txtid.setText("Ingrese la identificacion");
         txtPlaca.setText("Ingrese la placa");
-        autSELECT = null;
-        cliSELECT = null;
-
+        presentarTableCliente(null);
 
     }//GEN-LAST:event_btncancelarActionPerformed
 

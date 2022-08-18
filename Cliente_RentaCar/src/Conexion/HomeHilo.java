@@ -119,8 +119,6 @@ public class HomeHilo extends Thread {
             } catch (IOException e) {
             }
         }
-        System.out.println(" DESCONECTADO del server\n");
-   
     }
 
     /*--------Conexion puerto 5000 salida de archivos---------*/

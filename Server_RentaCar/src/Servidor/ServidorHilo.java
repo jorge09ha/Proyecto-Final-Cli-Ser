@@ -472,131 +472,39 @@ public class ServidorHilo extends Thread {
 
                         break;
 
-                    case "retornar"://------------------------------------> Rentornar
-
-                        out.writeUTF("id"); // preguta por id
-                        out.flush();
-
-                        id = in.readUTF(); //recibe el ID
-                        System.out.println("-ID: " + id);//print-------------------------------------#
-
-                        strToClient = retornar(id); // client            
-                        System.out.println("-Resultado: " + strToClient);//print---------------#
-                        out.writeUTF(strToClient); // cliente
-                        out.flush();
-
-                        strFromServer = in.readUTF(); // lee msg stop
-
-                        strToClient = "stop";
-                        out.writeUTF(strToClient);
-                        out.flush();
-
+                    case "retornar":
                         break;
 
-                    case "buscarRentados"://------------------------------------> Buscar Rentados
-                        out.writeUTF("id"); // preguta por id 
-                        out.flush();
-
-                        id = in.readUTF(); //recibe el ID
-                        System.out.println("-ID: " + id);//print-------------------------------------#
-
-                        strToClient = buscarAuto(id); // client      
-                        System.out.println("-Resultado: " + strToClient);//print---------------#
-                        id = strToClient;
-                        out.writeUTF(strToClient); // cliente
-                        out.flush();
-
-                        if (id == "correcto") {
-
-                            strFromServer = in.readUTF();
-
-                            if ("servidorA".equals(strFromServer)) {
-                                envioArchivoJson();
-                                System.out.println("-Server envio json");//print----------------------#
-                            }
-                            strToClient = "objetodeJasonAUTO()"; // client                    
-                            out.writeUTF(strToClient); // cliente
-                            out.flush();
-
-                            strFromServer = in.readUTF(); // lee msg stop
-
-                            strFromServer = "stop";
-                            out.writeUTF(strFromServer); //se envia un stop al cliente
-                            out.flush();
-                        }
-
-                        strFromServer = in.readUTF(); // lee msg stop
-
-                        strFromServer = "stop";
-                        out.writeUTF(strFromServer); //se envia un stop al cliente
-                        out.flush();
-
+                    case "verRentados":
                         break;
 
-                    case "buscarDisponibles"://------------------------------------> Buscar Disponibles
-                        out.writeUTF("id"); // preguta por id 
-                        out.flush();
-
-                        id = in.readUTF(); //recibe el ID
-                        System.out.println("-ID: " + id);//print-------------------------------------#
-
-                        strToClient = buscarDisponibles(id); // client      
-                        System.out.println("-Resultado: " + strToClient);//print---------------#
-                        id = strToClient;
-                        out.writeUTF(strToClient); // cliente
-                        out.flush();
-
-                        if (id == "correcto") {
-
-                            strFromServer = in.readUTF();
-
-                            if ("servidorA".equals(strFromServer)) {
-                                envioArchivoJson();
-                                System.out.println("-Server envio json");//print----------------------#
-                            }
-                            strToClient = "objetodeJasonRENTAR()"; // client                    
-                            out.writeUTF(strToClient); // cliente
-                            out.flush();
-
-                            strFromServer = in.readUTF(); // lee msg stop
-
-                            strFromServer = "stop";
-                            out.writeUTF(strFromServer); //se envia un stop al cliente
-                            out.flush();
-                        }
-
-                        strFromServer = in.readUTF(); // lee msg stop
-
-                        strFromServer = "stop";
-                        out.writeUTF(strFromServer); //se envia un stop al cliente
-                        out.flush();
-
+                    case "verDisponibles":
                         break;
 
                     case "home": //------------------------------------> Datos de la ventana HOME
 
-                        strToClient = contarDisponibles(); // el metodo hace un return tipo String con el resultado de lo que hiso
+                        strToClient = autosDisponibles(); // el metodo hace un return tipo String con el resultado de lo que hiso
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // Se envia a cliente el resulado del registro
                         out.flush();
 
                         strFromServer = in.readUTF(); //ok
 
-                        strToClient = contarRentados();
+                        strToClient = autosRentados();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
                         strFromServer = in.readUTF(); //ok
 
-                        strToClient = contarUsuarios();
+                        strToClient = adminUser();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
 
                         strFromServer = in.readUTF();//ok
 
-                        strToClient = contarClientes();
+                        strToClient = clientUser();
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient);
                         out.flush();
@@ -924,7 +832,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
         return "error base";
-    }
+    }//listo
 
     public static String eliminarCliente(String id) {
         Cliente cli = new Cliente();
@@ -955,7 +863,7 @@ public class ServidorHilo extends Thread {
             msg = "error base";
             return msg;
         }
-    }
+    }//listo
 
     public static String registrarCliente() {
         int resultado = 0;
@@ -983,7 +891,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
 
-    }
+    }//liso
 
     public static String modificarCliente(String id) {
 
@@ -1019,7 +927,7 @@ public class ServidorHilo extends Thread {
         }
         return "error base";
 
-    }
+    }//listo
 
     /*
     *
@@ -1066,7 +974,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
         return "error base";
-    }
+    }//listo
 
     public static String eliminarUsuario(String id) {
         Cliente cli = new Cliente();
@@ -1124,7 +1032,8 @@ public class ServidorHilo extends Thread {
             msg = "duplicado";
             return msg;
         }
-    }
+
+    }//listo
 
     public static String modificarUsuario(String id) {
 
@@ -1251,7 +1160,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
         return "error base";
-    }
+    }//listo
 
     public static String eliminarAuto(String id) {
         Auto aut = new Auto();
@@ -1282,7 +1191,7 @@ public class ServidorHilo extends Thread {
             msg = "error base";
             return msg;
         }
-    }
+    }//listo
 
     public static String registrarAuto() {
         int resultado = 0;
@@ -1310,7 +1219,7 @@ public class ServidorHilo extends Thread {
             return msg;
         }
 
-    }
+    }//liso
 
     public static String modificarAuto(String id) {
 
@@ -1346,14 +1255,14 @@ public class ServidorHilo extends Thread {
         }
         return "error base";
 
-    }
+    }//listo
 
     /*
     *
-    *                    Cuenta de listas
+    *                   CRUD Rentar
     *
      */
-    public static String contarDisponibles() {
+    public static String autosDisponibles() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1380,7 +1289,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String contarClientes() {
+    public static String clientUser() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1407,7 +1316,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String contarRentados() {
+    public static String autosRentados() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1434,7 +1343,7 @@ public class ServidorHilo extends Thread {
         }
     }
 
-    public static String contarUsuarios() {
+    public static String adminUser() {
         Auto aut = new Auto();
         Connection conn = getConnection();
 
@@ -1479,42 +1388,24 @@ public class ServidorHilo extends Thread {
         return msg;
     }
 
-    /*
-    *
-    *                    Cuenta de listas
-    *
-     */
     public static String rentar() {
         int resultado = 0;
         String msg = "";
-
         Connection conn = getConnection();
 
         Rentar re = archivoJsonAObjetoRENTAR("default");
 
-        String nom = re.getNombre();
-        String ape1 = re.getApellido1();
-        String ape2 = re.getApellido2();
-        String ema = re.getEmail();
-        String tel = re.getTelefono();
-        String pla = re.getPlaca();
-        String mar = re.getMarca();
-        String model = re.getModelo();
-        String an = re.getAnnio();
-        String tra = re.getTransmision();
-
-        String query = "INSERT INTO rentados (nombre, apellido1, apellido2, correoElectronico, telefono, idauto, marca, modelo, annio, transmision) VALUES ('" + nom + "','" + ape1 + "','" + ape2 + "','" + ema + "','" + tel + "','" + pla + "','" + mar + "','" + model + "','" + an + "','" + tra + "')";
-
         try {
 
-            String sql = query;
+            String sql = "INSERT INTO rentados  Values ('" + re.getPlaca() + "','" + re.getMarca() + "','"
+                    + re.getModelo() + "','" + re.getCedula() + "','" + re.getNombre() + "','"
+                    + re.getApellido1() + "','" + re.getApellido2() + "','" + re.getEmail() + "','"
+                    + re.getTelefono() + "')";
 
             Statement st = conn.createStatement();
             resultado = st.executeUpdate(sql);
 
             if (resultado > 0) {
-                sql = "UPDATE autos SET rentar= 'R' WHERE idauto = '" + re.getPlaca() + "'";
-                resultado = st.executeUpdate(sql);
                 msg = "correcto";
                 return msg;
             } else {
@@ -1523,172 +1414,9 @@ public class ServidorHilo extends Thread {
             }
 
         } catch (Exception e) {
-            System.out.println(e);
             msg = "duplicado";
             return msg;
         }
-    }
-
-    public static String retornar(String id) {
-        Rentar rent = new Rentar();
-        Connection conn = getConnection();
-        int resultado = 0;
-        String buscar = id;
-        String msg;
-
-        try {
-            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
-
-                buscar = buscarRentarEliminar(id);
-
-                String sql = "DELETE FROM rentados WHERE idrenta = '" + buscar + "'";
-                Statement st = conn.createStatement();
-                resultado = st.executeUpdate(sql);
-
-                if (resultado > 0) {
-                    sql = "UPDATE autos SET rentar= 'D' WHERE idauto = '" + id + "'";
-                    resultado = st.executeUpdate(sql);
-                    msg = "correcto";
-                    return msg;
-                } else {
-                    msg = "no existe";
-                    return msg;
-                }
-
-            } else {
-                msg = "id vacio";
-                return msg;
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-            msg = "error base";
-            return msg;
-        }
-    }
-
-    public static String buscarRentados(String id) {
-        Rentar ren = new Rentar();
-        Connection conn = getConnection();
-        String buscar = id;
-        String msg;
-
-        try {
-            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
-                String sql = "SELECT * FROM rentados WHERE idauto = '" + id + "'";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(sql);
-
-                if (!rs.isBeforeFirst()) {
-                    msg = "no existe";
-                    return msg;
-                }
-
-                while (rs.next()) {
-                    ren.setPlaca(rs.getString("idauto"));
-                    ren.setMarca(rs.getString("marca"));
-                    ren.setModelo(rs.getString("modelo"));
-                    ren.setCedula(rs.getString("idcliente"));
-                    ren.setNombre(rs.getString("nombre"));
-                    ren.setApellido1(rs.getString("apellido1"));
-                    ren.setApellido2(rs.getString("apellido2"));
-                    ren.setEmail(rs.getString("correoElectronico"));
-                    ren.setTelefono(rs.getString("telefono"));
-
-                    objetoaJsonRENTAR(ren);
-
-                    msg = "correcto";
-                    return msg;
-
-                }
-            } else {
-                msg = "id vacio";
-                return msg;
-            }
-        } catch (Exception e) {
-            msg = "error base";
-            return msg;
-        }
-        return "error base";
-    }
-
-    public static String buscarDisponibles(String id) {
-        Auto auto = new Auto();
-        Connection conn = getConnection();
-        String buscar = id;
-        String msg;
-
-        try {
-            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
-                String sql = "SELECT * FROM autos WHERE rentar='D' AND idauto= '" + id + "'";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(sql);
-
-                if (!rs.isBeforeFirst()) {
-                    msg = "no existe";
-                    return msg;
-                }
-
-                while (rs.next()) {
-                    auto.setPlaca(rs.getString("idauto"));
-                    auto.setMarca(rs.getString("marca"));
-                    auto.setModelo(rs.getString("modelo"));
-                    auto.setAnnio(rs.getString("annio"));
-                    auto.setTransmision(rs.getString("transmision"));
-                    auto.setRentar(rs.getString("rentar"));
-
-                    objetoaJsonAUTO(auto);
-
-                    msg = "correcto";
-                    return msg;
-
-                }
-            } else {
-                msg = "id vacio";
-                return msg;
-            }
-        } catch (Exception e) {
-            msg = "error base";
-            return msg;
-        }
-        return "error base";
-    }
-    
-        public static String buscarRentarEliminar(String id) {
-        Rentar rent = new Rentar();
-        Connection conn = getConnection();
-        String buscar = id;
-        String msg;
-
-        try {
-            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
-                String sql = "SELECT * FROM rentados WHERE idauto = '" + id + "'";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(sql);
-
-                if (!rs.isBeforeFirst()) {
-                    msg = "no existe";
-                    return msg;
-                }
-
-                while (rs.next()) {
-
-                    rent.setPlaca(rs.getString("idrenta"));
-
-                    objetoaJsonRENTAR(rent);
-
-                    msg = rent.getPlaca();
-                    return msg;
-
-                }
-            } else {
-                msg = "id vacio";
-                return msg;
-            }
-        } catch (Exception e) {
-            msg = "error base";
-            return msg;
-        }
-        return "error base";
     }
 
 }

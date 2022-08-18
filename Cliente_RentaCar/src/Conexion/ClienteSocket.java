@@ -18,8 +18,7 @@ public class ClienteSocket {
         try {
             //Creo el socket.
             Socket sc = new Socket("127.0.0.1", 7777);
-            System.out.println("*CONECTADO al server: " + sc.getInetAddress().getHostAddress() + ":" + sc.getPort());
-   
+            System.out.println("\n***Solicitud de conexion al server: 10.90.1.10:7777***");//print--------------->
 
             //Defino la entrada y la salida.
             DataInputStream in = new DataInputStream(sc.getInputStream());
