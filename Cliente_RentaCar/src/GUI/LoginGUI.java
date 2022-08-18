@@ -78,10 +78,12 @@ public class LoginGUI extends javax.swing.JFrame {
                         this.dispose();
                         Dashboard form = new Dashboard();
                         form.setVisible(true);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Contraseña  incorrecto.", "Error", 1);
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(null, "Contraseña usuario o contraseña incorrecto.", "Error", 1);
+                    JOptionPane.showMessageDialog(null, "Usuario no existe.", "Error", 1);
                 }
 
             } catch (HeadlessException e) {

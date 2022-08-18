@@ -23,6 +23,8 @@ public class RentarGUI extends javax.swing.JPanel {
     static String USERNAME = "root";
     static String PASS = "admin01";
     static String mensaje = null;
+    public Cliente cliSELECT = new Cliente();
+    public Auto autSELECT = new Auto();
 
     public RentarGUI() {
         initComponents();
@@ -229,6 +231,7 @@ public class RentarGUI extends javax.swing.JPanel {
         add(btmRentar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, 110, 30));
 
         TableAuto.setBackground(new java.awt.Color(255, 255, 255));
+        TableAuto.setForeground(new java.awt.Color(0, 0, 0));
         TableAuto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -261,6 +264,7 @@ public class RentarGUI extends javax.swing.JPanel {
         jScrollPane3.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         TableCliente.setBackground(new java.awt.Color(255, 255, 255));
+        TableCliente.setForeground(new java.awt.Color(0, 0, 0));
         TableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -376,6 +380,8 @@ public class RentarGUI extends javax.swing.JPanel {
 
             cli = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
 
+            cli = cliSELECT;
+
             if ("correcto".equals(mensaje)) {
                 presentarTableCliente(cli);
                 ventanasMsjs();
@@ -459,18 +465,23 @@ public class RentarGUI extends javax.swing.JPanel {
             Auto aut = new Auto();
 
             aut.setPlaca(txtid.getText());
-            //objetoaJson(aut);
+            ClienteHilo.objetoaJsonAUTO(aut);
 
-            String task = "buscarcliente";
+            String task = "verRentados";
 
-            aut = (Auto) clientToServer(task, aut.getPlaca());
+            aut = (Auto) ClienteSocket.clientToServer(task, aut.getPlaca());
+            aut = ClienteHilo.archivoJsonAObjetoAUTO();
 
-            if (aut.getPlaca() == null) {
+            aut = ClienteHilo.archivoJsonAObjetoAUTO();///error null
+
+            aut = autSELECT;
+
+            if ("correcto".equals(mensaje)) {
                 presentarTableAuto();
+                ventanasMsjs();
             } else {
-                showAuto();
+                ventanasMsjs();
             }
-
         } catch (Exception e) {
 
         }

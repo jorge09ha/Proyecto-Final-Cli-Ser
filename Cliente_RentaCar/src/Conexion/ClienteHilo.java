@@ -34,7 +34,6 @@ public class ClienteHilo extends Thread {
      * Hilo donde realiza la tarea para desplegar los números en la pantalla
      * HOME
      */
-
     private static DataOutputStream dataOutputStream = null;
     private static DataInputStream dataInputStream = null;
     private Socket sc;
@@ -608,6 +607,24 @@ public class ClienteHilo extends Thread {
         return null;
     }
 
+    public static Object archivoJsonAObjetoRENTAR() {
+        try {
+            Gson gson = new Gson();
+
+            Reader reader = Files.newBufferedReader(Paths.get("NewFileFromServer.json"));
+            Auto auto = gson.fromJson(reader, Auto.class);
+            Cliente cliente = gson.fromJson(reader, Cliente.class);
+            reader.close();
+
+            return auto;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     /*------------------------Object to JSON---------------------*/
     public static boolean objetoaJsonCLIENTE(Cliente cli) {
         boolean done;
@@ -654,6 +671,26 @@ public class ClienteHilo extends Thread {
             Writer writer = Files.newBufferedWriter(Paths.get("ClientSide.json"));
 
             gson.toJson(aut, writer);
+            writer.close();
+
+            envioArchivoJson();
+
+            return done = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return done = false;
+        }
+    }
+
+    public static boolean objetoaJsonRENTAR(Auto aut, Cliente cli) {
+        boolean done;
+        try {
+            Gson gson = new Gson();
+            Writer writer = Files.newBufferedWriter(Paths.get("ClientSide.json"));
+
+            gson.toJson(aut, writer);
+            gson.toJson(cli, writer);
             writer.close();
 
             envioArchivoJson();
