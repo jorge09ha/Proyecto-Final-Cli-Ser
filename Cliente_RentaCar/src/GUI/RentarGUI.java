@@ -13,6 +13,9 @@ import java.sql.ResultSetMetaData;
 import static Conexion.ClienteSocket.clientToServer;
 import static Conexion.ClienteSocket.ipServer;
 import static Conexion.HomeSocket.homeToServer;
+import static GUI.Dashboard.PASS;
+import static GUI.Dashboard.URL;
+import static GUI.Dashboard.USERNAME;
 import static GUI.Home.autosdisponibles;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,9 +26,6 @@ import java.sql.Statement;
  */
 public class RentarGUI extends javax.swing.JPanel {
 
-    static String URL = "jdbc:mysql://"+ipServer+":3306/rentacar";
-    static String USERNAME = "root";
-    static String PASS = "admin01";
     static String mensaje = null;
     public Cliente cliSELECT = new Cliente();
     public Auto autSELECT = new Auto();

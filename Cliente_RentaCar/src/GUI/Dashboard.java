@@ -1,5 +1,6 @@
 package GUI;
 
+import static Conexion.ClienteSocket.ipServer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -17,6 +18,10 @@ public class Dashboard extends javax.swing.JFrame {
 
     int xMouse;
     int yMouse;
+
+    static String URL = "jdbc:mysql://" + ipServer + ":3306/rentacar";
+    static String USERNAME = "root";
+    static String PASS = "admin01";
 
     /**
      * Dashboard donde se muestran las distintas pantallas según su función

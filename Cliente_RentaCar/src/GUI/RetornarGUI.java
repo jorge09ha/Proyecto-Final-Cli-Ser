@@ -5,10 +5,6 @@ import ClasesRentaCar.Cliente;
 import ClasesRentaCar.Rentar;
 import Conexion.ClienteHilo;
 import Conexion.ClienteSocket;
-import static Conexion.ClienteSocket.ipServer;
-import static GUI.RentarGUI.PASS;
-import static GUI.RentarGUI.URL;
-import static GUI.RentarGUI.USERNAME;
 import static GUI.RentarGUI.mensaje;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,7 +20,7 @@ import java.sql.Statement;
  */
 public class RetornarGUI extends javax.swing.JPanel {
 
-    static String URL = "jdbc:mysql://"+ipServer+":3306/rentacar";
+    static String URL = "jdbc:mysql://localhost:3306/rentacar";
     static String USERNAME = "root";
     static String PASS = "admin01";
     static String mensaje = null;

@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 public class ClienteSocket {
     
     public static String ipServer="10.90.1.10";
+    
 
     public static String getIpServer() {
         return ipServer;
