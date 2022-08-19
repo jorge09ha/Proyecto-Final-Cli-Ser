@@ -1,5 +1,6 @@
 package Conexion;
 
+import static Conexion.ClienteSocket.ipServer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,7 +16,7 @@ public class HomeSocket {
     public static Object homeToServer(String tarea, String id) {
         try {
             //Creo el socket.
-            Socket sc = new Socket("127.0.0.1", 7777);
+            Socket sc = new Socket(ipServer, 7777);
             System.out.println("\n***CONECTADO AL SERVIDOR***");//print--------------->
 
             //Defino la entrada y la salida.

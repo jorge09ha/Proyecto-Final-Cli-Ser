@@ -25,6 +25,7 @@ import ClasesRentaCar.Auto;
 import ClasesRentaCar.Cliente;
 import ClasesRentaCar.Rentar;
 import ClasesRentaCar.UserAdmin;
+import static Conexion.ClienteSocket.ipServer;
 
 /**
  * @author Jorge Hernandez Araya
@@ -596,7 +597,7 @@ public class ClienteHilo extends Thread {
 
     /*--------Conexion puerto 5000 salida de archivos---------*/
     public static void envioArchivoJson() {
-        try ( Socket socket = new Socket("localhost", 5000)) {
+        try ( Socket socket = new Socket(ipServer, 5000)) {
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
