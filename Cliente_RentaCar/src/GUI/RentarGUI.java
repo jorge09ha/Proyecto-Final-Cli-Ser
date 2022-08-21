@@ -11,7 +11,6 @@ import javax.swing.table.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import static Conexion.ClienteSocket.clientToServer;
-import static Conexion.ClienteSocket.ipServer;
 import static Conexion.HomeSocket.homeToServer;
 import static GUI.Home.autosdisponibles;
 import java.sql.Connection;
@@ -56,7 +55,7 @@ public class RentarGUI extends javax.swing.JPanel {
             btmRentar.setVisible(false);
             btnBucarPlaca.setVisible(false);
             btnBuscar.setVisible(true);
-            btncancelar.setVisible(true);
+            btncancelar.setVisible(false);
             txtPlaca.setVisible(true);
             txtid.setVisible(true);
             btmActualizar.setVisible(true);
@@ -297,7 +296,7 @@ public class RentarGUI extends javax.swing.JPanel {
         TableAuto.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(TableAuto);
 
-        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 700, 110));
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 700, 100));
 
         jScrollPane3.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
@@ -381,7 +380,7 @@ public class RentarGUI extends javax.swing.JPanel {
         btnBucarPlaca.setBackground(new java.awt.Color(18, 90, 173));
         btnBucarPlaca.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         btnBucarPlaca.setForeground(new java.awt.Color(255, 255, 255));
-        btnBucarPlaca.setText("BUSCAR");
+        btnBucarPlaca.setText("SELECCIONAR");
         btnBucarPlaca.setBorder(null);
         btnBucarPlaca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -423,6 +422,7 @@ public class RentarGUI extends javax.swing.JPanel {
             cliSELECT = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
 
             if ("correcto".equals(mensaje)) {
+                btncancelar.setVisible(true);
                 presentarTableCliente(cliSELECT);
                 ventanasMsjs();
                 btnBucarPlaca.setVisible(true);

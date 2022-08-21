@@ -575,6 +575,7 @@ public class ClienteHilo extends Thread {
                 AutosGUI.mensajes(msg);
                 GUI.LoginGUI.mensajes(msg);
                 GUI.RentarGUI.mensajes(msg);
+                GUI.RetornarGUI.mensajes(msg);
 
             }
 

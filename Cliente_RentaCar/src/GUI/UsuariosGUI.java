@@ -72,7 +72,6 @@ public class UsuariosGUI extends javax.swing.JPanel {
 
     public static void mensajes(String msg) {
         mensaje = msg;
-
     }
 
     /**
