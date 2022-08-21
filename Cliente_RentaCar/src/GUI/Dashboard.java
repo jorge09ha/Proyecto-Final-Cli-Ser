@@ -19,10 +19,6 @@ public class Dashboard extends javax.swing.JFrame {
     int xMouse;
     int yMouse;
 
-    static String URL = "jdbc:mysql://" + ipServer + ":3306/rentacar";
-    static String USERNAME = "root";
-    static String PASS = "admin01";
-
     /**
      * Dashboard donde se muestran las distintas pantallas según su función
      * inicializa tomando el nombre del usuario bloqueado junto con la fecha.

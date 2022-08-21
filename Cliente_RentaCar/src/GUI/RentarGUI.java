@@ -13,9 +13,6 @@ import java.sql.ResultSetMetaData;
 import static Conexion.ClienteSocket.clientToServer;
 import static Conexion.ClienteSocket.ipServer;
 import static Conexion.HomeSocket.homeToServer;
-import static GUI.Dashboard.PASS;
-import static GUI.Dashboard.URL;
-import static GUI.Dashboard.USERNAME;
 import static GUI.Home.autosdisponibles;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,18 +26,22 @@ public class RentarGUI extends javax.swing.JPanel {
     static String mensaje = null;
     public Cliente cliSELECT = new Cliente();
     public Auto autSELECT = new Auto();
+    static String URL = "jdbc:mysql://localhost:3306/rentacar";
+    static String USERNAME = "root";
+    static String PASS = "admin01";
 
     public RentarGUI() {
         initComponents();
         presentarTableAuto();
         iniciar();
-
     }
 
     private void iniciar() {
         homeToServer("home", "");
         if (autosdisponibles.equals("0") || autosdisponibles == null) {
             estadoAUTOS.setText("NO HAY AUTOS DISPONIBLES");
+            txtid.setText("Ingrese la identificacion");
+            txtPlaca.setText("Ingrese la placa");
             btmRentar.setVisible(false);
             btnBucarPlaca.setVisible(false);
             btnBuscar.setVisible(false);
@@ -50,8 +51,10 @@ public class RentarGUI extends javax.swing.JPanel {
             btmActualizar.setVisible(true);
         } else {
             estadoAUTOS.setText("AUTOS: " + autosdisponibles);
-            btmRentar.setVisible(true);
-            btnBucarPlaca.setVisible(true);
+            txtid.setText("Ingrese la identificacion");
+            txtPlaca.setText("Ingrese la placa");
+            btmRentar.setVisible(false);
+            btnBucarPlaca.setVisible(false);
             btnBuscar.setVisible(true);
             btncancelar.setVisible(true);
             txtPlaca.setVisible(true);
@@ -408,7 +411,6 @@ public class RentarGUI extends javax.swing.JPanel {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         try {
-            //Cliente cli = new Cliente();
 
             cliSELECT.setCedula(txtid.getText());
             ClienteHilo.objetoaJsonCLIENTE(cliSELECT);
@@ -420,11 +422,10 @@ public class RentarGUI extends javax.swing.JPanel {
 
             cliSELECT = ClienteHilo.archivoJsonAObjetoCLIENTE();///error null
 
-            System.out.println(cliSELECT.getCedula());
-
             if ("correcto".equals(mensaje)) {
                 presentarTableCliente(cliSELECT);
                 ventanasMsjs();
+                btnBucarPlaca.setVisible(true);
             } else {
                 ventanasMsjs();
             }
@@ -436,9 +437,9 @@ public class RentarGUI extends javax.swing.JPanel {
     private void btmActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmActualizarActionPerformed
         // TODO add your handling code here:;
         try {
-
             presentarTableAuto();
-
+            btmRentar.setVisible(false);
+            txtPlaca.setText("Ingrese la placa");
         } catch (Exception e) {
         }
 
@@ -487,20 +488,21 @@ public class RentarGUI extends javax.swing.JPanel {
                     rentar = ClienteHilo.archivoJsonAObjetoRENTAR();///error null
 
                     if ("correcto".equals(rentar.getNombre())) { // se evalua si la propiedad nombre tiene como msg "correcto"
-
+                        iniciar();
                         txtid.setText("Ingrese la identificacion");
-                        txtPlaca.setText("");
+                        txtPlaca.setText("Ingrese la placa");
                         presentarTableCliente(null);
                         presentarTableAuto();
-                        autSELECT = null;
-                        cliSELECT = null;
+                        btmRentar.setVisible(false);
                         ventanasMsjs(); /////ventanas
+
                     } else {
+                        iniciar();
                         txtid.setText("Ingrese la identificacion");
-                        txtPlaca.setText("");
+                        txtPlaca.setText("Ingrese la placa");
                         presentarTableCliente(null);
-                        autSELECT = null;
-                        cliSELECT = null;
+                        presentarTableAuto();
+                        btmRentar.setVisible(false);
                         ventanasMsjs(); /////ventanas
                     }
                 } else {
@@ -546,6 +548,7 @@ public class RentarGUI extends javax.swing.JPanel {
                 txtPlaca.setText(autSELECT.getPlaca());
                 presentarTableAutoSelect(autSELECT);
                 ventanasMsjs();
+                btmRentar.setVisible(true);
             } else {
                 txtPlaca.setText("Ingrese la placa");
                 ventanasMsjs();
@@ -560,11 +563,14 @@ public class RentarGUI extends javax.swing.JPanel {
 
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
         // TODO add your handling code here:
-
-        txtid.setText("Ingrese la identificacion");
-        txtPlaca.setText("Ingrese la placa");
-        presentarTableCliente(null);
-
+        try {
+            iniciar();
+            presentarTableCliente(null);
+            presentarTableAuto();
+            btmRentar.setVisible(false);
+            txtPlaca.setText("Ingrese la placa");
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_btncancelarActionPerformed
 
 
