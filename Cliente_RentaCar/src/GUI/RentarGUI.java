@@ -38,6 +38,7 @@ public class RentarGUI extends javax.swing.JPanel {
     private void iniciar() {
         homeToServer("home", "");
         if (autosdisponibles.equals("0") || autosdisponibles == null) {
+            presentarTableAuto();
             estadoAUTOS.setText("NO HAY AUTOS DISPONIBLES");
             txtid.setText("Ingrese la identificacion");
             txtPlaca.setText("Ingrese la placa");
@@ -50,6 +51,7 @@ public class RentarGUI extends javax.swing.JPanel {
             btmActualizar.setVisible(true);
         } else {
             estadoAUTOS.setText("AUTOS: " + autosdisponibles);
+            presentarTableAuto();
             txtid.setText("Ingrese la identificacion");
             txtPlaca.setText("Ingrese la placa");
             btmRentar.setVisible(false);
@@ -513,7 +515,6 @@ public class RentarGUI extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
-
         }
     }//GEN-LAST:event_btmRentarActionPerformed
 

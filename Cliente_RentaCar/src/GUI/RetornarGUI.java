@@ -21,14 +21,14 @@ import java.sql.Statement;
  * @author Jorge Hernandez Araya
  */
 public class RetornarGUI extends javax.swing.JPanel {
-    
+
     static String URL = "jdbc:mysql://localhost:3306/rentacar";
     static String USERNAME = "root";
     static String PASS = "admin01";
-    
+
     static String mensaje = null;
     public Rentar rentSELECT = new Rentar();
-    
+
     public RetornarGUI() {
         initComponents();
         presentarTableAuto();
@@ -39,6 +39,7 @@ public class RetornarGUI extends javax.swing.JPanel {
     private void iniciar() {
         homeToServer("home", "");
         if (autosrentados.equals("0") || autosrentados == null) {
+            presentarTableAuto();
             estadoAUTOS.setText("NO HAY AUTOS RENTADOS");
             txtPlaca.setText("Ingrese la placa");
             txtPlaca.setVisible(false);
@@ -47,49 +48,50 @@ public class RetornarGUI extends javax.swing.JPanel {
             btnCancelar.setVisible(false);
             btmBPlaca.setVisible(false);
         } else {
+            presentarTableAuto();
             estadoAUTOS.setText("AUTOS RENTADOS: " + autosrentados);
             txtPlaca.setText("Ingrese la placa");
             txtPlaca.setVisible(true);
-             btmBPlaca.setVisible(true);
+            btmBPlaca.setVisible(true);
             btmActualizar.setVisible(true);
             btmRetornar.setVisible(false);
             btnCancelar.setVisible(false);
         }
     }
-    
+
     public static Connection getConnection() {
-        
+
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = (Connection) DriverManager.getConnection(URL, USERNAME, PASS);
-            
+
         } catch (Exception e) {
             System.out.println(e);
         }
-        
+
         return conn;
     }
-    
+
     public static ResultSet listRentados() {
 
         //ArrayList<Auto> autosList = new ArrayList<Auto>();
         Connection conn = getConnection();
         Auto aut = new Auto();
         Cliente cli = new Cliente();
-        
+
         try {
             String sql = "SELECT * FROM rentados  ";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            
+
             return rs;
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 0);
         }
         return null;
-        
+
     }
     //************************
 
@@ -105,7 +107,7 @@ public class RetornarGUI extends javax.swing.JPanel {
             // Names of columns
             Vector<String> columnNames = new Vector<String>();
             int columnCount = (metaData.getColumnCount()) - 1;
-            
+
             columnNames.add("Placa");
             columnNames.add("Marca");
             columnNames.add("Modelo");
@@ -127,30 +129,30 @@ public class RetornarGUI extends javax.swing.JPanel {
                 }
                 data.add(vector);
             }
-            
+
             modelo.setDataVector(data, columnNames);
             //TableAuto.setEnabled(false);
 
         } catch (Exception e) {
-            
+
         }
     }
-    
+
     private void presentarTableRentarSelect(Rentar re) {
         try {
             DefaultTableModel modelo = (DefaultTableModel) TableRentados.getModel();
             modelo.setRowCount(0);
-            
+
             int numFila = 0;
             modelo.insertRow(numFila, new Object[]{re.getPlaca(), re.getMarca(), re.getModelo(), re.getAnnio(), re.getTransmision(),
                 re.getCedula(), re.getNombre(), re.getApellido1(), re.getApellido2(), re.getEmail(), re.getTelefono()});
         } catch (Exception e) {
-            
+
         }
     }
-    
+
     public boolean camposVacios() {
-        
+
         if ((txtPlaca.equals("")) || (txtPlaca.getText().equals("Ingrese la placa"))
                 || (txtPlaca.equals(null))) {
             return true;
@@ -163,24 +165,24 @@ public class RetornarGUI extends javax.swing.JPanel {
     public void ventanasMsjs() {
         System.out.println("ESTE ES EL BENDITO MESJE DE ENTRADA: " + mensaje);
         switch (mensaje) {
-            
+
             case "correcto":
                 JOptionPane.showMessageDialog(null, "Accion ejecutada de forma correcta.", "Info", 1);
-                
+
                 break;
-            
+
             case "duplicado":
                 JOptionPane.showMessageDialog(null, "La placa ya existe.", "Error", 0);
                 break;
-            
+
             case "no existe":
                 JOptionPane.showMessageDialog(null, "No existe en la base de datos", "No existe", 1);
                 break;
-            
+
             case "id vacio":
                 JOptionPane.showMessageDialog(null, "El campo de placa no puede estar vacio", "Campo vacio", 2);
                 break;
-            
+
             case "error base":
                 JOptionPane.showMessageDialog(null, "Error al conectar la base de datos.", "Error", 1);
                 break;
@@ -190,7 +192,7 @@ public class RetornarGUI extends javax.swing.JPanel {
 
     public static void mensajes(String msg) {
         mensaje = msg;
-        
+
     }
 
     /**
@@ -348,19 +350,19 @@ public class RetornarGUI extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             if (camposVacios() == false) {
-                
+
                 rentSELECT.setPlaca(txtPlaca.getText());
                 ClienteHilo.objetoaJsonRENTAR(rentSELECT);
-                
+
                 String task = "buscarRentar";
-                
+
                 rentSELECT = (Rentar) ClienteSocket.clientToServer(task, rentSELECT.getPlaca());
                 rentSELECT = ClienteHilo.archivoJsonAObjetoRENTAR();
-                
+
                 rentSELECT = ClienteHilo.archivoJsonAObjetoRENTAR();///error null
 
                 rentSELECT = rentSELECT;
-                
+
                 if ("correcto".equals(mensaje)) {
                     txtPlaca.setText(rentSELECT.getPlaca());
                     presentarTableRentarSelect(rentSELECT);
@@ -371,13 +373,13 @@ public class RetornarGUI extends javax.swing.JPanel {
                     txtPlaca.setText("Ingrese la placa");
                     ventanasMsjs();
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Revise he intente nuevamente", "Campos en Blanco", 1);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
-            
+
         }
 
     }//GEN-LAST:event_btmBPlacaActionPerformed
@@ -385,29 +387,38 @@ public class RetornarGUI extends javax.swing.JPanel {
     private void btmRetornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmRetornarActionPerformed
         // TODO add your handling code here:
         try {
-            
-            rentSELECT.setPlaca(txtPlaca.getText());
-            ClienteHilo.objetoaJsonRENTAR(rentSELECT);
-            
-            String task = "retornar";
-            
-            rentSELECT = (Rentar) ClienteSocket.clientToServer(task, rentSELECT.getPlaca());
-            rentSELECT = ClienteHilo.archivoJsonAObjetoRENTAR();
-            
-            System.out.println(rentSELECT.getPlaca());
-            
-            if ("correcto".equals(mensaje)) {
-                txtPlaca.setText(rentSELECT.getPlaca());
-                presentarTableRentarSelect(rentSELECT);
-                ventanasMsjs();
+            if (camposVacios() == false) {
+
+                int response = JOptionPane.showConfirmDialog(null, "Desea retornar el auto " + rentSELECT.getPlaca() + "?", "Rentar auto", JOptionPane.YES_NO_OPTION);
+
+                if (response == JOptionPane.YES_OPTION) {
+                    rentSELECT.setPlaca(txtPlaca.getText());
+                    ClienteHilo.objetoaJsonRENTAR(rentSELECT);
+
+                    String task = "retornar";
+
+                    rentSELECT = (Rentar) ClienteSocket.clientToServer(task, rentSELECT.getPlaca());
+                    rentSELECT = ClienteHilo.archivoJsonAObjetoRENTAR();
+
+                    System.out.println(rentSELECT.getPlaca());
+
+                    if ("correcto".equals(mensaje)) {
+                        iniciar();
+                        //presentarTableAuto();
+                        //txtPlaca.setText("Ingrese la placa");
+                        ventanasMsjs();
+                    } else {
+                        txtPlaca.setText("Ingrese la placa");
+                        ventanasMsjs();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Datos no Almacenados", "Info", 1);
+                }
             } else {
-                txtPlaca.setText("Ingrese la placa");
-                ventanasMsjs();
+                JOptionPane.showMessageDialog(null, "Hay campos en blanco.\n" + "Revise he intente nuevamente", "Campos en Blanco", 1);
             }
-            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al registrar. " + e + "", "Error", 0);
-            
         }
     }//GEN-LAST:event_btmRetornarActionPerformed
 

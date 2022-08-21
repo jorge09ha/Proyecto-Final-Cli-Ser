@@ -479,7 +479,7 @@ public class ServidorHilo extends Thread {
                         id = in.readUTF(); //recibe el ID
                         System.out.println("-ID: " + id);//print-------------------------------------#
 
-                        strToClient = eliminarAuto(id); // client    
+                        strToClient = retornar(id); // client    
                         System.out.println("-Resultado: " + strToClient);//print---------------#
                         out.writeUTF(strToClient); // cliente
                         out.flush();
@@ -1533,6 +1533,40 @@ public class ServidorHilo extends Thread {
             return msg;
         }
     }
+
+    public static String retornar(String id) {
+        Auto aut = new Auto();
+        Connection conn = getConnection();
+        int resultado = 0;
+        String buscar = id;
+        String msg;
+
+        try {
+            if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
+                String sql = "DELETE FROM rentados WHERE idauto = '" + id + "'";
+                Statement st = conn.createStatement();
+                resultado = st.executeUpdate(sql);
+
+                if (resultado > 0) {
+                    sql = "UPDATE autos SET rentar= 'D' WHERE idauto = '" + id + "'";
+                    conn.createStatement();
+                    resultado = st.executeUpdate(sql);
+                    msg = "correcto";
+                    return msg;
+                } else {
+                    msg = "no existe";
+                    return msg;
+                }
+
+            } else {
+                msg = "id vacio";
+                return msg;
+            }
+        } catch (Exception e) {
+            msg = "error base";
+            return msg;
+        }
+    }//listo
 
     public static String buscarRentar(String id) {
         System.out.println("Metodo ID es " + id);/////------------borrar
