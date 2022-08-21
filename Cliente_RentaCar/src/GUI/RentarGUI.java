@@ -13,6 +13,7 @@ import java.sql.ResultSetMetaData;
 import static Conexion.ClienteSocket.clientToServer;
 import static Conexion.HomeSocket.homeToServer;
 import static GUI.Home.autosdisponibles;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -190,6 +191,7 @@ public class RentarGUI extends javax.swing.JPanel {
     public static void mensajes(String msg) {
         mensaje = msg;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

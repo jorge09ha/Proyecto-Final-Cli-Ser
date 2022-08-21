@@ -24,6 +24,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import ClasesRentaCar.Cliente;
 import ClasesRentaCar.Rentar;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
  * @author Jorge Hernandez Araya
@@ -878,6 +880,53 @@ public class ServidorHilo extends Thread {
         return conn;
     }
 
+    public static void crearFactura(Rentar rent) {
+        File archivo;
+        FileWriter escribir;
+        PrintWriter linea;
+        String separador = "\n----------------------------------------";
+
+        try {
+            File carpeta = new File("reports");
+            File[] lista = carpeta.listFiles();
+            int facturaNueva = lista.length + 1;
+            System.out.println("\n Hay " + lista.length + " elementos");
+
+            archivo = new File("reports\\rent-report#" + facturaNueva + ".txt");
+
+            //DataOutputStream archivo = new DataOutputStream(
+            //    new FileOutputStream("clientes.dat", true));
+            if (archivo.createNewFile()) {
+                System.out.println("-Archivo reporte creado: " + archivo);
+
+                escribir = new FileWriter(archivo, true);
+                linea = new PrintWriter(escribir);
+
+                String placa = rent.getPlaca();
+                String marca = rent.getMarca();
+                String modelo = rent.getModelo();
+                String annio = rent.getAnnio();
+                String transmision = rent.getTransmision();
+                String cedula = rent.getCedula();
+                String nombre = rent.getNombre();
+                String apellido1 = rent.getApellido1();
+                String apellido2 = rent.getApellido2();
+                String correoElectronico = rent.getEmail();
+                String telefono = rent.getTelefono();
+
+                linea.println("Reporte #" + facturaNueva + separador);
+                linea.println("Placa:" + placa + "\nMarca: " + marca + "\nModelo: " + modelo + "\nAño: " + annio + "\nTransmicion: " + transmision + separador
+                        + "\nCliente: " + nombre + " " + apellido1 + " " + apellido2 + "\nCedula: " + cedula + "\nCorreo: " + correoElectronico + "\nTelefono: " + telefono);
+                linea.close();
+            } else {
+                System.out.println("-No se creado el archivo: " + archivo);
+            }
+        } catch (Throwable e) {
+            System.err.println("-NO SE CREO EL ARCHIVO");
+        }
+
+    }
+
     /*
     *
     *                   CRUD Clientes
@@ -1503,9 +1552,6 @@ public class ServidorHilo extends Thread {
         String apellido2 = rent.getApellido2();
         String correoElectronico = rent.getEmail();
         String telefono = rent.getTelefono();
-//
-//        String query = "INSERT INTO rentados (nombre, apellido1, apellido2, correoElectronico, telefono, idauto, marca, modelo) VALUES ('"
-//                + nom + "','" + ape1 + "','" + ape2 + "','" + ema + "','" + tel + "','" + pla + "','" + mar + "','" + model + "')";
 
         String sql = "INSERT INTO rentados  Values ('" + placa + "','" + marca + "','" + modelo + "','" + annio
                 + "','" + transmision + "','" + cedula + "','" + nombre + "','" + apellido1 + "','" + apellido2
@@ -1520,6 +1566,7 @@ public class ServidorHilo extends Thread {
                 sql = "UPDATE autos SET rentar= 'R' WHERE idauto = '" + rent.getPlaca() + "'";
                 conn.createStatement();
                 resultado = st.executeUpdate(sql);
+                crearFactura(rent);
                 msg = "correcto";
                 return msg;
             } else {
