@@ -542,7 +542,6 @@ public class RentarGUI extends javax.swing.JPanel {
             autSELECT = ClienteHilo.archivoJsonAObjetoAUTO();///error null
 
             autSELECT = autSELECT;
-            System.out.println(autSELECT.getPlaca());
 
             if ("correcto".equals(mensaje)) {
                 txtPlaca.setText(autSELECT.getPlaca());

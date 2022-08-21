@@ -5,7 +5,8 @@ import ClasesRentaCar.Cliente;
 import ClasesRentaCar.Rentar;
 import Conexion.ClienteHilo;
 import Conexion.ClienteSocket;
-import static GUI.RentarGUI.mensaje;
+import static Conexion.HomeSocket.homeToServer;
+import static GUI.Home.autosrentados;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.*;
@@ -30,8 +31,28 @@ public class RetornarGUI extends javax.swing.JPanel {
     public RetornarGUI() {
         initComponents();
         presentarTableAuto();
+        iniciar();
     }
 //************************
+
+    private void iniciar() {
+        homeToServer("home", "");
+        if (autosrentados.equals("0") || autosrentados == null) {
+            estadoAUTOS.setText("NO HAY AUTOS RENTADOS");
+            txtPlaca.setText("Ingrese la placa");
+            txtPlaca.setVisible(false);
+            btmActualizar.setVisible(true);
+            btmRetornar.setVisible(false);
+            btnCancelar.setVisible(false);
+        } else {
+            estadoAUTOS.setText("AUTOS RENTADOS: " + autosrentados);
+            txtPlaca.setText("Ingrese la placa");
+            txtPlaca.setVisible(true);
+            btmActualizar.setVisible(true);
+            btmRetornar.setVisible(false);
+            btnCancelar.setVisible(false);
+        }
+    }
 
     public static Connection getConnection() {
 
@@ -76,7 +97,6 @@ public class RetornarGUI extends javax.swing.JPanel {
 
         try {
             ResultSet rs = listRentados();
-
             ResultSetMetaData metaData = rs.getMetaData();
 
             // Names of columns
@@ -86,12 +106,14 @@ public class RetornarGUI extends javax.swing.JPanel {
             columnNames.add("Placa");
             columnNames.add("Marca");
             columnNames.add("Modelo");
+            columnNames.add("Año");
+            columnNames.add("Transmision");
             columnNames.add("Cedula");
             columnNames.add("Nombre");
             columnNames.add("Apellido1");
             columnNames.add("Apellido2");
             columnNames.add("Correo");
-            columnNames.add("Telefono");
+            //columnNames.add("Telefono");
 
             // Data of the table
             Vector<Vector<Object>> data = new Vector<Vector<Object>>();
@@ -117,7 +139,8 @@ public class RetornarGUI extends javax.swing.JPanel {
             modelo.setRowCount(0);
 
             int numFila = 0;
-            modelo.insertRow(numFila, new Object[]{re.getPlaca(), re.getMarca(), re.getModelo(), re.getCedula(), re.getNombre(), re.getApellido1(), re.getApellido2(), re.getEmail(), re.getTelefono()});
+            modelo.insertRow(numFila, new Object[]{re.getPlaca(), re.getMarca(), re.getModelo(), re.getAnnio(), re.getTransmision(),
+                 re.getCedula(), re.getNombre(), re.getApellido1(), re.getApellido2(), re.getEmail(), re.getTelefono()});
         } catch (Exception e) {
 
         }
@@ -135,7 +158,7 @@ public class RetornarGUI extends javax.swing.JPanel {
 //ventanas para mostrar la respuesta que envió el servidor
 
     public void ventanasMsjs() {
-
+        System.out.println("ESTE ES EL BENDITO MESJE DE ENTRADA: "+mensaje);
         switch (mensaje) {
 
             case "correcto":
@@ -187,6 +210,7 @@ public class RetornarGUI extends javax.swing.JPanel {
         btnCancelar = new javax.swing.JButton();
         btmActualizar = new javax.swing.JButton();
         txtPlaca = new javax.swing.JTextField();
+        estadoAUTOS = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setAlignmentX(0.0F);
@@ -247,14 +271,14 @@ public class RetornarGUI extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Placa", "Marca", "Modelo", "Cedula", "Nombre", "Apellido1", "Apellido2", "Correo", "Telefono"
+                "Placa", "Marca", "Modelo", "Año", "Transmision", "Cedula", "Nombre", "Apellido1", "Apellido2", "Correo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -266,17 +290,8 @@ public class RetornarGUI extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(TableRentados);
-        if (TableRentados.getColumnModel().getColumnCount() > 0) {
-            TableRentados.getColumnModel().getColumn(0).setResizable(false);
-            TableRentados.getColumnModel().getColumn(2).setResizable(false);
-            TableRentados.getColumnModel().getColumn(3).setResizable(false);
-            TableRentados.getColumnModel().getColumn(4).setResizable(false);
-            TableRentados.getColumnModel().getColumn(5).setResizable(false);
-            TableRentados.getColumnModel().getColumn(6).setResizable(false);
-            TableRentados.getColumnModel().getColumn(8).setResizable(false);
-        }
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 730, 130));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 750, 130));
 
         btnCancelar.setBackground(new java.awt.Color(255, 102, 102));
         btnCancelar.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
@@ -319,6 +334,11 @@ public class RetornarGUI extends javax.swing.JPanel {
             }
         });
         add(txtPlaca, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 260, 30));
+
+        estadoAUTOS.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
+        estadoAUTOS.setForeground(new java.awt.Color(255, 0, 51));
+        estadoAUTOS.setText("NO HAY AUTOS RENTADOS");
+        add(estadoAUTOS, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btmBPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmBPlacaActionPerformed
@@ -326,9 +346,8 @@ public class RetornarGUI extends javax.swing.JPanel {
         try {
             if (camposVacios() == false) {
 
-            rentSELECT.setPlaca(txtPlaca.getText());
-            ClienteHilo.objetoaJsonRENTAR(rentSELECT);
-
+                rentSELECT.setPlaca(txtPlaca.getText());
+                ClienteHilo.objetoaJsonRENTAR(rentSELECT);
 
                 String task = "buscarRentar";
 
@@ -336,13 +355,14 @@ public class RetornarGUI extends javax.swing.JPanel {
                 rentSELECT = ClienteHilo.archivoJsonAObjetoRENTAR();
 
                 rentSELECT = ClienteHilo.archivoJsonAObjetoRENTAR();///error null
+
+                rentSELECT = rentSELECT;
                 
                 if ("correcto".equals(mensaje)) {
-                    
                     txtPlaca.setText(rentSELECT.getPlaca());
-                    //presentarTableRentarSelect(rentSELECT);
+                    presentarTableRentarSelect(rentSELECT);
                     ventanasMsjs();
-                    
+                    btmRetornar.setVisible(true);
                 } else {
                     txtPlaca.setText("Ingrese la placa");
                     ventanasMsjs();
@@ -424,6 +444,7 @@ public class RetornarGUI extends javax.swing.JPanel {
     private javax.swing.JButton btmBPlaca;
     private javax.swing.JButton btmRetornar;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JLabel estadoAUTOS;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel txt1;
     private javax.swing.JTextField txtPlaca;

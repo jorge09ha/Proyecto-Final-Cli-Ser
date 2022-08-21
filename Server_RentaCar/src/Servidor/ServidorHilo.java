@@ -493,7 +493,6 @@ public class ServidorHilo extends Thread {
                         break;
 
                     case "buscarRentar"://------------------------------------> Buscar rentados
-
                         out.writeUTF("id"); // preguta por id 
                         out.flush();
 
@@ -514,7 +513,7 @@ public class ServidorHilo extends Thread {
                                 envioArchivoJson();
                                 System.out.println("-Server envio json");//print----------------------#
                             }
-                            strToClient = "objetodeJasonRENTAR()"; // client                    
+                            strToClient = "objetodeJasonAUTO()"; // client                    
                             out.writeUTF(strToClient); // cliente
                             out.flush();
 
@@ -1536,7 +1535,8 @@ public class ServidorHilo extends Thread {
     }
 
     public static String buscarRentar(String id) {
-        System.out.println("Metodo ID es " + id);
+        System.out.println("Metodo ID es " + id);/////------------borrar
+
         Rentar rent = new Rentar();
         Connection conn = getConnection();
         String buscar = id;
@@ -1545,6 +1545,7 @@ public class ServidorHilo extends Thread {
         try {
             if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
                 String sql = "SELECT * FROM rentados WHERE idauto = '" + id + "'";
+
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(sql);
 
@@ -1592,7 +1593,7 @@ public class ServidorHilo extends Thread {
 
         try {
             if (!buscar.equals("") && !buscar.equals(null) && !buscar.equals("Ingrese la placa")) {
-                String sql = "SELECT * FROM autos where idauto='"+id+"' AND rentar='D'";
+                String sql = "SELECT * FROM autos where idauto='" + id + "' AND rentar='D'";
 
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(sql);
