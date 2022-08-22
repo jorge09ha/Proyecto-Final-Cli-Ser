@@ -890,14 +890,11 @@ public class ServidorHilo extends Thread {
             File carpeta = new File("reports");
             File[] lista = carpeta.listFiles();
             int facturaNueva = lista.length + 1;
-            System.out.println("\n Hay " + lista.length + " elementos");
 
             archivo = new File("reports\\rent-report#" + facturaNueva + ".txt");
 
-            //DataOutputStream archivo = new DataOutputStream(
-            //    new FileOutputStream("clientes.dat", true));
             if (archivo.createNewFile()) {
-                System.out.println("-Archivo reporte creado: " + archivo);
+                System.out.println("-Archivo creado: " + archivo);
 
                 escribir = new FileWriter(archivo, true);
                 linea = new PrintWriter(escribir);
@@ -916,13 +913,13 @@ public class ServidorHilo extends Thread {
 
                 linea.println("Reporte #" + facturaNueva + separador);
                 linea.println("Placa:" + placa + "\nMarca: " + marca + "\nModelo: " + modelo + "\nAño: " + annio + "\nTransmicion: " + transmision + separador
-                        + "\nCliente: " + nombre + " " + apellido1 + " " + apellido2 + "\nCedula: " + cedula + "\nCorreo: " + correoElectronico + "\nTelefono: " + telefono);
+                        + "\nCliente: " + nombre + " " + apellido1 + " " + apellido2 + "\nCedula: " + cedula + "\nCorreo: " + correoElectronico + "\nTelefono: " + telefono + separador);
                 linea.close();
             } else {
                 System.out.println("-No se creado el archivo: " + archivo);
             }
         } catch (Throwable e) {
-            System.err.println("-NO SE CREO EL ARCHIVO");
+            System.err.println("-NO SE CREO EL ARCHIVO\n" + e);
         }
 
     }
@@ -1616,7 +1613,6 @@ public class ServidorHilo extends Thread {
     }//listo
 
     public static String buscarRentar(String id) {
-        System.out.println("Metodo ID es " + id);/////------------borrar
 
         Rentar rent = new Rentar();
         Connection conn = getConnection();

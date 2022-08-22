@@ -472,19 +472,14 @@ public class ClienteHilo extends Thread {
                     case "buscarRentar"://------------------------------------> Buscar Autos Rentados   
                         out.writeUTF(strToClient); //Task
                         out.flush();
-                        System.out.println("ESTA ES EL BENDITA TAREAS: " + strFromClient);
 
                         strFromClient = in.readUTF();
-                        System.out.println("ESTE SERVER RESPONDE: " + strFromClient);
 
                         out.writeUTF(id); //send id
-                        System.out.println("ESTE ES EL BENDITO ID:" + id);
                         out.flush();
 
                         strFromClient = in.readUTF(); // msg correcto
-                        System.out.println("ESTE SERVER RESPONDE: " + strFromClient);
                         msg = strFromClient;
-                        System.out.println("ESTE ES EL BENDITO MESJE DE ENTRADA:"+msg);
 
                         if ("correcto".equals(strFromClient)) {
                             strToClient = "servidorA";

@@ -12,6 +12,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import static Conexion.ClienteSocket.clientToServer;
 import static Conexion.HomeSocket.homeToServer;
+import static GUI.Dashboard.PASS;
+import static GUI.Dashboard.URL;
+import static GUI.Dashboard.USERNAME;
 import static GUI.Home.autosdisponibles;
 import java.io.File;
 import java.sql.Connection;
@@ -26,9 +29,6 @@ public class RentarGUI extends javax.swing.JPanel {
     static String mensaje = null;
     public Cliente cliSELECT = new Cliente();
     public Auto autSELECT = new Auto();
-    static String URL = "jdbc:mysql://localhost:3306/rentacar";
-    static String USERNAME = "root";
-    static String PASS = "admin01";
 
     public RentarGUI() {
         initComponents();
@@ -191,7 +191,6 @@ public class RentarGUI extends javax.swing.JPanel {
     public static void mensajes(String msg) {
         mensaje = msg;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.

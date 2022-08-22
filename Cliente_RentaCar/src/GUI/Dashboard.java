@@ -1,5 +1,6 @@
 package GUI;
 
+import Conexion.ClienteSocket;
 import static Conexion.ClienteSocket.ipServer;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,6 +16,10 @@ import javax.swing.JPanel;
  * @author Jorge Hernandez Araya
  */
 public class Dashboard extends javax.swing.JFrame {
+    
+    static String URL = "jdbc:mysql://"+ClienteSocket.ipServer+":3306/rentacar";
+    static String USERNAME = "onlyshow";
+    static String PASS = "Admin.5erver";
 
     int xMouse;
     int yMouse;
