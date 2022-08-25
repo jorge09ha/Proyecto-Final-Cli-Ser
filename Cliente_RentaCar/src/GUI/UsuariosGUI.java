@@ -514,6 +514,7 @@ public class UsuariosGUI extends javax.swing.JPanel {
 
                 btnmodificar.setVisible(true);
                 btnborrar.setVisible(true);
+                btnAgregar.setVisible(false);
                 ventanasMsjs();
             } else {
 

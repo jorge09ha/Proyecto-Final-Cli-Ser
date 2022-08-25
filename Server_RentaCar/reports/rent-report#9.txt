@@ -1,0 +1,13 @@
+Reporte #9
+----------------------------------------
+Placa:4
+Marca: Hyundai
+Modelo: Vision 74
+Año: 2020
+Transmision: automatico
+----------------------------------------
+Cliente: Cristina Rivera Araya
+Cedula: 4
+Correo: cirstina.rivera@email.com
+Telefono: 4444-4444
+----------------------------------------

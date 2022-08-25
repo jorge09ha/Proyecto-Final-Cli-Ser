@@ -445,6 +445,7 @@ public class ClienteGUI extends javax.swing.JPanel {
 
                 btnmodificar.setVisible(true);
                 btnborrar.setVisible(true);
+                btnRegistrar.setVisible(false);
                 ventanasMsjs();
             } else {
                 btnmodificar.setVisible(false);

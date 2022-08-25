@@ -79,7 +79,7 @@ public class LoginGUI extends javax.swing.JFrame {
                         Dashboard form = new Dashboard();
                         form.setVisible(true);
                     }else{
-                        JOptionPane.showMessageDialog(null, "Contraseña  incorrecto.", "Error", 1);
+                        JOptionPane.showMessageDialog(null, "Contraseña  incorrecta.", "Error", 1);
                     }
 
                 } else {

@@ -498,6 +498,7 @@ public class AutosGUI extends javax.swing.JPanel {
 
                 btnmodificar.setVisible(true);
                 btnborrar.setVisible(true);
+                btmAgregar.setVisible(false);
                 ventanasMsjs();
             } else {
                 btnmodificar.setVisible(false);

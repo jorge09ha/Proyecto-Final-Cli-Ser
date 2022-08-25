@@ -1,0 +1,13 @@
+Reporte #5
+----------------------------------------
+Placa:2
+Marca: Toyota
+Modelo: Corolla
+Año: 2018
+Transmision: automatico
+----------------------------------------
+Cliente: Jorge Hernandez Araya
+Cedula: 2
+Correo: jorgeh@email.com
+Telefono: 2222-2222
+----------------------------------------

@@ -1,0 +1,13 @@
+Reporte #8
+----------------------------------------
+Placa:3
+Marca: Toyota
+Modelo: Supra
+Año: 2021
+Transmision: manual
+----------------------------------------
+Cliente: Victor Zuares Aguilar
+Cedula: 3
+Correo: victor.zuares@email.com
+Telefono: 33333-3333
+----------------------------------------

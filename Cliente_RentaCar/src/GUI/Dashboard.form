@@ -153,7 +153,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Proyecto Final G3 - Programacion Cliente Servidor"/>
+                <Property name="text" type="java.lang.String" value="Proyecto Final - Jorge Hernandez Araya - Programacion Cliente Servidor"/>
               </Properties>
             </Component>
           </SubComponents>

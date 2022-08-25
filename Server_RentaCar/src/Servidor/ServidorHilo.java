@@ -913,7 +913,7 @@ public class ServidorHilo extends Thread {
                 String telefono = rent.getTelefono();
 
                 linea.println("Reporte #" + facturaNueva + separador);
-                linea.println("Placa:" + placa + "\nMarca: " + marca + "\nModelo: " + modelo + "\nAño: " + annio + "\nTransmicion: " + transmision + separador
+                linea.println("Placa:" + placa + "\nMarca: " + marca + "\nModelo: " + modelo + "\nAño: " + annio + "\nTransmision: " + transmision + separador
                         + "\nCliente: " + nombre + " " + apellido1 + " " + apellido2 + "\nCedula: " + cedula + "\nCorreo: " + correoElectronico + "\nTelefono: " + telefono + separador);
                 linea.close();
             } else {

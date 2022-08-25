@@ -1,0 +1,13 @@
+Reporte #10
+----------------------------------------
+Placa:5
+Marca: Nissan
+Modelo: Tida
+Año: 2022
+Transmision: manual
+----------------------------------------
+Cliente: Monica Perez Solis
+Cedula: 5
+Correo: monica.solis@email.com
+Telefono: 5555-5555
+----------------------------------------

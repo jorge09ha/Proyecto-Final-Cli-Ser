@@ -163,7 +163,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Proyecto Final G3 - Programacion Cliente Servidor");
+        jLabel6.setText("Proyecto Final - Jorge Hernandez Araya - Programacion Cliente Servidor");
 
         javax.swing.GroupLayout TitleLayout = new javax.swing.GroupLayout(Title);
         Title.setLayout(TitleLayout);

@@ -162,7 +162,6 @@ public class RetornarGUI extends javax.swing.JPanel {
 //ventanas para mostrar la respuesta que envió el servidor
 
     public void ventanasMsjs() {
-        System.out.println("ESTE ES EL BENDITO MESJE DE ENTRADA: " + mensaje);
         switch (mensaje) {
 
             case "correcto":
