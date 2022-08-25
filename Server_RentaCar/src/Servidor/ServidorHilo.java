@@ -26,6 +26,7 @@ import ClasesRentaCar.Cliente;
 import ClasesRentaCar.Rentar;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  * @author Jorge Hernandez Araya
@@ -1400,23 +1401,24 @@ public class ServidorHilo extends Thread {
     *
      */
     public static String contarDisponibles() {
-        Auto aut = new Auto();
-        Connection conn = getConnection();
 
+//        Connection conn = getConnection();
         String msg;
 
         try {
 
-            String sql = "SELECT COUNT(rentar) AS cuenta FROM autos WHERE rentar = \"D\";";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            rs.next();
-            int count = rs.getInt("cuenta");
-            rs.close();
-
-            //objetoaJsonAUTO(aut);
-            msg = Integer.toString(count);
+//            String sql = "SELECT COUNT(rentar) AS cuenta FROM autos WHERE rentar = \"D\";";
+//            Statement st = conn.createStatement();
+//            ResultSet rs = st.executeQuery(sql);
+//
+//            rs.next();
+//            int count = rs.getInt("cuenta");
+//            rs.close();
+//            msg = Integer.toString(count);
+            String aDisponibles;
+            ArrayList<Auto> aD = listEstadosHome("D");
+            aDisponibles = Integer.toString(aD.size());
+            msg = aDisponibles;
 
             return msg;
 
@@ -1454,23 +1456,25 @@ public class ServidorHilo extends Thread {
     }
 
     public static String contarRentados() {
-        Auto aut = new Auto();
-        Connection conn = getConnection();
 
+//        Connection conn = getConnection();
         String msg;
 
         try {
 
-            String sql = "SELECT COUNT(rentar) AS cuenta FROM autos WHERE rentar = \"R\";";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            rs.next();
-            int count = rs.getInt("cuenta");
-            rs.close();
-
-            //objetoaJsonAUTO(aut);
-            msg = Integer.toString(count);
+//            String sql = "SELECT COUNT(rentar) AS cuenta FROM autos WHERE rentar = \"R\";";
+//            Statement st = conn.createStatement();
+//            ResultSet rs = st.executeQuery(sql);
+//
+//            rs.next();
+//            int count = rs.getInt("cuenta");
+//            rs.close();
+//
+//            msg = Integer.toString(count);
+            String aDisponibles;
+            ArrayList<Auto> aD = listEstadosHome("R");
+            aDisponibles = Integer.toString(aD.size());
+            msg = aDisponibles;
 
             return msg;
 
@@ -1506,6 +1510,38 @@ public class ServidorHilo extends Thread {
             return msg;
         }
     }
+
+    public static ArrayList<Auto> listEstadosHome(String status) {
+
+        String msg;
+        ArrayList<Auto> autosList = new ArrayList<Auto>();
+        Connection conn = getConnection();
+
+        try {
+            String sql = "SELECT * FROM autos WHERE rentar ='" + status + "'";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            while (rs.next()) {
+
+                Auto aut = new Auto();
+
+                aut.setPlaca(rs.getString("idauto"));
+                aut.setMarca(rs.getString("marca"));
+                aut.setModelo(rs.getString("modelo"));
+                aut.setAnnio(rs.getString("annio"));
+                aut.setTransmision(rs.getString("transmision"));
+                aut.setRentar(rs.getString("rentar"));
+                autosList.add(aut);
+
+            }
+
+        } catch (Exception e) {
+            msg = "error base";
+        }
+        return autosList;
+    }
+
 
     /*
     *

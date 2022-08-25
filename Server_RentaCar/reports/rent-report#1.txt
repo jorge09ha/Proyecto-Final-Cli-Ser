@@ -1,0 +1,13 @@
+Reporte #1
+----------------------------------------
+Placa:1
+Marca: Suzuki
+Modelo: Jinny
+Año: 2019
+Transmicion: manual
+----------------------------------------
+Cliente: Pamela Espinoza Torres
+Cedula: 1
+Correo: p.espinoza@email.com
+Telefono: 1111-1111
+----------------------------------------
